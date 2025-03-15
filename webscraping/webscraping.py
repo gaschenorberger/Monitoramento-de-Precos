@@ -31,7 +31,8 @@ def iniciar_navegador(com_debugging_remoto=True):
 
 navegador = iniciar_navegador(com_debugging_remoto=True)
 
-def coletaDadosAmazon(): #Já estar na pag Amazon
+def coletaDadosAmazon(): #Já estar na pag Amazon -- Coleta produtos em alta
+    
     btnTodos = navegador.find_element(By.XPATH, '//*[@id="nav-hamburger-menu"]')
     btnTodos.click(), time.sleep(1)
 
@@ -39,18 +40,24 @@ def coletaDadosAmazon(): #Já estar na pag Amazon
     btnProdAlta.click(), time.sleep(1)
 
     #Tópicos
+    secoes = navegador.find_elements(By.XPATH, "//div[contains(@class, 'a-carousel')]")
+    secoes_exibidas = set()
 
-    #prodAltaCasa = navegador.find_element(By.CLASS_NAME, 'a-carousel-heading a-inline-block')
-    """prodAltaBemEstar = navegador.find_element(By.XPATH, '//*[@id="CardInstancedOGO_h4OFbmC6TqwzsY6lg"]/div/div/div/div[1]/div[1]/h2')
-    prodAltaEletro = navegador.find_element(By.XPATH, '//*[@id="CardInstanceTibm_GR2tkF8aBmu_2dXLQ"]/div/div/div/div[1]/div[1]/h2')
-    prodAltaLivros = navegador.find_element(By.XPATH, '//*[@id="CardInstancexfsoEqQ25ZJMrjbz7q7yEw"]/div/div/div/div[1]/div[1]/h2')
-    prodAltaCozinha = navegador.find_element(By.XPATH, '//*[@id="CardInstanceYCeLIgVTK2aYlOX7o0QBLA"]/div/div/div/div[1]/div[1]/h2')
-    prodAltaJogos = navegador.find_element(By.XPATH, '//*[@id="CardInstance2MBoZ2uPd5GqR4BSNFbwig"]/div/div/div/div[1]/div[1]/h2')"""
+    for secao in secoes:
+        try:
+            topico = secao.find_element(By.XPATH, ".//h2[contains(@class, 'a-carousel-heading')]").text
+            if topico in secoes_exibidas:
+                continue  
+            secoes_exibidas.add(topico)  
+            
+            print(f"\n{topico}")  
+        except:
+            continue  
 
-    topicos = navegador.find_elements(By.XPATH, "//h2[contains(@class, 'a-carousel-heading')]")
-
-    for topico in topicos:
-        print(topico.text) 
-
+        produtos = secao.find_elements(By.XPATH, ".//div[contains(@class, 'p13n-sc-truncate-desktop-type2')]")
+        
+        if produtos:
+            for produto in produtos:
+                print(f" - {produto.text}")
 
 coletaDadosAmazon()
