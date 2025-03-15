@@ -11,6 +11,21 @@ import requests
 
 #start chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\Selenium\ChromeTestProfile"
 
+'''Marketplaces e Varejistas
+Amazon (www.amazon.com.br)
+Mercado Livre (www.mercadolivre.com.br)
+Americanas (www.americanas.com.br)
+Magazine Luiza (www.magazineluiza.com.br)
+Submarino (www.submarino.com.br)
+Casas Bahia (www.casasbahia.com.br)
+Ponto (ex-Ponto Frio) (www.pontofrio.com.br)
+Extra (www.extra.com.br)
+Lojas Especializadas
+Kabum (eletrônicos e hardware) (www.kabum.com.br)
+TerabyteShop (hardware e tecnologia) (www.terabyteshop.com.br)
+Pichau (componentes de PC) (www.pichau.com.br)
+Dell (computadores e acessórios) (www.dell.com.br)'''
+
 def iniciar_navegador(com_debugging_remoto=True):
     chrome_driver_path = ChromeDriverManager().install()
     chrome_driver_executable = os.path.join(os.path.dirname(chrome_driver_path), 'chromedriver.exe')
@@ -32,7 +47,7 @@ def iniciar_navegador(com_debugging_remoto=True):
 navegador = iniciar_navegador(com_debugging_remoto=True)
 
 def coletaDadosAmazon(): #Já estar na pag Amazon -- Coleta produtos em alta
-    
+
     btnTodos = navegador.find_element(By.XPATH, '//*[@id="nav-hamburger-menu"]')
     btnTodos.click(), time.sleep(1)
 
@@ -60,4 +75,18 @@ def coletaDadosAmazon(): #Já estar na pag Amazon -- Coleta produtos em alta
             for produto in produtos:
                 print(f" - {produto.text}")
 
-coletaDadosAmazon()
+def coletaDadosMerLivre():
+    btnOfertas = navegador.find_element(By.XPATH, '/html/body/header/div/div[5]/div/ul/li[2]/a')
+    btnOfertas.click(), time.sleep(1)
+
+    ofertas = navegador.find_element(By.XPATH, '//*[@id="root-app"]/div/div/section/a/div/h1').text
+    print(ofertas)
+
+    produtos = navegador.find_elements(By.XPATH, "//a[contains(@class, 'poly-component__title')]")
+    precos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'andes-money-amount__fraction')]")
+
+    for produto, preco in zip(produtos, precos):
+        print(f"{produto.text} -- R$ {preco.text}\n")
+
+
+coletaDadosMerLivre()
