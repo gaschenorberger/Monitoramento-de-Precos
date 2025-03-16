@@ -87,6 +87,7 @@ def coletaDadosMerLivre():
 
     for produto, preco in zip(produtos, precos):
         print(f"{produto.text} -- R$ {preco.text}\n")
+        print(1)
 
 
 coletaDadosMerLivre()
