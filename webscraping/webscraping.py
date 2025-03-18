@@ -130,7 +130,7 @@ def coletaDadosMerLivre():
         zip() serve para utilizar mais de uma variável de uma vez """
     
     for produto, preco in zip(produtos, precos): 
-        print(f"{produto.text.upper()} -- R$ {preco.text}\n") #Retorna pra mim o nome de cada procuto e o preço
+        print(f"{produto.text.upper()} - R$ {preco.text}\n") #Retorna pra mim o nome de cada procuto e o preço
         """PRODUTO = VARIÁVEL, .TEXT = RETORNAR O TEXTO, .UPPER () = RETORNAR EM CAIXA ALTA"""
 
 def coletaDadosAmericanas():
@@ -148,7 +148,7 @@ def coletaDadosAmericanas():
     print('Produtos Ofertas do Dia Americanas\n')
 
     for produto, preco in zip(produtos, precos): #LOOP PARA ME RETORNAR TODOS OS PRODUTOS
-        print(f"- {produto.text.upper()} -- R$ {preco.text}") 
+        print(f"- {produto.text.upper()} - R$ {preco.text}") 
         """PRODUTO = VARIÁVEL, .TEXT = RETORNAR O TEXTO, .UPPER () = RETORNAR EM CAIXA ALTA"""
 
 
