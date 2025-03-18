@@ -80,7 +80,7 @@ def coletaDadosAmazon(): #Já estar na pag Amazon -- Coleta produtos em alta
 
         if produtos:
             for produto in produtos:
-                print(f" - {produto.text}")
+                print(f" - {produto.text.upper()}")
 
 def coletaDadosMerLivre():
     btnOfertas = navegador.find_element(By.XPATH, '/html/body/header/div/div[5]/div/ul/li[2]/a')
@@ -93,13 +93,24 @@ def coletaDadosMerLivre():
     precos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'andes-money-amount__fraction')]")
     
     for produto, preco in zip(produtos, precos): 
-        print(f"{produto.text} -- R$ {preco.text}\n") 
+        print(f"{produto.text.upper()} -- R$ {preco.text}\n") 
 
 
 def coletaDadosAmericanas():
     ofertaDia = navegador.find_element(By.XPATH, '//*[@id="rsyswpsdk"]/div/header/div[1]/div[1]/main/ul/li[9]/a')
-    ofertaDia.click(), time.sleep(1)
+    ofertaDia.click(), time.sleep(2)
 
     btnVerTudo = navegador.find_element(By.XPATH, '//*[@id="rsyswpsdk"]/div/section/div/div[1]/div[3]/div/div[2]/div/div/div[3]/a')
+    btnVerTudo.click(), time.sleep(2)
 
-coletaDadosAmazon()
+    time.sleep(5)
+
+    produtos = navegador.find_elements(By.XPATH, "//h3[contains(@class, 'product-name')]")
+    precos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'styles__PromotionalPrice-sc-yl2rbe-0')]")
+
+    print('Produtos Ofertas do Dia Americanas\n')
+
+    for produto, preco in zip(produtos, precos): 
+        print(f"- {produto.text.upper()} -- R$ {preco.text}") 
+
+coletaDadosAmericanas()
