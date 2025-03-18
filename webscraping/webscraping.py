@@ -71,6 +71,8 @@ navegador = iniciar_navegador(com_debugging_remoto=True)
 def coletaDadosAmazon(): #Já estar na pag Amazon -- Coleta produtos em alta
 
     btnTodos = navegador.find_element(By.XPATH, '//*[@id="nav-hamburger-menu"]') #Obtendo o XPATH do elemento
+    #btnTodos = Selenium, encontre o elemento pelo XPATH = //*[@id="nav-hamburger-menu"]
+
     btnTodos.click(), time.sleep(1) #Dando um click em cima do elemento, e dando uma pausa de 1 segundo
 
     btnProdAlta = navegador.find_element(By.XPATH, '//*[@id="hmenu-content"]/ul[1]/li[4]/a')

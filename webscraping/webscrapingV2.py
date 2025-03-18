@@ -96,4 +96,10 @@ def coletaDadosMerLivre():
         print(f"{produto.text} -- R$ {preco.text}\n") 
 
 
+def coletaDadosAmericanas():
+    ofertaDia = navegador.find_element(By.XPATH, '//*[@id="rsyswpsdk"]/div/header/div[1]/div[1]/main/ul/li[9]/a')
+    ofertaDia.click(), time.sleep(1)
+
+    btnVerTudo = navegador.find_element(By.XPATH, '//*[@id="rsyswpsdk"]/div/section/div/div[1]/div[3]/div/div[2]/div/div/div[3]/a')
+
 coletaDadosAmazon()
