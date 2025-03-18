@@ -71,7 +71,7 @@ navegador = iniciar_navegador(com_debugging_remoto=True)
 def coletaDadosAmazon(): #Já estar na pag Amazon -- Coleta produtos em alta
 
     btnTodos = navegador.find_element(By.XPATH, '//*[@id="nav-hamburger-menu"]') #Obtendo o XPATH do elemento
-    btnTodos.click(), time.sleep(1) #Dando um click 'em cima do elemento, e dando uma pausa de 1 segundo
+    btnTodos.click(), time.sleep(1) #Dando um click em cima do elemento, e dando uma pausa de 1 segundo
 
     btnProdAlta = navegador.find_element(By.XPATH, '//*[@id="hmenu-content"]/ul[1]/li[4]/a')
     btnProdAlta.click(), time.sleep(1) #Mesma coisa que em cima
@@ -89,7 +89,7 @@ def coletaDadosAmazon(): #Já estar na pag Amazon -- Coleta produtos em alta
 
         try: #Tentar, fazer uma tentativa
 
-            #Vai me retornar o nome dos tópicos
+            #Vai me retornar o nome dos tópicos     Elementos h2 com a classe abaixo
             topico = secao.find_element(By.XPATH, ".//h2[contains(@class, 'a-carousel-heading')]").text
 
             #Se o tópico ja estiver em secoes_exibidas, o loop continua, no caso aqui evitando seções duplicadas no meu retorno de Nomes no terminal
