@@ -10,6 +10,8 @@ from bs4 import BeautifulSoup
 import requests
 
 #VERSÃO 2 SEM LINHAS COMENTADAS
+#CONFORME FOR ATUALIZANDO AQUI, VOU ADICIONANDO LA E COMENTANDO 
+
 #------------------------------
 
 '''Marketplaces e Varejistas
