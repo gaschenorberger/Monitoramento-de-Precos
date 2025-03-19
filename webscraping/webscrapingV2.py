@@ -113,4 +113,53 @@ def coletaDadosAmericanas():
     for produto, preco in zip(produtos, precos): 
         print(f"- {produto.text.upper()} -- R$ {preco.text}") 
 
-coletaDadosAmericanas()
+        
+
+def teste():
+    termo_busca = "iphone 14"
+    url = f"https://lista.mercadolivre.com.br/{termo_busca.replace(' ', '-')}"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
+    }
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        # Buscar links de produtos
+        produtos = soup.find_all("a", {"class": "poly-component__title"})
+
+        # Criar uma lista para armazenar os links dos produtos
+        links_produtos = []
+
+        if produtos:
+            for produto in produtos[:10]:  # Pegando os 10 primeiros links de produtos
+                link = produto.get("href")
+                if link not in links_produtos:  # Verificar se o link não foi adicionado antes
+                    links_produtos.append(link)
+
+            # Agora, percorrer cada link para extrair o nome e preço
+            for link in links_produtos:
+                # Fazer a requisição para a página do produto
+                produto_response = requests.get(link, headers=headers)
+                if produto_response.status_code == 200:
+                    produto_soup = BeautifulSoup(produto_response.text, "html.parser")
+                    
+                    # Extrair o nome do produto
+                    nome_produto = produto_soup.find("h1", {"class": "ui-pdp-title"}).text.strip()
+                    
+                    # Extrair o preço do produto
+                    preco_produto = produto_soup.find("span", {"class": "andes-money-amount__fraction"}).text.strip()
+                    
+                    # Imprimir nome e preço
+                    print(f"Produto: {nome_produto}")
+                    print(f"Preço: R$ {preco_produto}")
+                    print("-" * 40)
+                else:
+                    print(f"Erro ao acessar o produto: {link}")
+        else:
+            print("Nenhum produto encontrado.")
+    else:
+        print(f"Erro ao acessar o site. Código de status: {response.status_code}")
+teste()
