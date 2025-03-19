@@ -64,13 +64,20 @@ header a.cabecalhoLogo{
     text-decoration: none;
 }
 
+.hoverText {
+    transition: 0.5s;
+    border-radius: 20px;
+    padding: 3px;
+}
+
 .hoverText:hover{
     background-color: var(--cor-terciaria);
     color: var(--cor-quaternaria);
+
 }
 
 .cabecalho__menu_links {
-    padding: 208px 19px;
+    padding: 10px 50px;
     position: relative;
     cursor: pointer;
     transition: 0.3s;
