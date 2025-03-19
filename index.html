@@ -9,32 +9,59 @@
 </head>
 <body>
     <header class="cabecalho">
-        <div class="cabecalhoFuncoes">
+        <div class="fistColumnMenu">
             <a class="cabecalhoLogo" href="./index.html">
                 <img src="./assets/logo 1.svg" alt="Preço Certo"></a>
             <button class="pesquisa" onclick="todasCategorias()">Todas as categorias</button>
-            <img src="./assets/arrow-down-angle-svgrepo-com 1.svg" alt="">
+            <img class="pesquisa" src="./assets/arrow-down-angle-svgrepo-com 1.svg" alt="">
             <input class="pesquisa" type="text" id="txtBusca" placeholder="Digite sua busca"/>
             <img class="pesquisa" src="./assets/search-svgrepo-com 1.svg" alt="Buscar">
             <img class="loginInicio" src="./assets/login imagem.svg" alt="Login Imagem">
             <button class="loginInicio" onclick="abrirAbaLogin()">Entrar</button>
             <img class="loginInicio" src="./assets/side arrow.svg" alt="Seta Login">
         </div>
-        <nav class="cabecalho__menu">
-            <button class="menuEndereco" onclick="menuCEP()">XXXXX-XXX <br> Endereço do usuário</button>
-            <a class="cabecalho__menu_links" href="">
-                <img src="./assets/list-svgrepo-com 1.svg" alt="Ícone categorias">Categorias</a>
-            <a class="cabecalho__menu_links" href="">
-                <img src="./assets/message-square-lines-alt-svgrepo-com 1.svg" alt="Ícone blog">Blog</a>
-            <a class="cabecalho__menu_links" href="">
-                <img src="./assets/dolar-svgrepo-com 1.svg" alt="Ícone cashback">Cashback</a>
-            <a class="cabecalho__menu_links" href="">
-                <img src="./assets/sale-svgrepo-com 1.svg" alt="Ícone cupons">Cupons</a>
-            <a class="cabecalho__menu_links" href="">
-                <img src="./assets/bolt-svgrepo-com 1.svg" alt="Ícone ofertas">Ofertas do dia</a>
-            <a class="cabecalho__menu_links" href="">
-                <img src="./assets/search-svgrepo-com 2.svg" alt="Ícone semana do consumidor">Semana do consumidor</a>
-        </nav>
+        <div class="secondColumnMenu">
+            <nav class="cabecalho__menu">
+                <ul class="menuLista">
+                    <li>
+                        <img src="./assets/location-pin-svgrepo-com 1.svg" alt="Icone Endereço">
+                        <button class="menuEndereco" onclick="menuCEP()">XXXXX-XXX <br> Endereço do usuário</button>
+                    </li>
+                        
+                    <li>
+                        <a class="cabecalho__menu_active" href="">
+                            <img class="imgCat" src="./assets/list-svgrepo-com 1.svg" alt="Ícone categorias">
+                            <span class="hoverText">Categorias</span> </a>
+                    </li>
+    
+                    <li>
+                        <a class="cabecalho__menu_active" href="">
+                            <img id="imgBlog" src="./assets/message-square-lines-alt-svgrepo-com 1.svg" alt="Ícone blog">
+                        <span class="hoverText">Blog</span></a>
+                    </li>
+    
+                    <li>
+                        <a class="cabecalho__menu_links" href="">
+                            <img src="./assets/dolar-svgrepo-com 1.svg" alt="Ícone cashback">Cashback</a>
+                    </li>
+    
+                    <li>
+                        <a class="cabecalho__menu_links" href="">
+                            <img src="./assets/sale-svgrepo-com 1.svg" alt="Ícone cupons">Cupons</a>
+                    </li>
+    
+                    <li>
+                        <a class="cabecalho__menu_links" href="">
+                            <img src="./assets/bolt-svgrepo-com 1.svg" alt="Ícone ofertas">Ofertas do dia</a>
+                    </li>
+    
+                    <li>
+                        <a class="cabecalho__menu_links" href="">
+                            <img src="./assets/search-svgrepo-com 2.svg" alt="Ícone semana do consumidor">Semana do consumidor</a>
+                    </li>
+                </ul>    
+            </nav>
+        </div>
     </header>
     <main class="apresentacao">
         <section class="apresentacao__conteudo">

@@ -4,22 +4,83 @@
     --cor-primaria: #10439F;
     --cor-secundaria: #F27BBD;
     --cor-terciaria: #FFFF;
+    --cor-quaternaria: #000;
 
-    --fonte-primaria: 'Krona One', sans-serif;
-    --fonte-secundaria: 'Montserrat', sans-serif;
+    --fonte-primaria: 'Montserrat', sans-serif;
 }
 
 *{
    margin: 0;
    padding: 0;
+   box-sizing: border-box;
+   font-family: var(--fonte-primaria);
 }
 
 .body{
-    box-sizing: border-box;
     background-color: var(--cor-terciaria)
 }
 
 .cabecalho{
+    display: flex;
+    flex-direction: row;
+    width: 195px;
+    margin: 0px auto;
+    width: 100%;
     background-color: var(--cor-primaria);
-    padding: 2% 0% 0% 15%;
+    align-items: center;
+    
 }
+
+.fisrtColumnMenu{
+    display: inline-flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.cabecalho__menu{
+    display: inline-flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+header a.cabecalhoLogo{
+    padding: 190px;
+    align-items: end;
+    margin-right: 38px;
+}
+
+.menuLista{
+    list-style: none;
+    display: inline-flex;
+}
+
+.cabecalho__menu_active{
+    padding: 1px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 16px;
+    color: #FFFF; 
+    text-decoration: none;
+}
+
+.hoverText:hover{
+    background-color: var(--cor-terciaria);
+    color: var(--cor-quaternaria);
+}
+
+.cabecalho__menu_links {
+    padding: 208px 19px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 16px;
+    color: #FFFF; 
+    text-decoration: none; 
+}
+
+.cabecalho__menu_links:hover{
+    text-decoration: underline;
+}
+
+
