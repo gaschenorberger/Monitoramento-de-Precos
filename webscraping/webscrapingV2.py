@@ -80,7 +80,7 @@ def coletaDadosAmazon(): #Já estar na pag Amazon -- Coleta produtos em alta
 
         if produtos:
             for produto in produtos:
-                print(f" - {produto.text}")
+                print(f" - {produto.text.upper()}")
 
 def coletaDadosMerLivre():
     btnOfertas = navegador.find_element(By.XPATH, '/html/body/header/div/div[5]/div/ul/li[2]/a')
@@ -93,13 +93,73 @@ def coletaDadosMerLivre():
     precos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'andes-money-amount__fraction')]")
     
     for produto, preco in zip(produtos, precos): 
-        print(f"{produto.text} -- R$ {preco.text}\n") 
+        print(f"{produto.text.upper()} -- R$ {preco.text}\n") 
 
 
 def coletaDadosAmericanas():
     ofertaDia = navegador.find_element(By.XPATH, '//*[@id="rsyswpsdk"]/div/header/div[1]/div[1]/main/ul/li[9]/a')
-    ofertaDia.click(), time.sleep(1)
+    ofertaDia.click(), time.sleep(2)
 
     btnVerTudo = navegador.find_element(By.XPATH, '//*[@id="rsyswpsdk"]/div/section/div/div[1]/div[3]/div/div[2]/div/div/div[3]/a')
+    btnVerTudo.click(), time.sleep(2)
 
-coletaDadosAmazon()
+    time.sleep(5)
+
+    produtos = navegador.find_elements(By.XPATH, "//h3[contains(@class, 'product-name')]")
+    precos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'styles__PromotionalPrice-sc-yl2rbe-0')]")
+
+    print('Produtos Ofertas do Dia Americanas\n')
+
+    for produto, preco in zip(produtos, precos): 
+        print(f"- {produto.text.upper()} -- R$ {preco.text}") 
+
+        
+
+def teste():
+    termo_busca = "iphone 14"
+    url = f"https://lista.mercadolivre.com.br/{termo_busca.replace(' ', '-')}"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
+    }
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        # Buscar links de produtos
+        produtos = soup.find_all("a", {"class": "poly-component__title"})
+
+        # Criar uma lista para armazenar os links dos produtos
+        links_produtos = []
+
+        if produtos:
+            for produto in produtos[:10]:  # Pegando os 10 primeiros links de produtos
+                link = produto.get("href")
+                if link not in links_produtos:  # Verificar se o link não foi adicionado antes
+                    links_produtos.append(link)
+
+            # Agora, percorrer cada link para extrair o nome e preço
+            for link in links_produtos:
+                # Fazer a requisição para a página do produto
+                produto_response = requests.get(link, headers=headers)
+                if produto_response.status_code == 200:
+                    produto_soup = BeautifulSoup(produto_response.text, "html.parser")
+                    
+                    # Extrair o nome do produto
+                    nome_produto = produto_soup.find("h1", {"class": "ui-pdp-title"}).text.strip()
+                    
+                    # Extrair o preço do produto
+                    preco_produto = produto_soup.find("span", {"class": "andes-money-amount__fraction"}).text.strip()
+                    
+                    # Imprimir nome e preço
+                    print(f"Produto: {nome_produto}")
+                    print(f"Preço: R$ {preco_produto}")
+                    print("-" * 40)
+                else:
+                    print(f"Erro ao acessar o produto: {link}")
+        else:
+            print("Nenhum produto encontrado.")
+    else:
+        print(f"Erro ao acessar o site. Código de status: {response.status_code}")
+teste()

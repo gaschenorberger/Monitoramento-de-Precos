@@ -99,7 +99,7 @@ def coletaDadosAmazon(): #Já estar na pag Amazon -- Coleta produtos em alta
                 continue  
             secoes_exibidas.add(topico)  
             
-            print(f"\n{topico}")  #Printa pra mim o tópico
+            print(f"\n{topico.upper()}")  #Printa pra mim o tópico
         except: #Se acontecer algum erro, o código simplesmente ignora e vai pra próxima
             continue  
 
@@ -110,7 +110,8 @@ def coletaDadosAmazon(): #Já estar na pag Amazon -- Coleta produtos em alta
         #Se existir algum produto, ou seja, se foi obtido os nomes dos produtos
         if produtos:
             for produto in produtos: #Para cada produto na lista Produtos
-                print(f" - {produto.text}") #Vai me retornar o nome de cada um
+                print(f" - {produto.text.upper()}") #Vai me retornar o nome de cada um
+                """PRODUTO = VARIÁVEL, .TEXT = RETORNAR O TEXTO, .UPPER () = RETORNAR EM CAIXA ALTA"""
 
 def coletaDadosMerLivre():
     btnOfertas = navegador.find_element(By.XPATH, '/html/body/header/div/div[5]/div/ul/li[2]/a')
@@ -129,7 +130,26 @@ def coletaDadosMerLivre():
         zip() serve para utilizar mais de uma variável de uma vez """
     
     for produto, preco in zip(produtos, precos): 
-        print(f"{produto.text} -- R$ {preco.text}\n") #Retorna pra mim o nome de cada procuto e o preço
+        print(f"{produto.text.upper()} - R$ {preco.text}\n") #Retorna pra mim o nome de cada procuto e o preço
+        """PRODUTO = VARIÁVEL, .TEXT = RETORNAR O TEXTO, .UPPER () = RETORNAR EM CAIXA ALTA"""
+
+def coletaDadosAmericanas():
+    ofertaDia = navegador.find_element(By.XPATH, '//*[@id="rsyswpsdk"]/div/header/div[1]/div[1]/main/ul/li[9]/a') # OBTENDO XPATH ELEMENTO
+    ofertaDia.click(), time.sleep(1) #CLICANDO NO ELEMENTO
+
+    btnVerTudo = navegador.find_element(By.XPATH, '//*[@id="rsyswpsdk"]/div/section/div/div[1]/div[3]/div/div[2]/div/div/div[3]/a') # OBTENDO XPATH ELEMENTO
+    btnVerTudo.click(), time.sleep(1) #CLICANDO NO ELEMENTO
+
+    time.sleep(1)
+
+    produtos = navegador.find_elements(By.XPATH, "//h3[contains(@class, 'product-name')]") # OBTENDO XPATH ELEMENTOS
+    precos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'styles__PromotionalPrice-sc-yl2rbe-0')]") # OBTENDO XPATH ELEMENTOS
+
+    print('Produtos Ofertas do Dia Americanas\n')
+
+    for produto, preco in zip(produtos, precos): #LOOP PARA ME RETORNAR TODOS OS PRODUTOS
+        print(f"- {produto.text.upper()} - R$ {preco.text}") 
+        """PRODUTO = VARIÁVEL, .TEXT = RETORNAR O TEXTO, .UPPER () = RETORNAR EM CAIXA ALTA"""
 
 
 coletaDadosAmazon()
