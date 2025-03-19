@@ -21,30 +21,30 @@ body {
     margin-left: 200px;
 }
 
-.search-bar {
+.searchBar {
     display: flex;
 }
 
-.search-bar select, .search-bar input, .search-bar button {
+.searchBar select, .searchBar input, .searchBar button {
     padding: 15px;
     border: none;
 }
 
-.search-bar select {
+.searchBar select {
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
 }
 
-.search-bar button {
+.searchBar button {
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
 }
 
-.user-actions {
+.userActions {
     margin-right: 50px;
 }
 
-.user-actions button {
+.userActions button {
     background: none;
     border: none;
     color: white;
