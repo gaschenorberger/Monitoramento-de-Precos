@@ -67,3 +67,7 @@ body {
     transition: 0.3s;
 }
 
+.menu a:hover {
+   color: #F27BBD;;
+}
+
