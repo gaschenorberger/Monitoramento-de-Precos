@@ -9,44 +9,32 @@
     --fonte-primaria: 'Montserrat', sans-serif;
 }
 
-*{
+body{
    margin: 0;
-   padding: 0;
-   box-sizing: border-box;
    font-family: var(--fonte-primaria);
-}
-
-.body{
-    background-color: var(--cor-terciaria)
+   background-color: var(--cor-terciaria);
+   color: var(--cor-quaternaria);
 }
 
 .cabecalho{
     display: flex;
-    flex-direction: row;
-    width: 195px;
-    margin: 0px auto;
-    width: 100%;
+    justify-content: space-between;
+    align-items: center;
     background-color: var(--cor-primaria);
-    align-items: center;
-    
-}
-
-.fisrtColumnMenu{
-    display: inline-flex;
-    align-items: center;
-    margin-left: auto;
+    padding: 10px 20px;
+    color: var(--cor-terciaria);
 }
 
 .cabecalho__menu{
     display: inline-flex;
     align-items: center;
-    margin-left: auto;
+    margin-left: 200px;
 }
 
-header a.cabecalhoLogo{
-    padding: 190px;
-    align-items: end;
-    margin-right: 38px;
+.cabecalhoLogo{
+    width: 100px;
+    height: 100px;
+    margin-left: 200px;
 }
 
 .menuLista{
