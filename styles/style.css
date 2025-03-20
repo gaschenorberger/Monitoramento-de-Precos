@@ -55,8 +55,15 @@ body {
 }
 
 .userActions button span.atvCashback {
-    color:beige;
+    color: #474545;
     font-size: 10px;
+}
+
+.loginButton{
+    background-color: #cfd9ec !important;
+    border-radius: 50px;
+    padding: 15px;
+    color: #000 !important;
 }
 
 .menu {
