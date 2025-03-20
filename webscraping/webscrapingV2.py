@@ -155,6 +155,7 @@ def teste():
                     # Imprimir nome e preço
                     print(f"Produto: {nome_produto}")
                     print(f"Preço: R$ {preco_produto}")
+                    print(link)
                     print("-" * 40)
                 else:
                     print(f"Erro ao acessar o produto: {link}")
