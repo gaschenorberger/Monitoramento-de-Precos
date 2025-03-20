@@ -1,81 +1,73 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-
-:root {
-    --cor-primaria: #10439F;
-    --cor-secundaria: #F27BBD;
-    --cor-terciaria: #FFFF;
-    --cor-quaternaria: #000;
-
-    --fonte-primaria: 'Montserrat', sans-serif;
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #000;
 }
 
-body{
-   margin: 0;
-   font-family: var(--fonte-primaria);
-   background-color: var(--cor-terciaria);
-   color: var(--cor-quaternaria);
-}
-
-.cabecalho{
+.navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--cor-primaria);
+    background-color: #023b92;
     padding: 10px 20px;
-    color: var(--cor-terciaria);
+    color: white;
 }
 
-.cabecalho__menu{
-    display: inline-flex;
-    align-items: center;
-    margin-left: 200px;
-}
-
-.cabecalhoLogo{
+.logo {
     width: 100px;
     height: 100px;
     margin-left: 200px;
 }
 
-.menuLista{
-    list-style: none;
-    display: inline-flex;
+.searchBar {
+    display: flex;
 }
 
-.cabecalho__menu_active{
-    padding: 1px;
-    position: relative;
+.searchBar select, .searchBar input, .searchBar button {
+    padding: 15px;
+    border: none;
+}
+
+.searchBar select {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.searchBar button {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.userActions {
+    margin-right: 50px;
+}
+
+.userActions button {
+    background: none;
+    border: none;
+    color: white;
     cursor: pointer;
-    transition: 0.3s;
-    font-size: 16px;
-    color: #FFFF; 
+}
+
+.menu {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    background-color: #023b92;
+    /*background-color: black;*/
+    padding: 10px 0;
+
+}
+
+.menu a {
+    color: white;
     text-decoration: none;
-}
-
-.hoverText {
-    transition: 0.5s;
-    border-radius: 20px;
-    padding: 3px;
-}
-
-.hoverText:hover{
-    background-color: var(--cor-terciaria);
-    color: var(--cor-quaternaria);
-
-}
-
-.cabecalho__menu_links {
-    padding: 10px 50px;
-    position: relative;
-    cursor: pointer;
+    font-size: 14px;
     transition: 0.3s;
-    font-size: 16px;
-    color: #FFFF; 
-    text-decoration: none; 
 }
 
-.cabecalho__menu_links:hover{
-    text-decoration: underline;
+.menu a:hover {
+   color: #F27BBD;;
 }
-
 

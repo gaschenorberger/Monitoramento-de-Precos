@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --cor-primaria: #10439F;
+    --cor-secundaria: #F27BBD;
+    --cor-terciaria: #FFFF;
+    --cor-quaternaria: #000;
+
+    --fonte-primaria: 'Montserrat', sans-serif;
+}
+
+body{
+   margin: 0;
+   font-family: var(--fonte-primaria);
+   background-color: var(--cor-terciaria);
+   color: var(--cor-quaternaria);
+}
+
+.cabecalho{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--cor-primaria);
+    padding: 10px 20px;
+    color: var(--cor-terciaria);
+}
+
+.cabecalho__menu{
+    display: inline-flex;
+    align-items: center;
+    margin-left: 200px;
+}
+
+.cabecalhoLogo{
+    width: 100px;
+    height: 100px;
+    margin-left: 200px;
+}
+
+.menuLista{
+    list-style: none;
+    display: inline-flex;
+}
+
+.cabecalho__menu_active{
+    padding: 1px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 16px;
+    color: #FFFF; 
+    text-decoration: none;
+}
+
+.hoverText {
+    transition: 0.5s;
+    border-radius: 20px;
+    padding: 3px;
+}
+
+.hoverText:hover{
+    background-color: var(--cor-terciaria);
+    color: var(--cor-quaternaria);
+
+}
+
+.cabecalho__menu_links {
+    padding: 10px 50px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 16px;
+    color: #FFFF; 
+    text-decoration: none; 
+}
+
+.cabecalho__menu_links:hover{
+    text-decoration: underline;
+}
+
+
