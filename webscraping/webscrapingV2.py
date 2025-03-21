@@ -88,13 +88,21 @@ def coletaDadosMerLivre():
 
     ofertas = navegador.find_element(By.XPATH, '//*[@id="root-app"]/div/div/section/a/div/h1').text
     print(f'{ofertas}\n')
-
+    
     produtos = navegador.find_elements(By.XPATH, "//a[contains(@class, 'poly-component__title')]") 
     precos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'andes-money-amount andes-money-amount--cents-superscript')]/descendant::span[contains(@class, 'andes-money-amount__fraction')]")
+    centavos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'andes-money-amount andes-money-amount--cents-superscript')]/descendant::span[contains(@class, 'andes-money-amount__cents andes-money-amount__cents--superscript-24')]")
     
-    for produto, preco in zip(produtos[:3], precos): 
-        print(f"{produto.text.upper()} -- R$ {preco.text}") 
 
+    # Ajustar a lista de centavos para ter o mesmo tamanho que produtos e preços
+    centavos_dict = {centavo.location['y']: centavo for centavo in centavos}  # Organiza por posição
+    centavos_ordenados = [centavos_dict.get(preco.location['y'], None) for preco in precos]  # Associa ao preço correto
+
+    for produto, preco, centavo in zip(produtos[:3], precos, centavos_ordenados[:3]):
+        if centavo:
+            print(f"{produto.text.upper()} -- R$ {preco.text},{centavo.text}")
+        else:
+            print(f"{produto.text.upper()} -- R$ {preco.text},00")
 
 def coletaDadosAmericanas():
     ofertaDia = navegador.find_element(By.XPATH, '//*[@id="rsyswpsdk"]/div/header/div[1]/div[1]/main/ul/li[9]/a')
