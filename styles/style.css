@@ -25,6 +25,7 @@ body {
 
 .searchBar {
     display: flex;
+    margin-left: 100px;
 }
 
 .searchBar select, .searchBar input, .searchBar button {
@@ -46,7 +47,7 @@ body {
 }
 
 .userActions {
-    margin-right: 50px;
+    margin-right: 200px;
 }
 
 .userActions button {
