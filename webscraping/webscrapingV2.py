@@ -79,7 +79,7 @@ def coletaDadosAmazon(): #Já estar na pag Amazon -- Coleta produtos em alta
         
 
         if produtos:
-            for produto in produtos:
+            for produto in produtos[:3]:
                 print(f" - {produto.text.upper()}")
 
 def coletaDadosMerLivre():
@@ -87,13 +87,13 @@ def coletaDadosMerLivre():
     btnOfertas.click(), time.sleep(1) 
 
     ofertas = navegador.find_element(By.XPATH, '//*[@id="root-app"]/div/div/section/a/div/h1').text
-    print(ofertas)
+    print(f'{ofertas}\n')
 
     produtos = navegador.find_elements(By.XPATH, "//a[contains(@class, 'poly-component__title')]") 
-    precos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'andes-money-amount__fraction')]")
+    precos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'andes-money-amount andes-money-amount--cents-superscript')]/descendant::span[contains(@class, 'andes-money-amount__fraction')]")
     
-    for produto, preco in zip(produtos, precos): 
-        print(f"{produto.text.upper()} -- R$ {preco.text}\n") 
+    for produto, preco in zip(produtos[:3], precos): 
+        print(f"{produto.text.upper()} -- R$ {preco.text}") 
 
 
 def coletaDadosAmericanas():
@@ -110,7 +110,7 @@ def coletaDadosAmericanas():
 
     print('Produtos Ofertas do Dia Americanas\n')
 
-    for produto, preco in zip(produtos, precos): 
+    for produto, preco in zip(produtos[:3], precos): 
         print(f"- {produto.text.upper()} -- R$ {preco.text}") 
 
         
@@ -163,4 +163,6 @@ def teste():
             print("Nenhum produto encontrado.")
     else:
         print(f"Erro ao acessar o site. Código de status: {response.status_code}")
-teste()
+
+
+coletaDadosMerLivre()
