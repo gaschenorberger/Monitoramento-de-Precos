@@ -193,24 +193,26 @@ def filtroMercadoLivre():
     site = BeautifulSoup(response.text, 'html.parser')
 
     produtos = site.find_all('div', attrs={'class': 'ui-search-result__wrapper'})
-
+    #print(produto.prettify())
+    
     for produto in produtos:
         preco = produto.find('div', attrs={'class': 'poly-price__current'})
         centavos = preco.find('span', attrs={'class': 'andes-money-amount__cents andes-money-amount__cents--superscript-24'})
         simbolo = preco.find('span', attrs={'class': 'andes-money-amount__currency-symbol'})
-        #print(produto.prettify())
 
         nomeProduto = produto.find('a', attrs={'class': 'poly-component__title'})
         precoProduto = preco.find('span', attrs={'class': 'andes-money-amount__fraction'})
 
+        linkProduto = nomeProduto['href']
+
         if centavos:
             produto = nomeProduto.text, simbolo.text, precoProduto.text + ',' + centavos.text #MUDAR LÓGICA !!!!
-            print(*produto, '\n')
+            print(*produto, '\n', linkProduto, '\n')
 
             listaProdutos.append(produto)
         else:
             produto = nomeProduto.text, 'R$', precoProduto.text + ',' + '00' 
-            print(*produto, '\n')
+            print(*produto, '\n', linkProduto, '\n')
 
             listaProdutos.append(produto)
 
