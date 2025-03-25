@@ -8,6 +8,8 @@ import time
 from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup
 import requests
+import pandas as pd
+import openpyxl
 
 #VERSÃO 2 SEM LINHAS COMENTADAS
 #CONFORME FOR ATUALIZANDO AQUI, VOU ADICIONANDO LA E COMENTANDO 
@@ -47,10 +49,13 @@ def iniciar_navegador(com_debugging_remoto=True):
     navegador = webdriver.Chrome(service=service, options=chrome_options)
     return navegador
 
-navegador = iniciar_navegador(com_debugging_remoto=True)
+#navegador = iniciar_navegador(com_debugging_remoto=True)
 
+
+#-------------------------------ÁREA PRINCIPAL---------------------------
 
 def coletaDadosAmazon(): #Já estar na pag Amazon -- Coleta produtos em alta
+    navegador = iniciar_navegador(com_debugging_remoto=True)
 
     btnTodos = navegador.find_element(By.XPATH, '//*[@id="nav-hamburger-menu"]')
     btnTodos.click(), time.sleep(1) 
@@ -83,6 +88,8 @@ def coletaDadosAmazon(): #Já estar na pag Amazon -- Coleta produtos em alta
                 print(f" - {produto.text.upper()}")
 
 def coletaDadosMerLivre():
+    navegador = iniciar_navegador(com_debugging_remoto=True)
+
     btnOfertas = navegador.find_element(By.XPATH, '/html/body/header/div/div[5]/div/ul/li[2]/a')
     btnOfertas.click(), time.sleep(1) 
 
@@ -105,6 +112,8 @@ def coletaDadosMerLivre():
             print(f"{produto.text.upper()} -- R$ {preco.text},00")
 
 def coletaDadosAmericanas():
+    navegador = iniciar_navegador(com_debugging_remoto=True)
+
     ofertaDia = navegador.find_element(By.XPATH, '//*[@id="rsyswpsdk"]/div/header/div[1]/div[1]/main/ul/li[9]/a')
     ofertaDia.click(), time.sleep(2)
 
@@ -120,8 +129,6 @@ def coletaDadosAmericanas():
 
     for produto, preco in zip(produtos[:3], precos): 
         print(f"- {produto.text.upper()} -- R$ {preco.text}") 
-
-        
 
 def teste():
     termo_busca = "iphone 14"
@@ -173,4 +180,46 @@ def teste():
         print(f"Erro ao acessar o site. Código de status: {response.status_code}")
 
 
-coletaDadosMerLivre()
+#-----------------------------PESQUISA FILTRADA-----------------------------
+
+def filtroMercadoLivre():
+    listaProdutos = []
+
+    urlBase = 'https://lista.mercadolivre.com.br/'
+    inputNome = input('Qual o nome do produto? ')
+
+    response = requests.get(urlBase + inputNome)
+
+    site = BeautifulSoup(response.text, 'html.parser')
+
+    produtos = site.find_all('div', attrs={'class': 'ui-search-result__wrapper'})
+
+    for produto in produtos:
+        preco = produto.find('div', attrs={'class': 'poly-price__current'})
+        centavos = preco.find('span', attrs={'class': 'andes-money-amount__cents andes-money-amount__cents--superscript-24'})
+        simbolo = preco.find('span', attrs={'class': 'andes-money-amount__currency-symbol'})
+        #print(produto.prettify())
+
+        nomeProduto = produto.find('a', attrs={'class': 'poly-component__title'})
+        precoProduto = preco.find('span', attrs={'class': 'andes-money-amount__fraction'})
+
+        if centavos:
+            produto = nomeProduto.text, simbolo.text, precoProduto.text + ',' + centavos.text #MUDAR LÓGICA !!!!
+            print(*produto, '\n')
+
+            listaProdutos.append(*produto)
+        else:
+            produto = nomeProduto.text, 'R$', precoProduto.text + ',' + '00' 
+            print(*produto, '\n')
+
+            listaProdutos.append(*produto)
+
+        #IMPLEMENTAR PLANILHA
+
+
+
+
+        
+
+
+filtroMercadoLivre()
