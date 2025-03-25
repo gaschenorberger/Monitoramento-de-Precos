@@ -207,12 +207,12 @@ def filtroMercadoLivre():
             produto = nomeProduto.text, simbolo.text, precoProduto.text + ',' + centavos.text #MUDAR LÓGICA !!!!
             print(*produto, '\n')
 
-            listaProdutos.append(*produto)
+            listaProdutos.append(produto)
         else:
             produto = nomeProduto.text, 'R$', precoProduto.text + ',' + '00' 
             print(*produto, '\n')
 
-            listaProdutos.append(*produto)
+            listaProdutos.append(produto)
 
         #IMPLEMENTAR PLANILHA
 
