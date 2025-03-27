@@ -10,6 +10,9 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 import openpyxl
+from sqlalchemy import create_engine
+from datetime import datetime
+import psycopg2
 
 #VERSÃO 2 SEM LINHAS COMENTADAS
 #CONFORME FOR ATUALIZANDO AQUI, VOU ADICIONANDO LA E COMENTANDO 
@@ -31,6 +34,7 @@ TerabyteShop (hardware e tecnologia) (www.terabyteshop.com.br)
 Pichau (componentes de PC) (www.pichau.com.br)
 Dell (computadores e acessórios) (www.dell.com.br)'''
 
+
 def iniciar_navegador(com_debugging_remoto=True): 
     chrome_driver_path = ChromeDriverManager().install()
     chrome_driver_executable = os.path.join(os.path.dirname(chrome_driver_path), 'chromedriver.exe')
@@ -50,6 +54,31 @@ def iniciar_navegador(com_debugging_remoto=True):
     return navegador
 
 #navegador = iniciar_navegador(com_debugging_remoto=True)
+
+def conectar_postgres():
+    return psycopg2.connect(
+        dbname="bd_preco_certo",
+        user="postgres",
+        password="1234",
+        host="localhost",
+        port="5432"
+    )
+
+def salvar_dados_postgres(nomePdt, precoPdt, linkPdt):
+    
+    conexao = conectar_postgres()
+    cursor = conexao.cursor()
+
+
+    query = """
+        INSERT INTO produtos (nome_pdt, preco_pdt, link_pdt)
+        VALUES (%s, %s, %s);
+    """
+    cursor.execute(query, (nomePdt, precoPdt, linkPdt))
+
+    conexao.commit()
+    cursor.close()
+    conexao.close()
 
 
 #-------------------------------ÁREA PRINCIPAL---------------------------
@@ -130,55 +159,6 @@ def coletaDadosAmericanas():
     for produto, preco in zip(produtos[:3], precos): 
         print(f"- {produto.text.upper()} -- R$ {preco.text}") 
 
-def teste():
-    termo_busca = "iphone 14"
-    url = f"https://lista.mercadolivre.com.br/{termo_busca.replace(' ', '-')}"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
-    }
-
-    response = requests.get(url, headers=headers)
-
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.text, "html.parser")
-
-        # Buscar links de produtos
-        produtos = soup.find_all("a", {"class": "poly-component__title"})
-
-        # Criar uma lista para armazenar os links dos produtos
-        links_produtos = []
-
-        if produtos:
-            for produto in produtos[:10]:  # Pegando os 10 primeiros links de produtos
-                link = produto.get("href")
-                if link not in links_produtos:  # Verificar se o link não foi adicionado antes
-                    links_produtos.append(link)
-
-            # Agora, percorrer cada link para extrair o nome e preço
-            for link in links_produtos:
-                # Fazer a requisição para a página do produto
-                produto_response = requests.get(link, headers=headers)
-                if produto_response.status_code == 200:
-                    produto_soup = BeautifulSoup(produto_response.text, "html.parser")
-                    
-                    # Extrair o nome do produto
-                    nome_produto = produto_soup.find("h1", {"class": "ui-pdp-title"}).text.strip()
-                    
-                    # Extrair o preço do produto
-                    preco_produto = produto_soup.find("span", {"class": "andes-money-amount__fraction"}).text.strip()
-                    
-                    # Imprimir nome e preço
-                    print(f"Produto: {nome_produto}")
-                    print(f"Preço: R$ {preco_produto}")
-                    print(link)
-                    print("-" * 40)
-                else:
-                    print(f"Erro ao acessar o produto: {link}")
-        else:
-            print("Nenhum produto encontrado.")
-    else:
-        print(f"Erro ao acessar o site. Código de status: {response.status_code}")
-
 
 #-----------------------------PESQUISA FILTRADA-----------------------------
 
@@ -195,33 +175,33 @@ def filtroMercadoLivre():
     produtos = site.find_all('div', attrs={'class': 'ui-search-result__wrapper'})
     #print(produto.prettify())
     
-    for produto in produtos:
+    for produto in produtos[:5]:
         preco = produto.find('div', attrs={'class': 'poly-price__current'})
         centavos = preco.find('span', attrs={'class': 'andes-money-amount__cents andes-money-amount__cents--superscript-24'})
         simbolo = preco.find('span', attrs={'class': 'andes-money-amount__currency-symbol'})
 
         nomeProduto = produto.find('a', attrs={'class': 'poly-component__title'})
         precoProduto = preco.find('span', attrs={'class': 'andes-money-amount__fraction'})
-
         linkProduto = nomeProduto['href']
 
+        nomeProduto = nomeProduto.text
+        simbolo = simbolo.text
+
+
         if centavos:
-            produto = nomeProduto.text, simbolo.text, precoProduto.text + ',' + centavos.text #MUDAR LÓGICA !!!!
-            print(*produto, '\n', linkProduto, '\n')
+            precoProduto = simbolo + precoProduto.text + ',' + centavos.text
+            print(nomeProduto, precoProduto, '\n', linkProduto, '\n')
 
-            listaProdutos.append(produto)
+            listaProdutos.append(nomeProduto, precoProduto, linkProduto)
         else:
-            produto = nomeProduto.text, 'R$', precoProduto.text + ',' + '00' 
-            print(*produto, '\n', linkProduto, '\n')
+            precoProduto = simbolo + precoProduto.text + ',' + '00'
+            print(nomeProduto, precoProduto, '\n', linkProduto, '\n')
 
-            listaProdutos.append(produto)
+            listaProdutos.append([nomeProduto, precoProduto, linkProduto])
 
-        #IMPLEMENTAR PLANILHA
+        salvar_dados_postgres(nomeProduto, precoProduto, linkProduto)
 
-
-
-
-        
+   
 
 
 filtroMercadoLivre()
