@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 import openpyxl
-from sqlalchemy import create_engine
 from datetime import datetime
 import psycopg2
 
@@ -202,6 +201,4 @@ def filtroMercadoLivre():
         salvar_dados_postgres(nomeProduto, precoProduto, linkProduto)
 
    
-
-
 filtroMercadoLivre()
