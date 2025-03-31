@@ -3,9 +3,13 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 import os
 import time
-from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
@@ -45,6 +49,7 @@ def iniciar_navegador(com_debugging_remoto=True):
     service = Service(executable_path=chrome_driver_executable)
     
     chrome_options = Options()
+
     if com_debugging_remoto:
         remote_debugging_port = 9222
         chrome_options.add_experimental_option("debuggerAddress", f"localhost:{remote_debugging_port}")
@@ -58,7 +63,7 @@ def conectar_postgres():
     return psycopg2.connect(
         dbname="bd_preco_certo",
         user="postgres",
-        password="1234",
+        password="123",
         host="localhost",
         port="5432"
     )
@@ -79,11 +84,15 @@ def salvar_dados_postgres(nomePdt, precoPdt, linkPdt):
     cursor.close()
     conexao.close()
 
-
 #-------------------------------ÁREA PRINCIPAL---------------------------
 
-def coletaDadosAmazon(): #Já estar na pag Amazon -- Coleta produtos em alta
-    navegador = iniciar_navegador(com_debugging_remoto=True)
+def coletaDadosAmazon(): #OK, falta preço -- Coleta produtos em alta 
+    #navegador = iniciar_navegador(com_debugging_remoto=True)
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+
+    navegador = webdriver.Chrome(options=options)
+    navegador.get("https://www.amazon.com.br")
 
     btnTodos = navegador.find_element(By.XPATH, '//*[@id="nav-hamburger-menu"]')
     btnTodos.click(), time.sleep(1) 
@@ -109,59 +118,67 @@ def coletaDadosAmazon(): #Já estar na pag Amazon -- Coleta produtos em alta
             continue  
 
         produtos = secao.find_elements(By.XPATH, ".//div[contains(@class, 'p13n-sc-truncate-desktop-type2')]")
-        
 
         if produtos:
             for produto in produtos[:3]:
                 print(f" - {produto.text.upper()}")
+                    
+def coletaDadosMerLivre(): #OK
+    # navegador = iniciar_navegador(com_debugging_remoto=True)
 
-def coletaDadosMerLivre():
-    navegador = iniciar_navegador(com_debugging_remoto=True)
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+
+    navegador = webdriver.Chrome(options=options)
+    navegador.get("https://www.mercadolivre.com.br/")
 
     btnOfertas = navegador.find_element(By.XPATH, '/html/body/header/div/div[5]/div/ul/li[2]/a')
     btnOfertas.click(), time.sleep(1) 
 
-    ofertas = navegador.find_element(By.XPATH, '//*[@id="root-app"]/div/div/section/a/div/h1').text
+    ofertas = navegador.find_element(By.XPATH, '//*[@id="root-app"]/div/div/section/a/div/h1').text.upper()
     print(f'{ofertas}\n')
     
     produtos = navegador.find_elements(By.XPATH, "//a[contains(@class, 'poly-component__title')]") 
     precos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'andes-money-amount andes-money-amount--cents-superscript')]/descendant::span[contains(@class, 'andes-money-amount__fraction')]")
     centavos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'andes-money-amount andes-money-amount--cents-superscript')]/descendant::span[contains(@class, 'andes-money-amount__cents andes-money-amount__cents--superscript-24')]")
-    
 
-    # Ajustar a lista de centavos para ter o mesmo tamanho que produtos e preços
-    centavos_dict = {centavo.location['y']: centavo for centavo in centavos}  # Organiza por posição
-    centavos_ordenados = [centavos_dict.get(preco.location['y'], None) for preco in precos]  # Associa ao preço correto
-
-    for produto, preco, centavo in zip(produtos[:3], precos, centavos_ordenados[:3]):
+    for produto, preco, centavo in zip(produtos[:3], precos, centavos[:3]):
         if centavo:
             print(f"{produto.text.upper()} -- R$ {preco.text},{centavo.text}")
         else:
             print(f"{produto.text.upper()} -- R$ {preco.text},00")
 
-def coletaDadosAmericanas():
+def coletaDadosAmericanas(): #OK, MAS APENAS COM A PAGINA ABERTA
     navegador = iniciar_navegador(com_debugging_remoto=True)
 
+    # options = webdriver.ChromeOptions()
+    # options.add_argument("--headless")
+
+    # navegador = webdriver.Chrome(options=options)
+    # navegador.get("https://www.americanas.com.br/")
+
+    action = ActionChains(navegador)
+    action.move_by_offset(10, 10).click().perform()
+
     ofertaDia = navegador.find_element(By.XPATH, '//*[@id="rsyswpsdk"]/div/header/div[1]/div[1]/main/ul/li[9]/a')
-    ofertaDia.click(), time.sleep(2)
+    ofertaDia.click(), time.sleep(1)
 
     btnVerTudo = navegador.find_element(By.XPATH, '//*[@id="rsyswpsdk"]/div/section/div/div[1]/div[3]/div/div[2]/div/div/div[3]/a')
-    btnVerTudo.click(), time.sleep(2)
-
-    time.sleep(5)
+    btnVerTudo.click(), time.sleep(5)
 
     produtos = navegador.find_elements(By.XPATH, "//h3[contains(@class, 'product-name')]")
     precos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'styles__PromotionalPrice-sc-yl2rbe-0')]")
 
     print('Produtos Ofertas do Dia Americanas\n')
 
+    indice = 1
     for produto, preco in zip(produtos[:3], precos): 
-        print(f"- {produto.text.upper()} -- R$ {preco.text}") 
-
+        print(f"{indice}- {produto.text.upper()} -- R$ {preco.text}") 
+        indice +=1
 
 #-----------------------------PESQUISA FILTRADA-----------------------------
 
-def filtroMercadoLivre():
+def filtroMercadoLivre(): #OK
     listaProdutos = []
 
     urlBase = 'https://lista.mercadolivre.com.br/'
