@@ -148,7 +148,7 @@ def coletaDadosMerLivre(): #OK
         else:
             print(f"{produto.text.upper()} -- R$ {preco.text},00")
 
-def coletaDadosAmericanas(): #OK, MAS APENAS COM A PAGINA ABERTA
+def coletaDadosAmericanas(): #ALTERAR PARA SITE DINÂMICO
     navegador = iniciar_navegador(com_debugging_remoto=True)
 
     # options = webdriver.ChromeOptions()
@@ -160,7 +160,7 @@ def coletaDadosAmericanas(): #OK, MAS APENAS COM A PAGINA ABERTA
     action = ActionChains(navegador)
     action.move_by_offset(10, 10).click().perform()
 
-    ofertaDia = navegador.find_element(By.XPATH, '//*[@id="rsyswpsdk"]/div/header/div[1]/div[1]/main/ul/li[9]/a')
+    ofertaDia = navegador.find_element(By.XPATH, '//*[@id="__next"]/header/div/section[2]/div/nav/ul/li[8]/a')
     ofertaDia.click(), time.sleep(1)
 
     btnVerTudo = navegador.find_element(By.XPATH, '//*[@id="rsyswpsdk"]/div/section/div/div[1]/div[3]/div/div[2]/div/div/div[3]/a')
@@ -179,7 +179,6 @@ def coletaDadosAmericanas(): #OK, MAS APENAS COM A PAGINA ABERTA
 #-----------------------------PESQUISA FILTRADA-----------------------------
 
 def filtroMercadoLivre(): #OK
-    listaProdutos = []
 
     urlBase = 'https://lista.mercadolivre.com.br/'
     inputNome = input('Qual o nome do produto? ')
@@ -191,7 +190,7 @@ def filtroMercadoLivre(): #OK
     produtos = site.find_all('div', attrs={'class': 'ui-search-result__wrapper'})
     #print(produto.prettify())
     
-    for produto in produtos[:5]:
+    for produto in produtos[:3]:
         preco = produto.find('div', attrs={'class': 'poly-price__current'})
         centavos = preco.find('span', attrs={'class': 'andes-money-amount__cents andes-money-amount__cents--superscript-24'})
         simbolo = preco.find('span', attrs={'class': 'andes-money-amount__currency-symbol'})
@@ -208,14 +207,37 @@ def filtroMercadoLivre(): #OK
             precoProduto = simbolo + precoProduto.text + ',' + centavos.text
             print(nomeProduto, precoProduto, '\n', linkProduto, '\n')
 
-            listaProdutos.append(nomeProduto, precoProduto, linkProduto)
         else:
             precoProduto = simbolo + precoProduto.text + ',' + '00'
             print(nomeProduto, precoProduto, '\n', linkProduto, '\n')
 
-            listaProdutos.append([nomeProduto, precoProduto, linkProduto])
-
         salvar_dados_postgres(nomeProduto, precoProduto, linkProduto)
 
-   
+
 filtroMercadoLivre()
+
+
+# IDEIA ESTRUTURA BANCO DE DADOS
+""" dados_webscraping
+	    nomeProduto
+	    precoProduto
+	    linkProduto
+        lojaProduto
+	
+    produtos_merclivre
+	    nomeProduto
+	    precoProduto
+	    linkProduto
+        lojaProduto
+	
+    produtos_amazon
+	    nomeProduto
+	    precoProduto
+	    linkProduto
+        lojaProduto
+
+    produtos_americanas
+	    nomeProduto
+	    precoProduto
+	    linkProduto
+        lojaProduto"""
