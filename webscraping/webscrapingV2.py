@@ -176,6 +176,20 @@ def coletaDadosAmericanas(): #ALTERAR PARA SITE DINÂMICO
         print(f"{indice}- {produto.text.upper()} -- R$ {preco.text}") 
         indice +=1
 
+def coletaDadosMagazine(): #OS MAIS VENDIDOS
+    urlBase = 'https://www.magazineluiza.com.br'
+
+    options = Options()
+    options.add_argument("--headless") 
+    navegador = webdriver.Chrome(options=options)
+
+    navegador.get(urlBase)
+    time.sleep(5)
+
+    site = BeautifulSoup(navegador.page_source, 'html.parser')
+    produto = site.find('h3', class_='sc-doohEh dHamKz')
+    print(produto.text)
+
 #-----------------------------PESQUISA FILTRADA-----------------------------
 
 def filtroMercadoLivre(): #OK
@@ -214,7 +228,7 @@ def filtroMercadoLivre(): #OK
         salvar_dados_postgres(nomeProduto, precoProduto, linkProduto)
 
 
-filtroMercadoLivre()
+coletaDadosMagazine()
 
 
 # IDEIA ESTRUTURA BANCO DE DADOS
