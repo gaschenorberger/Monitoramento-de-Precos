@@ -176,12 +176,35 @@ def coletaDadosAmericanas(): #ALTERAR PARA SITE DINÂMICO
         print(f"{indice}- {produto.text.upper()} -- R$ {preco.text}") 
         indice +=1
 
+def coletaDadosMagazine(): #OS MAIS VENDIDOS OK
+    urlBase = 'https://www.magazineluiza.com.br'
+
+    options = Options()
+    options.add_argument("--headless") 
+    navegador = webdriver.Chrome(options=options)
+
+    navegador.get(urlBase)
+    WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
+
+    navegador.execute_script("window.scrollBy(0, 1000);")
+    time.sleep(5)
+
+    site = BeautifulSoup(navegador.page_source, 'html.parser')
+    maisVendidos = site.find('div', class_='sc-fjhLSj iSXyfy')
+    produtos = maisVendidos.find_all('h3', class_='sc-doohEh dHamKz')
+    precos = maisVendidos.find_all('p', class_='sc-dcJsrY eLxcFM sc-kUdmhA cvHkKW')
+
+    for produto, preco in zip(produtos[:4], precos):
+        print(produto.text + preco.text)
+
+
 #-----------------------------PESQUISA FILTRADA-----------------------------
 
 def filtroMercadoLivre(): #OK
 
     urlBase = 'https://lista.mercadolivre.com.br/'
     inputNome = input('Qual o nome do produto? ')
+    inputNome = inputNome.replace(" ", "")
 
     response = requests.get(urlBase + inputNome)
 
@@ -213,8 +236,35 @@ def filtroMercadoLivre(): #OK
 
         salvar_dados_postgres(nomeProduto, precoProduto, linkProduto)
 
+def filtroMagazine(): #OK 
+    urlBase = 'https://www.magazineluiza.com.br/busca/'
+    inputNome = input('Qual o nome do produto? ')
+    inputNome = inputNome.replace(" ", "")
 
-filtroMercadoLivre()
+    url = urlBase + inputNome
+
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+
+    navegador = webdriver.Chrome(options=options)
+    navegador.get(url)
+
+    WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
+
+    time.sleep(3)
+
+    site = BeautifulSoup(navegador.page_source, 'html.parser')
+
+    divProdutos = site.find('div', class_='sc-iGgWBj eWtIHQ sc-fDinKg iwedJE')
+    produtos = divProdutos.find_all('h2', class_='sc-doohEh dHamKz')
+    precos = divProdutos.find_all('p', class_='sc-dcJsrY eLxcFM sc-kUdmhA cvHkKW')
+
+    for produto, preco in zip(produtos,precos):
+        print(produto.text + preco.text)
+
+
+
+filtroMagazine()
 
 
 # IDEIA ESTRUTURA BANCO DE DADOS
@@ -241,3 +291,6 @@ filtroMercadoLivre()
 	    precoProduto
 	    linkProduto
         lojaProduto"""
+
+#NO BANCO MINHA IDEIA É FAZER UMA TABELA PRA CADA SITE, SALVAR TODAS AS INF COM A DATA DO DIA, QUANDO FOR PUXAR NO SITE, USAR SELECT * FROM AMAZON WHERE DT_ATUAL = 'DATA';
+#ASSIM FAZENDO COM QUE PUXE NO SITE A ATUALIZAÇÃO DO DIA, MAS NAO DEIXANDO DE SALVAR OS PRODUTOS DOS OUTROS DIAS PRA FAZER GRAFICO DE COMPARAÇÃO DE DATA
