@@ -197,6 +197,28 @@ def coletaDadosMagazine(): #OS MAIS VENDIDOS OK
     for produto, preco in zip(produtos[:4], precos):
         print(produto.text + preco.text)
 
+def coletaCasasBahia():
+    url = 'https://www.casasbahia.com.br'
+
+    options = webdriver.ChromeOptions()
+    # options.add_argument("--headless")
+
+    navegador = webdriver.Chrome(options=options)
+    navegador.get(url)
+
+    WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
+
+    time.sleep(3)
+
+    site = BeautifulSoup(navegador.page_source, 'html.parser')
+    print(site.prettify())
+    # divProdutos = site.find('div', class_='css-78wyov')
+
+    # produtos = divProdutos.find('h3', class_='product-card__title')
+    # print(produtos.text)
+
+
+
 
 #-----------------------------PESQUISA FILTRADA-----------------------------
 
@@ -251,7 +273,7 @@ def filtroMagazine(): #OK
 
     WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
 
-    time.sleep(3)
+    time.sleep(5)
 
     site = BeautifulSoup(navegador.page_source, 'html.parser')
 
