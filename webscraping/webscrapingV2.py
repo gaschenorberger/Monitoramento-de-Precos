@@ -86,13 +86,16 @@ def salvar_dados_postgres(nomePdt, precoPdt, linkPdt):
 
 #-------------------------------ÁREA PRINCIPAL---------------------------
 
-def coletaDadosAmazon(): #OK, falta preço -- Coleta produtos em alta 
+def coletaDadosAmazon(): #OK
     #navegador = iniciar_navegador(com_debugging_remoto=True)
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")
 
     navegador = webdriver.Chrome(options=options)
     navegador.get("https://www.amazon.com.br")
+
+    WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
+
 
     btnTodos = navegador.find_element(By.XPATH, '//*[@id="nav-hamburger-menu"]')
     btnTodos.click(), time.sleep(1) 
@@ -118,10 +121,14 @@ def coletaDadosAmazon(): #OK, falta preço -- Coleta produtos em alta
             continue  
 
         produtos = secao.find_elements(By.XPATH, ".//div[contains(@class, 'p13n-sc-truncate-desktop-type2')]")
+        precos = secao.find_elements(By.XPATH, ".//span[contains(@class, 'p13n-sc-price') or contains(@class, '_cDEzb_p13n-sc-price_3mJ9Z')]")
 
         if produtos:
-            for produto in produtos[:3]:
-                print(f" - {produto.text.upper()}")
+            for produto, preco in zip(produtos[:3], precos):
+                if preco:
+                    print(produto.text.upper() + preco.text)
+                else:
+                    pass
                     
 def coletaDadosMerLivre(): #OK
     # navegador = iniciar_navegador(com_debugging_remoto=True)
@@ -176,7 +183,7 @@ def coletaDadosAmericanas(): #ALTERAR PARA SITE DINÂMICO
         print(f"{indice}- {produto.text.upper()} -- R$ {preco.text}") 
         indice +=1
 
-def coletaDadosMagazine(): #OS MAIS VENDIDOS OK
+def coletaDadosMagazine(): #OK 
     urlBase = 'https://www.magazineluiza.com.br'
 
     options = Options()
@@ -197,7 +204,7 @@ def coletaDadosMagazine(): #OS MAIS VENDIDOS OK
     for produto, preco in zip(produtos[:4], precos):
         print(produto.text + preco.text)
 
-def coletaCasasBahia():
+def coletaCasasBahia(): #CONTINUAR
     url = 'https://www.casasbahia.com.br'
 
     options = webdriver.ChromeOptions()
@@ -258,7 +265,7 @@ def filtroMercadoLivre(): #OK
 
         salvar_dados_postgres(nomeProduto, precoProduto, linkProduto)
 
-def filtroMagazine(): #OK 
+def filtroMagazine(): #SITE DINAMICO 
     urlBase = 'https://www.magazineluiza.com.br/busca/'
     inputNome = input('Qual o nome do produto? ')
     inputNome = inputNome.replace(" ", "")
@@ -284,9 +291,13 @@ def filtroMagazine(): #OK
     for produto, preco in zip(produtos,precos):
         print(produto.text + preco.text)
 
+def filtroAmazon():
+    inputNome = input('Qual é o produto? ')
+    urlBase = f"https://www.amazon.com.br/s?k={inputNome}&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&"
 
+    
 
-filtroMagazine()
+filtroAmazon()
 
 
 # IDEIA ESTRUTURA BANCO DE DADOS
