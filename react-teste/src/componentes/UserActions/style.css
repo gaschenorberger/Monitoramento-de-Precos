@@ -1,0 +1,32 @@
+.userActions {
+    margin-right: 200px;
+}
+
+.userActions button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.userActions button span.loginText{
+    font-size: 20px;
+    margin-left: 54px;
+    margin-top: -45px;
+    font-weight: bold;
+    display: block;
+}
+
+.userActions button span.atvCashback {
+    font-size: 12px !important;
+    font-style: italic;
+    color: #474545;
+    font-size: 10px;
+    margin-top: -15px;
+    margin-left: 54px;
+    display: block;
+}
+
+.alerts{
+    font-size: 15px;
+}

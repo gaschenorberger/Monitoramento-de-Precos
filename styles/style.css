@@ -38,13 +38,14 @@ body {
     font-weight: bold;
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
+    transition: 1s;
 
     text-align: start;
 }
 
-.searchBar select:hover, :focus {
+.searchBar select:focus {
+    border-color: #ffdd00;
 }
-
 .searchBar button {
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
@@ -118,7 +119,6 @@ body {
     font-size: 14px;
     transition: 0.3s;
 }
-
 .menu a:hover {
     padding: 15px;
     border-radius: 25px;

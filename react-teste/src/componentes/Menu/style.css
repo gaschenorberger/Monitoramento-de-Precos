@@ -1,0 +1,27 @@
+.menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    flex-wrap: wrap;
+    background-color: #023b92;
+    padding: 10px 0;
+
+}
+
+.menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.menu a:hover {
+    padding: 5px;
+    border-radius: 25px;
+    background-color: #F27BBD;;
+    color: white;
+}

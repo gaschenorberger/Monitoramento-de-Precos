@@ -1,0 +1,29 @@
+.searchBar {
+    display: flex;
+    margin-left: 100px;
+}
+
+.searchBar select, .searchBar input, .searchBar button {
+    padding: 20px;
+    border: none;
+    outline: none;
+}
+
+.searchBar select {
+    font-size: 15px;
+    font-weight: bold;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    transition: 1s;
+
+    text-align: start;
+}
+
+.searchBar input {
+    font-size: 15px;
+}
+
+.searchBar button {
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
