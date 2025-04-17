@@ -16,6 +16,7 @@ import pandas as pd
 import openpyxl
 from datetime import datetime
 import psycopg2
+import random
 
 #VERSÃO 2 SEM LINHAS COMENTADAS
 #CONFORME FOR ATUALIZANDO AQUI, VOU ADICIONANDO LA E COMENTANDO 
@@ -84,23 +85,55 @@ def salvar_dados_postgres(nomePdt, precoPdt, linkPdt):
     cursor.close()
     conexao.close()
 
-#-------------------------------ÁREA PRINCIPAL---------------------------
+def esperar_elemento(navegador, xpath, tempo=10):
+    """
+    Espera até que um elemento esteja presente na página, usando o XPath fornecido.
 
-def coletaDadosAmazon(): #OK
-    #navegador = iniciar_navegador(com_debugging_remoto=True)
+    :param navegador: Instância do navegador Selenium.
+    :param xpath: XPath do elemento a ser aguardado.
+    :param tempo: Tempo máximo de espera em segundos (padrão: 10).
+    :return: Lista de elementos encontrados ou None se não encontrar.
+    """
+    try:
+        elementos = WebDriverWait(navegador, tempo).until(
+            EC.presence_of_all_elements_located((By.XPATH, xpath))
+        )
+        return elementos
+    except Exception as e:
+        print(f"Erro ao esperar pelo elemento: {e}")
+        return None
+
+def iniciar_chrome(url, headless='off'):
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+    options.add_argument("--disable-extensions")
+
+    if headless == 'on':
+        options.add_argument("--headless")
 
     navegador = webdriver.Chrome(options=options)
-    navegador.get("https://www.amazon.com.br")
+    navegador.get(url)
+
+    return navegador
+
+#-------------------------------ÁREA PRINCIPAL---------------------------
+
+#CRIAR FUNÇÃO CHROME (URL='...', HEADLESS=ON/OFF)
+
+def coletaDadosAmazon(): #OK -- FALTA OBTER URL
+
+    navegador = iniciar_chrome(url='https://www.amazon.com.br', headless='on')
 
     WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
 
+    esperar_elemento(navegador, '//*[@id="nav-hamburger-menu"]')
 
     btnTodos = navegador.find_element(By.XPATH, '//*[@id="nav-hamburger-menu"]')
     btnTodos.click(), time.sleep(1) 
 
-    btnProdAlta = navegador.find_element(By.XPATH, '//*[@id="hmenu-content"]/ul[1]/li[4]/a')
+    esperar_elemento(navegador, '//*[@id="hmenu-content"]/div[1]/section[1]/ul/li[3]/a')
+
+    btnProdAlta = navegador.find_element(By.XPATH, '//*[@id="hmenu-content"]/div[1]/section[1]/ul/li[3]/a')
     btnProdAlta.click(), time.sleep(1) 
 
     #Tópicos
@@ -126,18 +159,13 @@ def coletaDadosAmazon(): #OK
         if produtos:
             for produto, preco in zip(produtos[:3], precos):
                 if preco:
-                    print(produto.text.upper() + preco.text)
+                    print(f"{produto.text.upper()} || {preco.text}")
                 else:
                     pass
                     
-def coletaDadosMerLivre(): #OK
-    # navegador = iniciar_navegador(com_debugging_remoto=True)
+def coletaDadosMerLivre(): #OK -- FALTA OBTER URL
 
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
-
-    navegador = webdriver.Chrome(options=options)
-    navegador.get("https://www.mercadolivre.com.br/")
+    navegador = iniciar_chrome(url='https://www.mercadolivre.com.br/', headless='on')
 
     btnOfertas = navegador.find_element(By.XPATH, '/html/body/header/div/div[5]/div/ul/li[2]/a')
     btnOfertas.click(), time.sleep(1) 
@@ -151,9 +179,9 @@ def coletaDadosMerLivre(): #OK
 
     for produto, preco, centavo in zip(produtos[:3], precos, centavos[:3]):
         if centavo:
-            print(f"{produto.text.upper()} -- R$ {preco.text},{centavo.text}")
+            print(f"{produto.text.upper()} || R$ {preco.text},{centavo.text}")
         else:
-            print(f"{produto.text.upper()} -- R$ {preco.text},00")
+            print(f"{produto.text.upper()} || R$ {preco.text},00")
 
 def coletaDadosAmericanas(): #ALTERAR PARA SITE DINÂMICO
     navegador = iniciar_navegador(com_debugging_remoto=True)
@@ -183,14 +211,10 @@ def coletaDadosAmericanas(): #ALTERAR PARA SITE DINÂMICO
         print(f"{indice}- {produto.text.upper()} -- R$ {preco.text}") 
         indice +=1
 
-def coletaDadosMagazine(): #OK 
-    urlBase = 'https://www.magazineluiza.com.br'
+def coletaDadosMagazine(): #OK -- FALTA OBTER URL
 
-    options = Options()
-    options.add_argument("--headless") 
-    navegador = webdriver.Chrome(options=options)
+    navegador = iniciar_chrome(url='https://www.magazineluiza.com.br', headless='on')
 
-    navegador.get(urlBase)
     WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
 
     navegador.execute_script("window.scrollBy(0, 1000);")
@@ -202,34 +226,20 @@ def coletaDadosMagazine(): #OK
     precos = maisVendidos.find_all('p', class_='sc-dcJsrY eLxcFM sc-kUdmhA cvHkKW')
 
     for produto, preco in zip(produtos[:4], precos):
-        print(produto.text + preco.text)
+        print(F"{produto.text} || {preco.text}")
 
 def coletaCasasBahia(): #CONTINUAR
-    url = 'https://www.casasbahia.com.br'
 
-    options = webdriver.ChromeOptions()
-    # options.add_argument("--headless")
-
-    navegador = webdriver.Chrome(options=options)
-    navegador.get(url)
+    navegador = iniciar_chrome(url='https://www.casasbahia.com.br', headless='on')
 
     WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
-
-    time.sleep(3)
-
-    site = BeautifulSoup(navegador.page_source, 'html.parser')
-    print(site.prettify())
-    # divProdutos = site.find('div', class_='css-78wyov')
-
-    # produtos = divProdutos.find('h3', class_='product-card__title')
-    # print(produtos.text)
 
 
 
 
 #-----------------------------PESQUISA FILTRADA-----------------------------
 
-def filtroMercadoLivre(): #OK
+def filtroMercadoLivre(): #OK -- OBTER URL
 
     urlBase = 'https://lista.mercadolivre.com.br/'
     inputNome = input('Qual o nome do produto? ')
@@ -265,18 +275,14 @@ def filtroMercadoLivre(): #OK
 
         salvar_dados_postgres(nomeProduto, precoProduto, linkProduto)
 
-def filtroMagazine(): #SITE DINAMICO 
+def filtroMagazine(): #SITE DINAMICO -- OBTER URL
     urlBase = 'https://www.magazineluiza.com.br/busca/'
     inputNome = input('Qual o nome do produto? ')
     inputNome = inputNome.replace(" ", "")
 
     url = urlBase + inputNome
 
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
-
-    navegador = webdriver.Chrome(options=options)
-    navegador.get(url)
+    navegador = iniciar_chrome(url=url, headless='on')
 
     WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
 
@@ -288,12 +294,44 @@ def filtroMagazine(): #SITE DINAMICO
     produtos = divProdutos.find_all('h2', class_='sc-doohEh dHamKz')
     precos = divProdutos.find_all('p', class_='sc-dcJsrY eLxcFM sc-kUdmhA cvHkKW')
 
-    for produto, preco in zip(produtos,precos):
+    for produto, preco in zip(produtos[:5],precos):
         print(produto.text + preco.text)
 
-def filtroAmazon():
+def filtroAmazon(): #OK
     inputNome = input('Qual é o produto? ')
-    urlBase = f"https://www.amazon.com.br/s?k={inputNome}&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&"
+    inputNome = inputNome.replace(" ", "+")
+    urlBase = f"https://www.amazon.com.br/s?k={inputNome}"
+    
+    print(urlBase)
+
+    navegador = iniciar_chrome(url=urlBase, headless='on')
+
+
+    WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
+
+    try:
+        erro = navegador.find_element(By.XPATH, "//*[contains(text(), 'Desculpe')]")
+        if erro:
+            print("Página de erro detectada")
+            navegador.get(urlBase)
+            time.sleep(random.uniform(2, 5)) 
+    except:
+        print("Página carregada normalmente.")
+
+
+    esperar_elemento(navegador, '//*[@class="s-main-slot s-result-list s-search-results sg-row"]//h2')
+
+    produtos = navegador.find_elements(By.XPATH, '//*[@class="s-main-slot s-result-list s-search-results sg-row"]//h2[@class="a-size-base-plus a-spacing-none a-color-base a-text-normal"]')
+    precos = navegador.find_elements(By.XPATH, '//*[@class="a-price-whole"]')
+    urls = navegador.find_elements(By.XPATH, '//*[@class="a-link-normal s-line-clamp-4 s-link-style a-text-normal"]')
+
+    if produtos and precos:
+        print(f'Encontrados {len(produtos)} produtos:')
+        for produto, preco, url in zip(produtos[:5], precos, urls):
+            print(f'{produto.text} || {preco.text} \n')
+            print(f'{url.get_attribute("href")} \n')
+    else:
+        print("Nenhum produto encontrado")
 
     
 
@@ -306,24 +344,28 @@ filtroAmazon()
 	    precoProduto
 	    linkProduto
         lojaProduto
+        hrefImg
 	
     produtos_merclivre
 	    nomeProduto
 	    precoProduto
 	    linkProduto
         lojaProduto
+        hrefImg
 	
     produtos_amazon
 	    nomeProduto
 	    precoProduto
 	    linkProduto
         lojaProduto
+        hrefImg
 
     produtos_americanas
 	    nomeProduto
 	    precoProduto
 	    linkProduto
-        lojaProduto"""
+        lojaProduto
+        hrefImg"""
 
 #NO BANCO MINHA IDEIA É FAZER UMA TABELA PRA CADA SITE, SALVAR TODAS AS INF COM A DATA DO DIA, QUANDO FOR PUXAR NO SITE, USAR SELECT * FROM AMAZON WHERE DT_ATUAL = 'DATA';
 #ASSIM FAZENDO COM QUE PUXE NO SITE A ATUALIZAÇÃO DO DIA, MAS NAO DEIXANDO DE SALVAR OS PRODUTOS DOS OUTROS DIAS PRA FAZER GRAFICO DE COMPARAÇÃO DE DATA
