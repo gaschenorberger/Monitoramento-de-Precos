@@ -1,5 +1,5 @@
-import loginImage from '../../images/login imagem.svg'
-import './style.css'
+import loginImage from '../../images/login imagem.svg';
+import './style.css';
 
 function LoginButton(){
     return(
@@ -9,6 +9,6 @@ function LoginButton(){
                     <span className="atvCashback">Ativar Cashback</span>
         </button>
     )
-}
+};
 
 export default LoginButton

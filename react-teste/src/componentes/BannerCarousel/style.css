@@ -1,0 +1,18 @@
+.carousel-wrapper{
+    margin-top: 43px;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.keen-slider__slide{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.banner-image{
+    width: 50%;
+    object-fit: cover;
+    display: block;
+}
