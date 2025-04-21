@@ -4,6 +4,7 @@
 }
 
 .searchBar select, .searchBar input, .searchBar button {
+    width: 250px;
     padding: 20px;
     border: none;
     outline: none;
@@ -12,8 +13,8 @@
 .searchBar select {
     font-size: 15px;
     font-weight: bold;
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
     transition: 1s;
 
     text-align: start;
@@ -24,6 +25,19 @@
 }
 
 .searchBar button {
+    width: 75px;
     border-top-right-radius: 25px;
     border-bottom-right-radius: 25px;
+}
+
+@media (max-width: 768px) {
+    .searchBar {
+        display: flex;
+        margin-left: 6px;
+    }
+
+    .searchBar select, .searchBar input, .searchBar button {
+        width: 100%;
+        padding: 20px;
+    }
 }

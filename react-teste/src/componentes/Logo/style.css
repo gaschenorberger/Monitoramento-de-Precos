@@ -2,6 +2,17 @@
     width: 100px;
     height: 80px;
 
-    margin-left: 200px;
+    margin-left: 320px;
     margin-top: -30px;
+}
+
+@media (max-width: 768px) {
+    .logo {
+        width: 100px;
+        height: 80px;
+    
+        margin-left: 23%;
+        margin-top: -25px;
+        margin-bottom: 25px;
+    }
 }
