@@ -2,16 +2,20 @@ import { banners } from './bannerImages'
 import { useKeenSlider } from "keen-slider/react"
 import "keen-slider/keen-slider.min.css"
 import "./style.css"
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const Carousel = () => {
+    const [currentSlide, setCurrentSlide] = useState(0)
     const [sliderRef, sliderInstance] = useKeenSlider({
         loop: true,
         centered: true,
         slides: {
-            perView: "auto",
+            perView: 1,
             spacing: 16,
-        }
+        },
+        slideChanged(s) {
+          setCurrentSlide(s.track.details.rel)
+        },
     })
 
     useEffect(() => {
@@ -28,8 +32,8 @@ const Carousel = () => {
     return (
         <div className="carousel-wrapper">
             <div ref={sliderRef} className="keen-slider custom-carousel">
-                {banners.map((banner) => (
-                    <div key={banner.id} className="keen-slider__slide">
+                {banners.map((banner, idx) => (
+                    <div key={banner.id} className={`keen-slider__slide ${idx === currentSlide ? 'active' : ''}`}>
                         <img src={banner.src} className='banner-image'/>
                     </div>
                 ))}

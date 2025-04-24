@@ -2,20 +2,34 @@
     margin-top: 43px;
     width: 100%;
     padding: 20px 0;
-    overflow: visible;
+    overflow: hidden;
     box-sizing: border-box;
+    
 }
 
 .keen-slider__slide{
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 1;
+    transform: scale(1);
+    overflow: hidden;
 }
+
+.keen-slider__slide.keen-slider__slide--active {
+    transform: scale(3);
+    opacity: 1;
+    z-index: 1;
+  }
 
 .banner-image{
     width: 100%;
+    height: auto;
+    max-width: 1000px;
     object-fit: cover;
     display: block;
+    transition: transform 0.3s ease;
 }
 
 @media (max-width: 768px) {

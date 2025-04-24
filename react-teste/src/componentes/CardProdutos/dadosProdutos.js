@@ -19,7 +19,9 @@ import XRN14 from "../../images/XRN14 1.svg"
         preco: "8.896,78",
         nlojas: "13",
         img: IP16,
-        id: 1
+        id: 1,
+        category: "celulares"
     }
  ]
+
  
