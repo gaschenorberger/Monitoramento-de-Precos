@@ -21,6 +21,36 @@ import XRN14 from "../../images/XRN14 1.svg"
         img: IP16,
         id: 1,
         category: "celulares"
+    },
+    {   
+        nome: "Celular Apple iPhone 16",
+        avaliacao: "4.8(870)", 
+        loja: "Fast Shop",
+        preco: "R$ 5.999,00",
+        nlojas: "9",
+        img: IP16N,
+        id: 2,
+        category: "celulares"
+    },
+    {   
+        nome: "Celular Samsung Galaxy S24 Plus 5G 256GB 12 GB",
+        avaliacao: "4.8(525)", 
+        loja: "Amazon",
+        preco: "R$ 3.599,09",
+        nlojas: "7",
+        img: S24,
+        id: 1,
+        category: "celulares"
+    },
+    {   
+        nome: "Celular Ciaomi Redmi Note 14 256GB",
+        avaliacao: "4.8(295)", 
+        loja: "Nick Digital",
+        preco: "R$ 1.195,05",
+        nlojas: "5",
+        img: XRN14,
+        id: 1,
+        category: "celulares"
     }
  ]
 

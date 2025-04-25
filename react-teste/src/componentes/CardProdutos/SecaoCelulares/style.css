@@ -1,0 +1,13 @@
+.celularSection{
+    justify-content: flex-start;
+}
+
+.produtosCelular{
+    display: flex;
+    justify-content: flex-start;
+    gap: 30px;
+    padding: 20px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    max-width: 1200px;
+}
