@@ -11,9 +11,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    opacity: 1;
-    transform: scale(1);
     overflow: hidden;
 }
 

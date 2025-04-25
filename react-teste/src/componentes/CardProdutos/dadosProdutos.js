@@ -16,7 +16,7 @@ import XRN14 from "../../images/XRN14 1.svg"
         nome: "Celular Apple iPhone 16 Pro Max 256GB",
         avaliacao: "4.8(974)", 
         loja: "Amazon",
-        preco: "8.896,78",
+        preco: "R$ 8.896,78",
         nlojas: "13",
         img: IP16,
         id: 1,
