@@ -211,9 +211,9 @@ def coletaDadosAmericanas(): #ALTERAR PARA SITE DINÂMICO
         print(f"{indice}- {produto.text.upper()} -- R$ {preco.text}") 
         indice +=1
 
-def coletaDadosMagazine(): #OK -- FALTA OBTER URL
+def coletaDadosMagazine(): #VERIFICAR DIVS -- FALTA OBTER URL
 
-    navegador = iniciar_chrome(url='https://www.magazineluiza.com.br', headless='on')
+    navegador = iniciar_chrome(url='https://www.magazineluiza.com.br', headless='off')
 
     WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
 
@@ -239,13 +239,13 @@ def coletaCasasBahia(): #CONTINUAR
 
 #-----------------------------PESQUISA FILTRADA-----------------------------
 
-def filtroMercadoLivre(): #OK -- OBTER URL
+def filtroMercadoLivre(nome): #OK -- OBTER URL
 
     urlBase = 'https://lista.mercadolivre.com.br/'
-    inputNome = input('Qual o nome do produto? ')
-    inputNome = inputNome.replace(" ", "")
+    # inputNome = input('Qual o nome do produto? ')
+    # inputNome = inputNome.replace(" ", "")
 
-    response = requests.get(urlBase + inputNome)
+    response = requests.get(urlBase + nome)
 
     site = BeautifulSoup(response.text, 'html.parser')
 
@@ -275,12 +275,12 @@ def filtroMercadoLivre(): #OK -- OBTER URL
 
         salvar_dados_postgres(nomeProduto, precoProduto, linkProduto)
 
-def filtroMagazine(): #SITE DINAMICO -- OBTER URL
+def filtroMagazine(nome): #SITE DINAMICO -- OBTER URL
     urlBase = 'https://www.magazineluiza.com.br/busca/'
-    inputNome = input('Qual o nome do produto? ')
-    inputNome = inputNome.replace(" ", "")
+    # inputNome = input('Qual o nome do produto? ')
+    # inputNome = inputNome.replace(" ", "")
 
-    url = urlBase + inputNome
+    url = urlBase + nome
 
     navegador = iniciar_chrome(url=url, headless='on')
 
@@ -297,10 +297,11 @@ def filtroMagazine(): #SITE DINAMICO -- OBTER URL
     for produto, preco in zip(produtos[:5],precos):
         print(produto.text + preco.text)
 
-def filtroAmazon(): #OK
-    inputNome = input('Qual é o produto? ')
-    inputNome = inputNome.replace(" ", "+")
-    urlBase = f"https://www.amazon.com.br/s?k={inputNome}"
+def filtroAmazon(nome): #OK
+    # inputNome = input('Qual é o produto? ')
+    # inputNome = inputNome.replace(" ", "+")
+
+    urlBase = f"https://www.amazon.com.br/s?k={nome}"
     
     print(urlBase)
 
@@ -333,9 +334,15 @@ def filtroAmazon(): #OK
     else:
         print("Nenhum produto encontrado")
 
+#FILTRO COMPLETO -- EXECUTA TODAS AS FUNÇÕES DE UMA VEZ, TRAZENDO OS RESULTADOS 
+def filtroCompleto():
+    nome = input('Qual o nome do produto? ')
     
+    filtroMercadoLivre(nome)
+    filtroMagazine(nome)
+    filtroAmazon(nome)
 
-filtroAmazon()
+filtroCompleto()
 
 
 # IDEIA ESTRUTURA BANCO DE DADOS
