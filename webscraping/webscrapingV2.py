@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 import os
@@ -107,7 +107,8 @@ def iniciar_chrome(url, headless='off'):
     options = webdriver.ChromeOptions()
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
     options.add_argument("--disable-extensions")
-
+    options.add_argument("--start-maximized")
+    
     if headless == 'on':
         options.add_argument("--headless")
 
@@ -117,8 +118,6 @@ def iniciar_chrome(url, headless='off'):
     return navegador
 
 #-------------------------------ÁREA PRINCIPAL---------------------------
-
-#CRIAR FUNÇÃO CHROME (URL='...', HEADLESS=ON/OFF)
 
 def coletaDadosAmazon(): #OK -- FALTA OBTER URL
 
@@ -184,27 +183,31 @@ def coletaDadosMerLivre(): #OK -- FALTA OBTER URL
             print(f"{produto.text.upper()} || R$ {preco.text},00")
 
 def coletaDadosAmericanas(): #ALTERAR PARA SITE DINÂMICO
-    navegador = iniciar_navegador(com_debugging_remoto=True)
-
-    # options = webdriver.ChromeOptions()
-    # options.add_argument("--headless")
-
-    # navegador = webdriver.Chrome(options=options)
-    # navegador.get("https://www.americanas.com.br/")
-
+    navegador = iniciar_chrome(url="https://www.americanas.com.br/", headless='off')
     action = ActionChains(navegador)
     action.move_by_offset(10, 10).click().perform()
+    time.sleep(2)
 
-    ofertaDia = navegador.find_element(By.XPATH, '//*[@id="__next"]/header/div/section[2]/div/nav/ul/li[8]/a')
-    ofertaDia.click(), time.sleep(1)
+    WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
 
-    btnVerTudo = navegador.find_element(By.XPATH, '//*[@id="rsyswpsdk"]/div/section/div/div[1]/div[3]/div/div[2]/div/div/div[3]/a')
-    btnVerTudo.click(), time.sleep(5)
+    ofertaDia = WebDriverWait(navegador, 20).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="__next"]/header/div/section[2]/div/nav/ul/li[8]/a'))
+    )
+    ofertaDia.click()
 
-    produtos = navegador.find_elements(By.XPATH, "//h3[contains(@class, 'product-name')]")
-    precos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'styles__PromotionalPrice-sc-yl2rbe-0')]")
+    try:
+        btnVerTudo = WebDriverWait(navegador, 5).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="rsyswpsdk"]/div/section/div/div[1]/div[3]/div/div[2]/div/div/div[3]/a'))
+        )
+        btnVerTudo.click()
+        print("Botão 'Ver Tudo' encontrado e clicado!")
+    except (TimeoutException, NoSuchElementException):
+        print("Botão 'Ver Tudo' NÃO encontrado. Continuando o código...")
 
     print('Produtos Ofertas do Dia Americanas\n')
+    produtos = navegador.find_elements(By.XPATH, "//h3[contains(@class, 'ProductCard_productName')]")
+    precos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'ProductCard_productPrice')]")
+
 
     indice = 1
     for produto, preco in zip(produtos[:3], precos): 
@@ -342,7 +345,7 @@ def filtroCompleto():
     filtroMagazine(nome)
     filtroAmazon(nome)
 
-filtroCompleto()
+coletaDadosAmericanas()
 
 
 # IDEIA ESTRUTURA BANCO DE DADOS
