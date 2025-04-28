@@ -1,5 +1,7 @@
 .userActions {
+    display: flex;
     margin-right: 320px;
+    position: relative;
 }
 
 .userActions button {
@@ -28,5 +30,9 @@
 }
 
 .alerts{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
     font-size: 15px;
 }

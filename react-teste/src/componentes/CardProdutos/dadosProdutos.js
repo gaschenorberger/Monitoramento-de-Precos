@@ -43,7 +43,7 @@ import XRN14 from "../../images/XRN14 1.svg"
         category: "celulares"
     },
     {   
-        nome: "Celular Ciaomi Redmi Note 14 256GB",
+        nome: "Celular Xiaomi Redmi Note 14 256GB",
         avaliacao: "4.8(295)", 
         loja: "Nick Digital",
         preco: "R$ 1.195,05",

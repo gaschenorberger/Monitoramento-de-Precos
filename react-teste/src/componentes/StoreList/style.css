@@ -1,7 +1,9 @@
 .storeList{
+    align-items: center;
+    justify-content: center;
     margin-top: 20px;
     display: flex;
-    margin-left: 30%;
+    flex-wrap: wrap;
     gap: 50px;
 }
 

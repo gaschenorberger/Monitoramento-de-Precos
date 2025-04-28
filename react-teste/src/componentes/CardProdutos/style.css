@@ -10,6 +10,10 @@
     padding: 10px;
 }
 
+.cardProdutos:hover{
+    border: 2px solid #898989 !important;
+}
+
 .aProduto{
     text-decoration: none;
     color: black;
@@ -17,7 +21,6 @@
     justify-content: center;
 
 }
-
 .produtoIMG{
     margin-top: 10px;
     width: 235px;

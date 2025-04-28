@@ -1,6 +1,9 @@
 import './style.css'
+import { useEffect } from 'react'
 
 function Menu(){
+   
+
     return (
         <nav className="menu">
             <a href="#">

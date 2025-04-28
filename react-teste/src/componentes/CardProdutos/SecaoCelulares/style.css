@@ -4,7 +4,7 @@
 
 .produtosCelular{
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 30px;
     padding: 20px;
     margin: 0 auto;
