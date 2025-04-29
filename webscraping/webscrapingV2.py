@@ -184,8 +184,10 @@ def coletaDadosMerLivre(): #OK -- FALTA OBTER URL
 
 def coletaDadosAmericanas(): #ALTERAR PARA SITE DINÂMICO
     navegador = iniciar_chrome(url="https://www.americanas.com.br/", headless='off')
+
     action = ActionChains(navegador)
     action.move_by_offset(10, 10).click().perform()
+
     time.sleep(2)
 
     WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
@@ -205,14 +207,33 @@ def coletaDadosAmericanas(): #ALTERAR PARA SITE DINÂMICO
         print("Botão 'Ver Tudo' NÃO encontrado. Continuando o código...")
 
     print('Produtos Ofertas do Dia Americanas\n')
-    produtos = navegador.find_elements(By.XPATH, "//h3[contains(@class, 'ProductCard_productName')]")
-    precos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'ProductCard_productPrice')]")
 
+    produtos_xpath = "//h3[contains(@class, 'ProductCard_productName')]"
 
-    indice = 1
-    for produto, preco in zip(produtos[:3], precos): 
-        print(f"{indice}- {produto.text.upper()} -- R$ {preco.text}") 
-        indice +=1
+    try:
+        WebDriverWait(navegador, 30).until(
+            EC.presence_of_element_located((By.XPATH, produtos_xpath))
+        )
+        produtos = navegador.find_elements(By.XPATH, produtos_xpath)
+        precos = navegador.find_elements(By.XPATH, "//p[contains(@class, 'ProductCard_productPrice')]")
+        links = navegador.find_elements(By.XPATH, "//a[contains(@class, 'ins-product-box')]")
+        imgLinks = navegador.find_elements(By.XPATH, "//a[contains(@class, 'ins-product-box')]//img")
+
+        if not produtos:
+            print("Nenhum produto encontrado.")
+        else:
+
+            for i, (produto, preco, link, imgLink) in enumerate(zip(produtos[:3], precos, links, imgLinks), start=1):
+                urlProduto = link.get_attribute('href')
+                src = imgLink.get_attribute('src')
+
+                print(f"{produto.text.strip().upper()} -- {preco.text.strip()}")
+                print(urlProduto)
+                print(src)
+
+    except TimeoutException:
+        print("Produtos não carregaram a tempo. Verifique se o XPath está correto ou se é necessário rolar mais")
+
 
 def coletaDadosMagazine(): #VERIFICAR DIVS -- FALTA OBTER URL
 
