@@ -39,7 +39,7 @@ import XRN14 from "../../images/XRN14 1.svg"
         preco: "R$ 3.599,09",
         nlojas: "7",
         img: S24,
-        id: 1,
+        id: 3,
         category: "celulares"
     },
     {   
@@ -49,8 +49,68 @@ import XRN14 from "../../images/XRN14 1.svg"
         preco: "R$ 1.195,05",
         nlojas: "5",
         img: XRN14,
-        id: 1,
+        id: 4,
         category: "celulares"
+    },
+    {   
+        nome: "Controle Dualshock 4 PS4 sem Fio - Sony",
+        avaliacao: "4.8(979)", 
+        loja: "Amazon",
+        preco: "R$ 189,90",
+        nlojas: "6",
+        img: PS4,
+        id: 5,
+        category: "consoles"
+    },
+    {   
+        nome: "Fone de ouvido Bluetooth com Microfone QCY TI3",
+        avaliacao: "4.8(295)", 
+        loja: "Amazon",
+        preco: "R$ 134,64",
+        nlojas: "8",
+        img: FONE,
+        id: 6,
+        category: "fones de ouvido"
+    },
+    {   
+        nome: "Notebook Gamer Dell G15 5530",
+        avaliacao: "4.6(415)", 
+        loja: "Amazon",
+        preco: "R$ 6.649,00",
+        nlojas: "5",
+        img: DELLG15,
+        id: 7,
+        category: "notebooks"
+    },
+    {   
+        nome: "Notebook Lenovo Yoga 7x Snapdragon X Elite",
+        avaliacao: "4.8(425)", 
+        loja: "Amazon",
+        preco: "R$ 10.924,05",
+        nlojas: "8",
+        img: LENOVO,
+        id: 8,
+        category: "notebooks"
+    },
+    {   
+        nome: "Macbook Appple Pro M4 24GB SSD 1TB macOS",
+        avaliacao: "4.6(415)", 
+        loja: "Magazine Luiza",
+        preco: "R$ 17.299,99",
+        nlojas: "10",
+        img: MACBOOK,
+        id: 9,
+        category: "notebooks"
+    },
+    {   
+        nome: "Notebook Samsung Galaxy Book4",
+        avaliacao: "4.9(115)", 
+        loja: "Mercado Livre",
+        preco: "R$ 3.149,10",
+        nlojas: "5",
+        img: GLXBOOK,
+        id: 10,
+        category: "notebooks"
     }
  ]
 

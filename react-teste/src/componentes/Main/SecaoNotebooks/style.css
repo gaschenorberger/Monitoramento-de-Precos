@@ -1,0 +1,13 @@
+.nbSection{
+    justify-content: flex-start;
+}
+
+.produtosNb{
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    max-width: 1200px;
+}

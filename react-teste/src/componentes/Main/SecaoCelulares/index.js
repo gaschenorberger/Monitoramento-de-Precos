@@ -1,5 +1,5 @@
-import { produtos } from "../dadosProdutos";
-import { CardProdutos } from "..";
+import { produtos } from "../../CardProdutos/dadosProdutos";
+import { CardProdutos } from "../../CardProdutos";
 import { Titulo } from "../../Titulo";
 import "./style.css"
 
@@ -11,7 +11,7 @@ const CelularSection = () => {
             <h2 className="celularSectionTxt"><Titulo cor="#0000"
             tamanhoFonte="24px">Encontre o celular ideal, com a melhor oferta!</Titulo></h2>
             <div className="produtosCelular">
-                {celulares.map((produtos, id) => (
+                {celulares.slice(0,4).map((produtos, id) => (
                     <CardProdutos key={id} {...produtos} />
                 ))}
             </div>

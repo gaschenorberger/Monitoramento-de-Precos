@@ -1,0 +1,11 @@
+.historySection{
+    justify-content: center;
+    align-items: center;
+    margin: 120px;
+    padding: 10px 20px;
+    border: 1px solid #898989;
+    border-radius: 15px;
+    width: 50%;
+    margin-left: 15%;
+    margin-right: 15%;
+}

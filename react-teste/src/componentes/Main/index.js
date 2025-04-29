@@ -1,7 +1,10 @@
 import Carousel from "../BannerCarousel"
 import { Titulo } from "../Titulo"
 import StoreList from "../StoreList"
-import CelularSection from "../CardProdutos/SecaoCelulares"
+import CelularSection from "./SecaoCelulares"
+import AmazonSection from "./SecaoAmazon"
+import NbSection from "./SecaoNotebooks"
+import HistorySection from "./SecaoHistory"
 import './style.css'
 
 
@@ -15,6 +18,9 @@ function Main(){
             tamanhoFonte="24px">Comparação de preços e cashback é no Preço Certo!</Titulo>
             <StoreList/>
             <CelularSection/>
+            <AmazonSection/>
+            <NbSection/>
+            <HistorySection/>
             
         </main>
     )
