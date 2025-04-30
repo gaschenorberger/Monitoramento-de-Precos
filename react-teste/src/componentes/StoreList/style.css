@@ -19,3 +19,7 @@
 .storeLogo{
     width: 64px;
 }
+
+.storeLink:hover{
+    text-decoration: underline;
+}

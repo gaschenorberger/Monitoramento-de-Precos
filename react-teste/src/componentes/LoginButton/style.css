@@ -6,12 +6,12 @@
     padding: 8px;
     color: #000 !important;
     text-align: left;
+    transition: width 0.3s, height 0.3s;
 }
 
 .loginButton:hover {
     width: 240px;
     height: 60px;
-    transition: 0.3s;
 }
 
 .loginImage {
@@ -22,4 +22,8 @@
 .loginText{
     margin-top: -42px !important;
     font-size: 20px !important;
+}
+
+.atvCashback:hover{
+    text-decoration: underline;
 }
