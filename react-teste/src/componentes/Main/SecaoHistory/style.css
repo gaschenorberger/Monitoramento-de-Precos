@@ -5,7 +5,20 @@
     padding: 10px 20px;
     border: 1px solid #898989;
     border-radius: 15px;
-    width: 50%;
-    margin-left: 15%;
+    width: 70%;
+    margin-left: 14%;
+    margin-right: 15%;
+}
+
+.historySection_hidden{
+    justify-content: center;
+    align-items: center;
+    margin: 120px;
+    padding: 10px 20px;
+    background-color: blue;
+    border: 1px solid #898989;
+    border-radius: 15px;
+    width: 70%;
+    margin-left: 14%;
     margin-right: 15%;
 }

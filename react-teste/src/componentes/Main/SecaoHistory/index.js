@@ -1,10 +1,11 @@
 // @ts-nocheck
+import { ShowTxt } from './ShowTxt';
 import './style.css'
 
 const HistorySection = () => {
     return(
         <div className='historySection'>
-            <h2>Um poquinho sobre a Preço Certo</h2>
+            <h2>Um pouquinho sobre a Preço Certo</h2>
             <section className='historyTxt'>
                 <p>
                     A história da Preço Certo começou em 2025, quando os acadêmicos de Engenharia de Software Gabriel Alvise e João Gnoatto, de Cascavel-PR, decidiram criar uma plataforma inovadora para ajudar consumidores a encontrarem os melhores preços do mercado. Desde o início, nosso propósito sempre foi facilitar sua vida na hora de comprar eletrônicos, celulares, computadores, videogames e muito mais!
@@ -33,6 +34,7 @@ const HistorySection = () => {
                     Então, bora economizar? Preço Certo é a sua escolha inteligente para comprar mais gastando menos! 🚀
                 </p>
             </section>
+            <ShowTxt/>
         </div>
     );
 };
