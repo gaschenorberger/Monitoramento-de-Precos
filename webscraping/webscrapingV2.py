@@ -121,7 +121,7 @@ def iniciar_chrome(url, headless='off'):
 
 def coletaDadosAmazon(): #OK -- FALTA OBTER URL
 
-    navegador = iniciar_chrome(url='https://www.amazon.com.br', headless='on')
+    navegador = iniciar_chrome(url='https://www.amazon.com.br', headless='off')
 
     WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
 
@@ -366,7 +366,7 @@ def filtroCompleto():
     filtroMagazine(nome)
     filtroAmazon(nome)
 
-coletaDadosAmericanas()
+coletaDadosAmazon()
 
 
 # IDEIA ESTRUTURA BANCO DE DADOS
