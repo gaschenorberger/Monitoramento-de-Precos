@@ -263,13 +263,13 @@ def coletaCasasBahia(): #CONTINUAR
 
 #-----------------------------PESQUISA FILTRADA-----------------------------
 
-def filtroMercadoLivre(nome): #OK -- OBTER URL
+def filtroMercadoLivre(inputNome): #OK -- OBTER IMG
 
     urlBase = 'https://lista.mercadolivre.com.br/'
     # inputNome = input('Qual o nome do produto? ')
     # inputNome = inputNome.replace(" ", "")
 
-    response = requests.get(urlBase + nome)
+    response = requests.get(urlBase + inputNome)
 
     site = BeautifulSoup(response.text, 'html.parser')
 
@@ -297,14 +297,14 @@ def filtroMercadoLivre(nome): #OK -- OBTER URL
             precoProduto = simbolo + precoProduto.text + ',' + '00'
             print(nomeProduto, precoProduto, '\n', linkProduto, '\n')
 
-        salvar_dados_postgres(nomeProduto, precoProduto, linkProduto)
+        # salvar_dados_postgres(nomeProduto, precoProduto, linkProduto)
 
-def filtroMagazine(nome): #SITE DINAMICO -- OBTER URL
+def filtroMagazine(inputNome): #OK -- OBTER URL
     urlBase = 'https://www.magazineluiza.com.br/busca/'
     # inputNome = input('Qual o nome do produto? ')
     # inputNome = inputNome.replace(" ", "")
 
-    url = urlBase + nome
+    url = urlBase + inputNome
 
     navegador = iniciar_chrome(url=url, headless='on')
 
@@ -314,18 +314,22 @@ def filtroMagazine(nome): #SITE DINAMICO -- OBTER URL
 
     site = BeautifulSoup(navegador.page_source, 'html.parser')
 
-    divProdutos = site.find('div', class_='sc-iGgWBj eWtIHQ sc-fDinKg iwedJE')
-    produtos = divProdutos.find_all('h2', class_='sc-doohEh dHamKz')
-    precos = divProdutos.find_all('p', class_='sc-dcJsrY eLxcFM sc-kUdmhA cvHkKW')
+    containers = site.find_all('a', attrs={'data-testid': 'product-card-container'})
 
-    for produto, preco in zip(produtos[:5],precos):
-        print(produto.text + preco.text)
+    for card in containers[:5]:
+        produtos = card.find('h2', attrs={'data-testid': 'product-title'})
+        precos = card.find('p', attrs={'data-testid': 'price-value'})   
+        links = card.get('href')
 
-def filtroAmazon(nome): #OK
+        if produtos and precos:
+            print(produtos.text + precos.text)
+            print(links)
+
+def filtroAmazon(inputNome): #OK -- OBTER IMG
     # inputNome = input('Qual é o produto? ')
     # inputNome = inputNome.replace(" ", "+")
 
-    urlBase = f"https://www.amazon.com.br/s?k={nome}"
+    urlBase = f"https://www.amazon.com.br/s?k={inputNome}"
     
     print(urlBase)
 
@@ -360,13 +364,13 @@ def filtroAmazon(nome): #OK
 
 #FILTRO COMPLETO -- EXECUTA TODAS AS FUNÇÕES DE UMA VEZ, TRAZENDO OS RESULTADOS 
 def filtroCompleto():
-    nome = input('Qual o nome do produto? ')
+    inputNome = input('Qual o nome do produto? ')
     
-    filtroMercadoLivre(nome)
-    filtroMagazine(nome)
-    filtroAmazon(nome)
+    # filtroMercadoLivre(inputNome)
+    filtroMagazine(inputNome)
+    # filtroAmazon(inputNome)
 
-coletaDadosAmazon()
+filtroCompleto()
 
 
 # IDEIA ESTRUTURA BANCO DE DADOS
