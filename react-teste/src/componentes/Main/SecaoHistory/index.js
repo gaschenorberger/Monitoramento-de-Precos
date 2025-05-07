@@ -1,10 +1,18 @@
 // @ts-nocheck
-import { ShowTxt } from './ShowTxt';
+import React, { useState } from 'react'
 import './style.css'
 
 const HistorySection = () => {
+    const [isExpanded, setIsExpanded] = useState(false);
+    
+    const toggleText = (e) => {
+        e.preventDefault();
+        setIsExpanded(!isExpanded);
+
+    }
+
     return(
-        <div className='historySection'>
+        <div className={`historySection ${isExpanded ? 'expadend' : 'collapsed'}`}>
             <h2>Um pouquinho sobre a Preço Certo</h2>
             <section className='historyTxt'>
                 <p>
@@ -34,7 +42,10 @@ const HistorySection = () => {
                     Então, bora economizar? Preço Certo é a sua escolha inteligente para comprar mais gastando menos! 🚀
                 </p>
             </section>
-            <ShowTxt/>
+            <a onClick={toggleText} className='buttonShowTxt' href="#">
+                { isExpanded ? 'Mostrar Menos' : 'Mostrar Mais'}
+            </a>
+
         </div>
     );
 };
