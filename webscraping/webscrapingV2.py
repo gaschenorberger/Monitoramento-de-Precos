@@ -17,6 +17,8 @@ import openpyxl
 from datetime import datetime
 import psycopg2
 import random
+import subprocess
+import pyautogui
 
 #VERSÃO 2 SEM LINHAS COMENTADAS
 #CONFORME FOR ATUALIZANDO AQUI, VOU ADICIONANDO LA E COMENTANDO 
@@ -117,23 +119,41 @@ def iniciar_chrome(url, headless='off'):
 
     return navegador
 
+def abrir_chrome():
+    try:
+        comando = r'start chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\Selenium\ChromeTestProfile'
+        subprocess.Popen(comando, shell=True)
+
+        time.sleep(3)
+
+        url = 'https://www.amazon.com.br'
+        pyautogui.write(url)
+        time.sleep(2)
+
+        pyautogui.press('enter')
+    except Exception as e:
+        print(f"Ocorreu um erro: {str(e)}")
+
 #-------------------------------ÁREA PRINCIPAL---------------------------
 
 def coletaDadosAmazon(): #OK -- FALTA OBTER URL
 
-    navegador = iniciar_chrome(url='https://www.amazon.com.br', headless='off')
+    navegador = iniciar_chrome(url='https://www.amazon.com.br/gp/bestsellers', headless='off')
+    # abrir_chrome()
+
+    # navegador = iniciar_navegador()
 
     WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
 
     esperar_elemento(navegador, '//*[@id="nav-hamburger-menu"]')
 
-    btnTodos = navegador.find_element(By.XPATH, '//*[@id="nav-hamburger-menu"]')
-    btnTodos.click(), time.sleep(1) 
+    # btnTodos = navegador.find_element(By.XPATH, '//*[@id="nav-hamburger-menu"]')
+    # btnTodos.click(), time.sleep(1) 
 
-    esperar_elemento(navegador, '//*[@id="hmenu-content"]/div[1]/section[1]/ul/li[3]/a')
+    # esperar_elemento(navegador, '//*[@id="hmenu-content"]/div[1]/section[1]/ul/li[3]/a')
 
-    btnProdAlta = navegador.find_element(By.XPATH, '//*[@id="hmenu-content"]/div[1]/section[1]/ul/li[3]/a')
-    btnProdAlta.click(), time.sleep(1) 
+    # btnProdAlta = navegador.find_element(By.XPATH, '//*[@id="hmenu-content"]/div[1]/section[1]/ul/li[3]/a')
+    # btnProdAlta.click(), time.sleep(1) 
 
     #Tópicos
 
@@ -367,10 +387,11 @@ def filtroCompleto():
     inputNome = input('Qual o nome do produto? ')
     
     # filtroMercadoLivre(inputNome)
-    filtroMagazine(inputNome)
-    # filtroAmazon(inputNome)
+    # filtroMagazine(inputNome)
+    filtroAmazon(inputNome)
 
-filtroCompleto()
+# filtroCompleto()
+coletaDadosMerLivre()
 
 
 # IDEIA ESTRUTURA BANCO DE DADOS
