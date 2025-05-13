@@ -248,8 +248,8 @@ def coletaDadosAmericanas(): #ALTERAR PARA SITE DINÂMICO
                 src = imgLink.get_attribute('src')
 
                 print(f"{produto.text.strip().upper()} -- {preco.text.strip()}")
-                print(urlProduto)
-                print(src)
+                print('LINK: ', urlProduto)
+                print('IMG: ', src)
 
     except TimeoutException:
         print("Produtos não carregaram a tempo. Verifique se o XPath está correto ou se é necessário rolar mais")
@@ -257,7 +257,7 @@ def coletaDadosAmericanas(): #ALTERAR PARA SITE DINÂMICO
 
 def coletaDadosMagazine(): #VERIFICAR DIVS -- FALTA OBTER URL
 
-    navegador = iniciar_chrome(url='https://www.magazineluiza.com.br', headless='off')
+    navegador = iniciar_chrome(url='https://www.magazineluiza.com.br/celulares-e-smartphones/l/te/', headless='off')
 
     WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
 
@@ -266,11 +266,11 @@ def coletaDadosMagazine(): #VERIFICAR DIVS -- FALTA OBTER URL
 
     site = BeautifulSoup(navegador.page_source, 'html.parser')
     maisVendidos = site.find('div', class_='sc-fjhLSj iSXyfy')
-    produtos = maisVendidos.find_all('h3', class_='sc-doohEh dHamKz')
+    produtos = maisVendidos.find_all('h2', class_='sc-doohEh dHamKz')
     precos = maisVendidos.find_all('p', class_='sc-dcJsrY eLxcFM sc-kUdmhA cvHkKW')
 
     for produto, preco in zip(produtos[:4], precos):
-        print(F"{produto.text} || {preco.text}")
+        print(F"{produto.text} | {preco.text}")
 
 def coletaCasasBahia(): #CONTINUAR
 
@@ -387,11 +387,11 @@ def filtroCompleto():
     inputNome = input('Qual o nome do produto? ')
     
     # filtroMercadoLivre(inputNome)
-    # filtroMagazine(inputNome)
-    filtroAmazon(inputNome)
+    filtroMagazine(inputNome)
+    # filtroAmazon(inputNome)
 
 # filtroCompleto()
-coletaDadosMerLivre()
+coletaDadosMagazine()
 
 
 # IDEIA ESTRUTURA BANCO DE DADOS
