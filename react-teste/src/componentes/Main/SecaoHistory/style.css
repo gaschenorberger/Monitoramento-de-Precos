@@ -10,15 +10,23 @@
     margin-right: 15%;
 }
 
-.historySection_hidden{
+.historySection.collapsed{
     justify-content: center;
     align-items: center;
+    max-height: 240px;
     margin: 120px;
     padding: 10px 20px;
-    background-color: blue;
     border: 1px solid #898989;
     border-radius: 15px;
     width: 70%;
     margin-left: 14%;
     margin-right: 15%;
+    overflow: hidden;
+}
+
+.buttonShowTxt{
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+    cursor: pointer;
 }
