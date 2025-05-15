@@ -339,11 +339,14 @@ def filtroMagazine(inputNome): #OK -- OBTER URL
     for card in containers[:5]:
         produtos = card.find('h2', attrs={'data-testid': 'product-title'})
         precos = card.find('p', attrs={'data-testid': 'price-value'})   
+        imgLink = card.find('img', attrs={'data-testid': 'image'})
         links = card.get('href')
+        links = f'https://www.magazineluiza.com.br/{links}'
 
         if produtos and precos:
             print(produtos.text + precos.text)
             print(links)
+            print(f"{imgLink['src']}\n")
 
 def filtroAmazon(inputNome): #OK -- OBTER IMG
     # inputNome = input('Qual é o produto? ')
@@ -390,8 +393,8 @@ def filtroCompleto():
     filtroMagazine(inputNome)
     # filtroAmazon(inputNome)
 
-# filtroCompleto()
-coletaDadosMagazine()
+filtroCompleto()
+# coletaDadosMagazine()
 
 
 # IDEIA ESTRUTURA BANCO DE DADOS
