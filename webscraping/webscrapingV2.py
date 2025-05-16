@@ -136,7 +136,7 @@ def abrir_chrome():
 
 #-------------------------------ÁREA PRINCIPAL---------------------------
 
-def coletaDadosAmazon(): #OK -- FALTA OBTER URL
+def coletaDadosAmazon(): #OK -- FALTA OBTER URL E IMG
 
     navegador = iniciar_chrome(url='https://www.amazon.com.br/gp/bestsellers', headless='off')
     # abrir_chrome()
@@ -182,7 +182,7 @@ def coletaDadosAmazon(): #OK -- FALTA OBTER URL
                 else:
                     pass
                     
-def coletaDadosMerLivre(): #OK -- FALTA OBTER URL
+def coletaDadosMerLivre(): #OK -- FALTA OBTER URL E IMG
 
     navegador = iniciar_chrome(url='https://www.mercadolivre.com.br/', headless='on')
 
@@ -202,8 +202,8 @@ def coletaDadosMerLivre(): #OK -- FALTA OBTER URL
         else:
             print(f"{produto.text.upper()} || R$ {preco.text},00")
 
-def coletaDadosAmericanas(): #ALTERAR PARA SITE DINÂMICO
-    navegador = iniciar_chrome(url="https://www.americanas.com.br/", headless='off')
+def coletaDadosAmericanas(): #OK
+    navegador = iniciar_chrome(url="https://www.americanas.com.br/", headless='on')
 
     action = ActionChains(navegador)
     action.move_by_offset(10, 10).click().perform()
@@ -212,50 +212,44 @@ def coletaDadosAmericanas(): #ALTERAR PARA SITE DINÂMICO
 
     WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
 
-    ofertaDia = WebDriverWait(navegador, 20).until(
-        EC.element_to_be_clickable((By.XPATH, '//*[@id="__next"]/header/div/section[2]/div/nav/ul/li[8]/a'))
-    )
-    ofertaDia.click()
+    wait = WebDriverWait(navegador, 20)
 
-    try:
-        btnVerTudo = WebDriverWait(navegador, 5).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id="rsyswpsdk"]/div/section/div/div[1]/div[3]/div/div[2]/div/div/div[3]/a'))
-        )
-        btnVerTudo.click()
-        print("Botão 'Ver Tudo' encontrado e clicado!")
-    except (TimeoutException, NoSuchElementException):
-        print("Botão 'Ver Tudo' NÃO encontrado. Continuando o código...")
+    menu_celulares = wait.until(EC.presence_of_element_located((By.XPATH, "//a[text()='celulares']")))
+    ActionChains(navegador).move_to_element(menu_celulares).perform()
+
+    iphone_link = wait.until(EC.element_to_be_clickable((By.XPATH, "//a[text()='iphone']")))
+    iphone_link.click()
 
     print('Produtos Ofertas do Dia Americanas\n')
 
-    produtos_xpath = "//h3[contains(@class, 'ProductCard_productName')]"
-
     try:
         WebDriverWait(navegador, 30).until(
-            EC.presence_of_element_located((By.XPATH, produtos_xpath))
+            EC.presence_of_element_located((By.XPATH, "//h3[contains(@class, 'ProductCard_productName')]"))
         )
-        produtos = navegador.find_elements(By.XPATH, produtos_xpath)
+        produtos = navegador.find_elements(By.XPATH, "//h3[contains(@class, 'ProductCard_productName')]")
         precos = navegador.find_elements(By.XPATH, "//p[contains(@class, 'ProductCard_productPrice')]")
-        links = navegador.find_elements(By.XPATH, "//a[contains(@class, 'ins-product-box')]")
-        imgLinks = navegador.find_elements(By.XPATH, "//a[contains(@class, 'ins-product-box')]//img")
+        links = navegador.find_elements(By.XPATH, "//div[contains(@class, 'ProductCard_productCard')]//a")
+        imgLinks = navegador.find_elements(By.XPATH, "//div[contains(@class, 'ProductCard_productImage')]//img")
 
         if not produtos:
             print("Nenhum produto encontrado.")
         else:
 
-            for i, (produto, preco, link, imgLink) in enumerate(zip(produtos[:3], precos, links, imgLinks), start=1):
-                urlProduto = link.get_attribute('href')
-                src = imgLink.get_attribute('src')
+            try:
+                for i, (produto, preco, link, imgLink) in enumerate(zip(produtos[:3], precos, links, imgLinks), start=1):
+                    urlProduto = link.get_attribute('href')
+                    src = imgLink.get_attribute('src')
 
-                print(f"{produto.text.strip().upper()} -- {preco.text.strip()}")
-                print('LINK: ', urlProduto)
-                print('IMG: ', src)
+                    print(f"{produto.text.strip().upper()} -- {preco.text.strip()}")
+                    print(f'LINK: {urlProduto}')
+                    print(f'IMG: {src}\n')
+            except Exception as e:
+                print(f"Erro durante o loop: {e}")
 
     except TimeoutException:
         print("Produtos não carregaram a tempo. Verifique se o XPath está correto ou se é necessário rolar mais")
 
-
-def coletaDadosMagazine(): #VERIFICAR DIVS -- FALTA OBTER URL
+def coletaDadosMagazine(): #VERIFICAR DIVS -- FALTA OBTER URL E IMG
 
     navegador = iniciar_chrome(url='https://www.magazineluiza.com.br/celulares-e-smartphones/l/te/', headless='off')
 
@@ -283,19 +277,28 @@ def coletaCasasBahia(): #CONTINUAR
 
 #-----------------------------PESQUISA FILTRADA-----------------------------
 
-def filtroMercadoLivre(inputNome): #OK -- OBTER IMG
-
+def filtroMercadoLivre(inputNome): #OK
     urlBase = 'https://lista.mercadolivre.com.br/'
-    # inputNome = input('Qual o nome do produto? ')
-    # inputNome = inputNome.replace(" ", "")
 
-    response = requests.get(urlBase + inputNome)
+    options = Options()
+    options.add_argument('--headless')
+    options.add_argument('--disable-gpu')
+    options.add_argument('--no-sandbox') 
 
-    site = BeautifulSoup(response.text, 'html.parser')
+    navegador = webdriver.Chrome(options=options)
+
+    navegador.get(urlBase + inputNome)
+
+    time.sleep(5)  
+
+    html = navegador.page_source
+
+    navegador.quit()  
+
+    site = BeautifulSoup(html, 'html.parser')
 
     produtos = site.find_all('div', attrs={'class': 'ui-search-result__wrapper'})
-    #print(produto.prettify())
-    
+
     for produto in produtos[:3]:
         preco = produto.find('div', attrs={'class': 'poly-price__current'})
         centavos = preco.find('span', attrs={'class': 'andes-money-amount__cents andes-money-amount__cents--superscript-24'})
@@ -304,22 +307,27 @@ def filtroMercadoLivre(inputNome): #OK -- OBTER IMG
         nomeProduto = produto.find('a', attrs={'class': 'poly-component__title'})
         precoProduto = preco.find('span', attrs={'class': 'andes-money-amount__fraction'})
         linkProduto = nomeProduto['href']
+        imgTag = produto.find('img', attrs={'class': 'poly-component__picture'})
 
-        nomeProduto = nomeProduto.text
-        simbolo = simbolo.text
+        nomeProduto = nomeProduto.text.strip()
+        simbolo = simbolo.text.strip()
 
+        imgLink = imgTag.get('src')
+
+        if imgLink.startswith('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'):
+            imgLink = imgTag.get('data-src') or imgTag.get('data-lazy-src') or imgTag.get('data-original') or imgLink
 
         if centavos:
             precoProduto = simbolo + precoProduto.text + ',' + centavos.text
-            print(nomeProduto, precoProduto, '\n', linkProduto, '\n')
-
         else:
-            precoProduto = simbolo + precoProduto.text + ',' + '00'
-            print(nomeProduto, precoProduto, '\n', linkProduto, '\n')
+            precoProduto = simbolo + precoProduto.text + ',00'
+
+        print(nomeProduto, precoProduto, '\n', linkProduto)
+        print(imgLink, '\n')
 
         # salvar_dados_postgres(nomeProduto, precoProduto, linkProduto)
 
-def filtroMagazine(inputNome): #OK -- OBTER URL
+def filtroMagazine(inputNome): #OK 
     urlBase = 'https://www.magazineluiza.com.br/busca/'
     # inputNome = input('Qual o nome do produto? ')
     # inputNome = inputNome.replace(" ", "")
@@ -348,7 +356,7 @@ def filtroMagazine(inputNome): #OK -- OBTER URL
             print(links)
             print(f"{imgLink['src']}\n")
 
-def filtroAmazon(inputNome): #OK -- OBTER IMG
+def filtroAmazon(inputNome): #OK 
     # inputNome = input('Qual é o produto? ')
     # inputNome = inputNome.replace(" ", "+")
 
@@ -377,11 +385,17 @@ def filtroAmazon(inputNome): #OK -- OBTER IMG
     precos = navegador.find_elements(By.XPATH, '//*[@class="a-price-whole"]')
     urls = navegador.find_elements(By.XPATH, '//*[@class="a-link-normal s-line-clamp-4 s-link-style a-text-normal"]')
 
+
     if produtos and precos:
         print(f'Encontrados {len(produtos)} produtos:')
         for produto, preco, url in zip(produtos[:5], precos, urls):
-            print(f'{produto.text} || {preco.text} \n')
-            print(f'{url.get_attribute("href")} \n')
+
+            imgLink = navegador.find_element(By.XPATH, '//*[@class="s-image"]')
+
+            print(f'{produto.text} || {preco.text}')
+            print(f'{url.get_attribute("href")}')
+            print(f'{imgLink.get_attribute('src')}\n')
+
     else:
         print("Nenhum produto encontrado")
 
@@ -390,11 +404,11 @@ def filtroCompleto():
     inputNome = input('Qual o nome do produto? ')
     
     # filtroMercadoLivre(inputNome)
-    filtroMagazine(inputNome)
-    # filtroAmazon(inputNome)
+    # filtroMagazine(inputNome)
+    filtroAmazon(inputNome)
 
-filtroCompleto()
-# coletaDadosMagazine()
+# filtroCompleto()
+coletaDadosAmericanas()
 
 
 # IDEIA ESTRUTURA BANCO DE DADOS
