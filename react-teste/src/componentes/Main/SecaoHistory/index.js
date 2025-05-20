@@ -43,7 +43,7 @@ const HistorySection = () => {
                 </p>
             </section>
             <a onClick={toggleText} className='buttonShowTxt' href="#">
-                { isExpanded ? 'Mostrar Menos' : 'Mostrar Mais'}
+                { isExpanded ? 'Minimizar <' : 'Maximizar >'}
             </a>
 
         </div>

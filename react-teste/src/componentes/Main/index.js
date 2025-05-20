@@ -5,6 +5,7 @@ import CelularSection from "./SecaoCelulares"
 import AmazonSection from "./SecaoAmazon"
 import NbSection from "./SecaoNotebooks"
 import HistorySection from "./SecaoHistory"
+import Footer from "../Footer"
 import './style.css'
 
 
@@ -21,6 +22,7 @@ function Main(){
             <AmazonSection/>
             <NbSection/>
             <HistorySection/>
+            <Footer/>
             
         </main>
     )

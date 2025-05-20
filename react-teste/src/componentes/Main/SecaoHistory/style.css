@@ -13,7 +13,7 @@
 .historySection.collapsed{
     justify-content: center;
     align-items: center;
-    max-height: 240px;
+    max-height: 220px;
     margin: 120px;
     padding: 10px 20px;
     border: 1px solid #898989;
@@ -22,6 +22,7 @@
     margin-left: 14%;
     margin-right: 15%;
     overflow: hidden;
+    overflow-y: auto;
 }
 
 .buttonShowTxt{
@@ -29,4 +30,5 @@
     color: black;
     font-weight: 600;
     cursor: pointer;
+    
 }
