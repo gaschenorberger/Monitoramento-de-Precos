@@ -41,27 +41,6 @@ Pichau (componentes de PC) (www.pichau.com.br)
 Dell (computadores e acessórios) (www.dell.com.br)'''
 
 
-def iniciar_navegador(com_debugging_remoto=True): 
-    chrome_driver_path = ChromeDriverManager().install()
-    chrome_driver_executable = os.path.join(os.path.dirname(chrome_driver_path), 'chromedriver.exe')
-    
-    #print(f"ChromeDriver path: {chrome_driver_executable}")
-    if not os.path.isfile(chrome_driver_executable):
-        raise FileNotFoundError(f"O ChromeDriver não foi encontrado em {chrome_driver_executable}")
-
-    service = Service(executable_path=chrome_driver_executable)
-    
-    chrome_options = Options()
-
-    if com_debugging_remoto:
-        remote_debugging_port = 9222
-        chrome_options.add_experimental_option("debuggerAddress", f"localhost:{remote_debugging_port}")
-    
-    navegador = webdriver.Chrome(service=service, options=chrome_options)
-    return navegador
-
-#navegador = iniciar_navegador(com_debugging_remoto=True)
-
 def conectar_postgres():
     return psycopg2.connect(
         dbname="bd_preco_certo",
@@ -119,69 +98,62 @@ def iniciar_chrome(url, headless='off'):
 
     return navegador
 
-def abrir_chrome():
-    try:
-        comando = r'start chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\Selenium\ChromeTestProfile'
-        subprocess.Popen(comando, shell=True)
 
-        time.sleep(3)
-
-        url = 'https://www.amazon.com.br'
-        pyautogui.write(url)
-        time.sleep(2)
-
-        pyautogui.press('enter')
-    except Exception as e:
-        print(f"Ocorreu um erro: {str(e)}")
 
 #-------------------------------ÁREA PRINCIPAL---------------------------
 
-def coletaDadosAmazon(): #OK -- FALTA OBTER URL E IMG
+def coletaDadosAmazon(): #OK
 
     navegador = iniciar_chrome(url='https://www.amazon.com.br/gp/bestsellers', headless='off')
-    # abrir_chrome()
 
-    # navegador = iniciar_navegador()
+    WebDriverWait(navegador, 10).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
 
-    WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
-
-    esperar_elemento(navegador, '//*[@id="nav-hamburger-menu"]')
-
-    # btnTodos = navegador.find_element(By.XPATH, '//*[@id="nav-hamburger-menu"]')
-    # btnTodos.click(), time.sleep(1) 
-
-    # esperar_elemento(navegador, '//*[@id="hmenu-content"]/div[1]/section[1]/ul/li[3]/a')
-
-    # btnProdAlta = navegador.find_element(By.XPATH, '//*[@id="hmenu-content"]/div[1]/section[1]/ul/li[3]/a')
-    # btnProdAlta.click(), time.sleep(1) 
+    if esperar_elemento(navegador, '//*[@id="nav-hamburger-menu"]'):
+        print()
+    else:
+        navegador.refresh()
 
     #Tópicos
 
-    secoes = navegador.find_elements(By.XPATH, "//div[contains(@class, 'a-carousel')]") 
-    secoes_exibidas = set() 
+    wait = WebDriverWait(navegador, 20)
 
-    for secao in secoes: 
-        try: 
-            topico = secao.find_element(By.XPATH, ".//h2[contains(@class, 'a-carousel-heading')]").text
+    secaoComputadores = wait.until(EC.element_to_be_clickable((By.XPATH, "//a[text()='Computadores']")))
+    secaoComputadores.click()
 
-            if topico in secoes_exibidas:
-                continue  
-            secoes_exibidas.add(topico)  
+    time.sleep(2)
+
+    esperar_elemento(navegador, "//div[contains(@class, 'a-cardui dcl-product')]")
+
+    secao = navegador.find_element(By.XPATH, "//div[contains(@class, 'a-cardui dcl-product')]") 
+    produtos = secao.find_elements(By.XPATH, "//span[contains(@class, 'dcl-truncate dcl-product-label')]//span")
+    reais = secao.find_elements(By.XPATH, "//span[contains(@class, 'a-price-whole')]")
+    centavos = secao.find_elements(By.XPATH, "//span[contains(@class, 'a-price-fraction')]")
+    links = navegador.find_elements(By.XPATH, "//div[contains(@class, 'a-cardui dcl-product')]//a")
+    imgLinks = navegador.find_elements(By.XPATH, "//div[contains(@class, 'dcl-product-image-container')]//img")
+    
+    if produtos:
+
+        for produto, real, centavo, link, imgLink  in zip(produtos[:3], reais, centavos, links, imgLinks):
+
+            urlProduto = link.get_attribute('href')
+            src = imgLink.get_attribute('src')
             
-            print(f"\n{topico}") 
-        except: 
-            continue  
+            if centavos:
+                real = real.text
+                centavo = centavo.text
+                preco = f'{real},{centavo}'
 
-        produtos = secao.find_elements(By.XPATH, ".//div[contains(@class, 'p13n-sc-truncate-desktop-type2')]")
-        precos = secao.find_elements(By.XPATH, ".//span[contains(@class, 'p13n-sc-price') or contains(@class, '_cDEzb_p13n-sc-price_3mJ9Z')]")
+                print(f"{produto.text.upper()} | {preco}")
+                print(urlProduto)
+                print(f"{src}\n")
+                
+            else:
+                preco = f'{real.text},00'
 
-        if produtos:
-            for produto, preco in zip(produtos[:3], precos):
-                if preco:
-                    print(f"{produto.text.upper()} || {preco.text}")
-                else:
-                    pass
-                    
+                print(f"{produto.text.upper()} | {preco.text}")
+                print(urlProduto)
+                print(f"{src}\n")
+         
 def coletaDadosMerLivre(): #OK -- FALTA OBTER URL E IMG
 
     navegador = iniciar_chrome(url='https://www.mercadolivre.com.br/', headless='on')
@@ -404,11 +376,11 @@ def filtroCompleto():
     inputNome = input('Qual o nome do produto? ')
     
     # filtroMercadoLivre(inputNome)
-    # filtroMagazine(inputNome)
-    filtroAmazon(inputNome)
+    filtroMagazine(inputNome)
+    # filtroAmazon(inputNome)
 
 # filtroCompleto()
-coletaDadosAmericanas()
+coletaDadosAmazon()
 
 
 # IDEIA ESTRUTURA BANCO DE DADOS
