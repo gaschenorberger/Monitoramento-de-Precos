@@ -23,15 +23,36 @@
 .menu a {
     text-decoration: none;
     color: white;
+    font-weight: 500;
     transition: 0.3s;
     display: flex;
     align-items: center;
     gap: 8px;
+    position: relative;
 }
 
-.menu a:hover {
+.menu a:hover{
+    font-weight: bold;
+}
+
+.menu a::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0%;
+    height: 2px;
+    background-color: #F27BBD;
+    transition: ease 0.3s;
+}
+
+.menu a:hover::after{
+    width: 100%;
+}
+
+/* .menu a:hover {
     padding: 5px;
     border-radius: 25px;
     background-color: #F27BBD;;
     color: white;
-}
+} */

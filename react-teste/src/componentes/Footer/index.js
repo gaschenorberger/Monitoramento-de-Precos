@@ -4,7 +4,7 @@ const Footer = () => {
     return(
         <div className="footerContainer">
             <footer>
-                <div className="itemsFooter">
+                <div className="highFooter">
                     <section className="destaques">
                         <h3>Destaques</h3>
                         <a href="#" className="destaquesItems">Celulares</a>
@@ -25,6 +25,11 @@ const Footer = () => {
                         <h3>Precisa de ajuda?</h3>
                         <a href="#" className="helpButton">Tire sua dúvida</a>
                     </section>
+                </div>
+                <hr className="lineFooter"/>
+                <div className="lowFooter">
+                    <p>O uso deste site está sujeito aos termos e condições do Termo de Uso e Política de privacidade. <br/>
+                    © Preço Certo. Todos os direitos reservados.</p>
                 </div>
                 
             </footer>

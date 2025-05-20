@@ -2,3 +2,59 @@
     background-color: #023b92;
     padding: 25px 61px;
 }
+
+.highFooter{
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 300px;
+}
+
+.destaques{
+    display: flex;
+    flex-direction: column;
+}
+
+.destaquesItems{
+    text-decoration: none;
+    color: white;
+    margin-top: 5px;
+}
+
+.destaques h3{
+    color: #FF66C4;
+}
+
+.infos{
+    display: flex;
+    flex-direction: column;
+}
+
+.infos{
+    color: #FF66C4;
+}
+
+.helpGuide{
+    margin-top: -100px;
+    color: #FF66C4;
+}
+
+.helpButton{
+    padding: 8px 16px;
+    text-decoration: none;
+    color: #FFFF;
+    font-weight: 600;
+    border: 2px solid white;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.lineFooter{
+    margin: 25px 10% 20px 10%;
+}
+
+.lowFooter{
+    color: white;
+    margin-left: 10%;
+}
