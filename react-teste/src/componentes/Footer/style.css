@@ -22,6 +22,10 @@
     margin-top: 5px;
 }
 
+.destaquesItems:hover {
+    text-decoration: underline;
+}
+
 .destaques h3{
     color: #FF66C4;
 }
