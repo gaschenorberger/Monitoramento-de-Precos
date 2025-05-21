@@ -18,12 +18,30 @@
 
 .destaquesItems{
     text-decoration: none;
+    font-weight: 500;
     color: white;
     margin-top: 5px;
+    position: relative;
 }
 
 .destaquesItems:hover {
-    text-decoration: underline;
+    font-weight: bold;
+}
+
+
+.destaquesItems::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    height: 2px;
+    background-color: #FF66C4;
+    transition: width ease 0.3s;
+}
+
+.destaquesItems:hover::after{
+    width: 100%;
 }
 
 .destaques h3{
@@ -52,6 +70,12 @@
     border: 2px solid white;
     border-radius: 15px;
     cursor: pointer;
+}
+
+.helpButton:hover{
+   color: #FF66C4;
+   border-color: #FF66C4;
+   transition: 0.3s;
 }
 
 .lineFooter{
