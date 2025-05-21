@@ -156,17 +156,20 @@ def coletaDadosAmazon(): #OK
          
 def coletaDadosMerLivre(): #OK -- FALTA OBTER URL E IMG
 
-    navegador = iniciar_chrome(url='https://www.mercadolivre.com.br/', headless='on')
+    navegador = iniciar_chrome(url='https://www.mercadolivre.com.br/c/informatica#menu=categories', headless='off')
 
-    btnOfertas = navegador.find_element(By.XPATH, '/html/body/header/div/div[5]/div/ul/li[2]/a')
-    btnOfertas.click(), time.sleep(1) 
+    wait = WebDriverWait(navegador, 20)
 
-    ofertas = navegador.find_element(By.XPATH, '//*[@id="root-app"]/div/div/section/a/div/h1').text.upper()
-    print(f'{ofertas}\n')
+    esperar_elemento(navegador, "//section[contains(@class, 'dynamic-carousel-normal-desktop')]")
     
-    produtos = navegador.find_elements(By.XPATH, "//a[contains(@class, 'poly-component__title')]") 
-    precos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'andes-money-amount andes-money-amount--cents-superscript')]/descendant::span[contains(@class, 'andes-money-amount__fraction')]")
-    centavos = navegador.find_elements(By.XPATH, "//span[contains(@class, 'andes-money-amount andes-money-amount--cents-superscript')]/descendant::span[contains(@class, 'andes-money-amount__cents andes-money-amount__cents--superscript-24')]")
+    # SECTION PRODUTOS
+
+    esperar_elemento(navegador, "//div[contains(@class, 'dynamic-carousel__item-container')]")
+    divProdutos = navegador.find_element(By.XPATH, "//div[contains(@class, 'dynamic-carousel__item-container')]")
+
+    produtos = divProdutos.find_elements(By.XPATH, "//h3[contains(@class, 'dynamic-carousel__title')]") 
+    precos = divProdutos.find_elements(By.XPATH, "//div[contains(@class, 'dynamic-carousel__price-block')]//span")
+    centavos = divProdutos.find_elements(By.XPATH, "//div[contains(@class, 'dynamic-carousel__price-block')]//span//sup")
 
     for produto, preco, centavo in zip(produtos[:3], precos, centavos[:3]):
         if centavo:
@@ -380,7 +383,7 @@ def filtroCompleto():
     # filtroAmazon(inputNome)
 
 # filtroCompleto()
-coletaDadosAmazon()
+coletaDadosMerLivre()
 
 
 # IDEIA ESTRUTURA BANCO DE DADOS
