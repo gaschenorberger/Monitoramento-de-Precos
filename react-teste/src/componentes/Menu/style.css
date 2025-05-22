@@ -50,6 +50,13 @@
     width: 100%;
 }
 
+@media (max-width: 1020px) {
+    .menu{
+        margin-top: 130px;
+        gap: 15px;
+        width: 115%;
+    }
+}
 
 /* .menu a:hover {
     padding: 5px;

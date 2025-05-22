@@ -30,14 +30,10 @@
     border-bottom-right-radius: 25px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1020px) {
     .searchBar {
         display: flex;
-        margin-left: 6px;
-    }
-
-    .searchBar select, .searchBar input, .searchBar button {
-        width: 100%;
-        padding: 20px;
+        margin-left: 10%;
+        width: 150%;
     }
 }
