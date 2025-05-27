@@ -14,11 +14,13 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 import openpyxl
-from datetime import datetime
+from datetime import date
 import psycopg2
 import random
 import subprocess
 import pyautogui
+
+
 
 #VERSÃO 2 SEM LINHAS COMENTADAS
 #CONFORME FOR ATUALIZANDO AQUI, VOU ADICIONANDO LA E COMENTANDO 
@@ -41,30 +43,51 @@ Pichau (componentes de PC) (www.pichau.com.br)
 Dell (computadores e acessórios) (www.dell.com.br)'''
 
 
-def conectar_postgres():
-    return psycopg2.connect(
-        dbname="bd_preco_certo",
-        user="postgres",
-        password="123",
-        host="localhost",
-        port="5432"
-    )
 
-def salvar_dados_postgres(nomePdt, precoPdt, linkPdt):
-    
-    conexao = conectar_postgres()
-    cursor = conexao.cursor()
+def inserirDados(produto_nome, loja_nome, preco, link_produto, href_img):
+    try:
+        conexao = psycopg2.connect(
+            dbname='precoCerto',
+            user='postgres',
+            password='123',
+            host='localhost',
+            port='5432'
+        )
+        cursor = conexao.cursor()
+
+        # Verifica ou cria produto
+        produto_id = obter_ou_criar(cursor, 'produtos', produto_nome)
+
+        # Verifica ou cria loja
+        loja_id = obter_ou_criar(cursor, 'lojas', loja_nome)
+
+        # Insere na tabela de preços
+        cursor.execute("""
+            INSERT INTO precos (produto_id, loja_id, preco, link_produto, href_img, data_captura)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (produto_id, loja_id, preco, link_produto, href_img, date.today()))
+
+        conexao.commit()
+
+        print(f"✅ Dados inseridos: {produto_nome} | {preco} | {loja_nome}\n")
+
+    except Exception as erro:
+        print(f"❌ Erro ao inserir dados: {erro}")
+
+    finally:
+        cursor.close()
+        conexao.close()
 
 
-    query = """
-        INSERT INTO produtos (nome_pdt, preco_pdt, link_pdt)
-        VALUES (%s, %s, %s);
-    """
-    cursor.execute(query, (nomePdt, precoPdt, linkPdt))
+def obter_ou_criar(cursor, tabela, nome):
+    cursor.execute(f"SELECT id FROM {tabela} WHERE nome = %s", (nome,))
+    resultado = cursor.fetchone()
+    if resultado:
+        return resultado[0]
+    else:
+        cursor.execute(f"INSERT INTO {tabela} (nome) VALUES (%s) RETURNING id", (nome,))
+        return cursor.fetchone()[0]
 
-    conexao.commit()
-    cursor.close()
-    conexao.close()
 
 def esperar_elemento(navegador, xpath, tempo=10):
     """
@@ -102,7 +125,7 @@ def iniciar_chrome(url, headless='off'):
 
 #-------------------------------ÁREA PRINCIPAL---------------------------
 
-def coletaDadosAmazon(): #OK
+def coletaDadosAmazon(): # OK
 
     navegador = iniciar_chrome(url='https://www.amazon.com.br/gp/bestsellers', headless='off')
 
@@ -137,24 +160,30 @@ def coletaDadosAmazon(): #OK
 
             urlProduto = link.get_attribute('href')
             src = imgLink.get_attribute('src')
+            data = date.today()
             
             if centavos:
                 real = real.text
                 centavo = centavo.text
                 preco = f'{real},{centavo}'
+                produto = produto.text
 
-                print(f"{produto.text.upper()} | {preco}")
+                print(f"{produto.upper()} | {preco}")
                 print(urlProduto)
                 print(f"{src}\n")
                 
             else:
                 preco = f'{real.text},00'
+                produto = produto.text
 
-                print(f"{produto.text.upper()} | {preco.text}")
+                print(f"{produto.upper()} | {preco.text}")
                 print(urlProduto)
                 print(f"{src}\n")
+            
+            inserirDados(produto, "Amazon", preco, urlProduto, src)
+
          
-def coletaDadosMerLivre(): #OK -- FALTA OBTER URL E IMG
+def coletaDadosMerLivre(): # OK -- FALTA OBTER URL E IMG
 
     navegador = iniciar_chrome(url='https://www.mercadolivre.com.br/c/informatica#menu=categories', headless='off')
 
@@ -177,17 +206,17 @@ def coletaDadosMerLivre(): #OK -- FALTA OBTER URL E IMG
         else:
             print(f"{produto.text.upper()} || R$ {preco.text},00")
 
-def coletaDadosAmericanas(): #OK
-    navegador = iniciar_chrome(url="https://www.americanas.com.br/", headless='on')
+def coletaDadosAmericanas(): # OK
+    navegador = iniciar_chrome(url="https://www.americanas.com.br/", headless='off')
 
-    action = ActionChains(navegador)
-    action.move_by_offset(10, 10).click().perform()
+    popUp = navegador.find_element(By.XPATH, "//div[contains(@class, 'ins-responsive-banner')]")
 
-    time.sleep(2)
-
-    WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
+    if popUp:
+        popUp.click()
 
     wait = WebDriverWait(navegador, 20)
+
+    WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
 
     menu_celulares = wait.until(EC.presence_of_element_located((By.XPATH, "//a[text()='celulares']")))
     ActionChains(navegador).move_to_element(menu_celulares).perform()
@@ -206,6 +235,10 @@ def coletaDadosAmericanas(): #OK
         links = navegador.find_elements(By.XPATH, "//div[contains(@class, 'ProductCard_productCard')]//a")
         imgLinks = navegador.find_elements(By.XPATH, "//div[contains(@class, 'ProductCard_productImage')]//img")
 
+        WebDriverWait(navegador, 30).until(
+            EC.presence_of_element_located((By.XPATH, "//h3[contains(@class, 'ProductCard_productName')]"))
+        )
+
         if not produtos:
             print("Nenhum produto encontrado.")
         else:
@@ -214,17 +247,24 @@ def coletaDadosAmericanas(): #OK
                 for i, (produto, preco, link, imgLink) in enumerate(zip(produtos[:3], precos, links, imgLinks), start=1):
                     urlProduto = link.get_attribute('href')
                     src = imgLink.get_attribute('src')
+                    produto = produto.text
+                    preco = preco.text
 
-                    print(f"{produto.text.strip().upper()} -- {preco.text.strip()}")
+                    preco = preco.split()
+                    preco = preco[1]
+
+                    print(f"{produto.strip().upper()} -- {preco.strip()}")
                     print(f'LINK: {urlProduto}')
                     print(f'IMG: {src}\n')
+
+                    inserirDados(produto, "Americanas", preco, urlProduto, src)
             except Exception as e:
                 print(f"Erro durante o loop: {e}")
 
     except TimeoutException:
         print("Produtos não carregaram a tempo. Verifique se o XPath está correto ou se é necessário rolar mais")
 
-def coletaDadosMagazine(): #VERIFICAR DIVS -- FALTA OBTER URL E IMG
+def coletaDadosMagazine(): # VERIFICAR DIVS -- FALTA OBTER URL E IMG
 
     navegador = iniciar_chrome(url='https://www.magazineluiza.com.br/celulares-e-smartphones/l/te/', headless='off')
 
@@ -241,7 +281,7 @@ def coletaDadosMagazine(): #VERIFICAR DIVS -- FALTA OBTER URL E IMG
     for produto, preco in zip(produtos[:4], precos):
         print(F"{produto.text} | {preco.text}")
 
-def coletaCasasBahia(): #CONTINUAR
+def coletaCasasBahia(): # CONTINUAR
 
     navegador = iniciar_chrome(url='https://www.casasbahia.com.br', headless='on')
 
@@ -383,7 +423,8 @@ def filtroCompleto():
     # filtroAmazon(inputNome)
 
 # filtroCompleto()
-coletaDadosMerLivre()
+# coletaDadosAmazon()
+coletaDadosAmericanas()
 
 
 # IDEIA ESTRUTURA BANCO DE DADOS
@@ -417,3 +458,25 @@ coletaDadosMerLivre()
 
 #NO BANCO MINHA IDEIA É FAZER UMA TABELA PRA CADA SITE, SALVAR TODAS AS INF COM A DATA DO DIA, QUANDO FOR PUXAR NO SITE, USAR SELECT * FROM AMAZON WHERE DT_ATUAL = 'DATA';
 #ASSIM FAZENDO COM QUE PUXE NO SITE A ATUALIZAÇÃO DO DIA, MAS NAO DEIXANDO DE SALVAR OS PRODUTOS DOS OUTROS DIAS PRA FAZER GRAFICO DE COMPARAÇÃO DE DATA
+
+
+
+
+"""
+TABELA LOJAS
+id
+nome
+
+TABELA PRODUTOS
+id
+nome
+
+TABELA PRECOS
+id
+produto_id
+loja_id
+preco
+link_produto
+href_img
+data_captura
+"""
