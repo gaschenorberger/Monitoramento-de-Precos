@@ -183,7 +183,7 @@ def coletaDadosAmazon(): # OK
             inserirDados(produto, "Amazon", preco, urlProduto, src)
 
          
-def coletaDadosMerLivre(): # OK -- FALTA OBTER URL E IMG
+def coletaDadosMerLivre(): # OK -- IMPLEMENTAR BANCO
 
     navegador = iniciar_chrome(url='https://www.mercadolivre.com.br/c/informatica#menu=categories', headless='off')
 
@@ -201,18 +201,32 @@ def coletaDadosMerLivre(): # OK -- FALTA OBTER URL E IMG
     centavos = divProdutos.find_elements(By.XPATH, "//div[contains(@class, 'dynamic-carousel__price-block')]//span//sup")
 
     for produto, preco, centavo in zip(produtos[:3], precos, centavos[:3]):
+
+        produto = produto.text
+        preco = preco.text
+        centavo = centavo.text
+        urlImg = navegador.find_element(By.XPATH, "//div[contains(@class, 'dynamic-carousel__link-container')]//img")
+        urlProduto = navegador.find_element(By.XPATH, "//div[contains(@class, 'dynamic-carousel__item-container')]//a[contains(@class, 'splinter-link')]")
+
+        linkProduto = urlProduto.get_attribute('href')
+        imgProduto = urlImg.get_attribute('src')
+ 
         if centavo:
-            print(f"{produto.text.upper()} || R$ {preco.text},{centavo.text}")
+            print(f"{produto.upper()} || R$ {preco},{centavo}")
         else:
-            print(f"{produto.text.upper()} || R$ {preco.text},00")
+            print(f"{produto.upper()} || R$ {preco},00")
+
+        print(linkProduto)
+        print(imgProduto, "\n")
 
 def coletaDadosAmericanas(): # OK
     navegador = iniciar_chrome(url="https://www.americanas.com.br/", headless='off')
 
-    popUp = navegador.find_element(By.XPATH, "//div[contains(@class, 'ins-responsive-banner')]")
-
-    if popUp:
+    try:
+        popUp = navegador.find_element(By.XPATH, "//div[contains(@class, 'ins-responsive-banner')]")
         popUp.click()
+    except NoSuchElementException:
+        print("Popup não encontrado")
 
     wait = WebDriverWait(navegador, 20)
 
@@ -257,7 +271,7 @@ def coletaDadosAmericanas(): # OK
                     print(f'LINK: {urlProduto}')
                     print(f'IMG: {src}\n')
 
-                    inserirDados(produto, "Americanas", preco, urlProduto, src)
+                    # inserirDados(produto, "Americanas", preco, urlProduto, src)
             except Exception as e:
                 print(f"Erro durante o loop: {e}")
 
