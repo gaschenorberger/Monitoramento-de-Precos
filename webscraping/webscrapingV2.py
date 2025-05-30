@@ -151,36 +151,30 @@ def coletaDadosAmazon(): # OK
     produtos = secao.find_elements(By.XPATH, "//span[contains(@class, 'dcl-truncate dcl-product-label')]//span")
     reais = secao.find_elements(By.XPATH, "//span[contains(@class, 'a-price-whole')]")
     centavos = secao.find_elements(By.XPATH, "//span[contains(@class, 'a-price-fraction')]")
-    links = navegador.find_elements(By.XPATH, "//div[contains(@class, 'a-cardui dcl-product')]//a")
-    imgLinks = navegador.find_elements(By.XPATH, "//div[contains(@class, 'dcl-product-image-container')]//img")
+    linkProduto = navegador.find_elements(By.XPATH, "//div[contains(@class, 'a-cardui dcl-product')]//a")
+    imgProduto = navegador.find_elements(By.XPATH, "//div[contains(@class, 'dcl-product-image-container')]//img")
     
     if produtos:
 
-        for produto, real, centavo, link, imgLink  in zip(produtos[:3], reais, centavos, links, imgLinks):
+        for produto, real, centavo, link, imgLink  in zip(produtos[:3], reais, centavos, linkProduto, imgProduto):
 
             urlProduto = link.get_attribute('href')
-            src = imgLink.get_attribute('src')
-            data = date.today()
+            urlImg = imgLink.get_attribute('src')
+            produto = produto.text
             
             if centavos:
                 real = real.text
                 centavo = centavo.text
                 preco = f'{real},{centavo}'
-                produto = produto.text
-
-                print(f"{produto.upper()} | {preco}")
-                print(urlProduto)
-                print(f"{src}\n")
                 
             else:
                 preco = f'{real.text},00'
-                produto = produto.text
 
-                print(f"{produto.upper()} | {preco.text}")
-                print(urlProduto)
-                print(f"{src}\n")
+            print(f"{produto.upper()} | {preco}")
+            print(f'LINK: {urlProduto}')
+            print(f'IMG: {urlImg}\n')
             
-            inserirDados(produto, "Amazon", preco, urlProduto, src)
+            inserirDados(produto, "Amazon", preco, urlProduto, urlImg)
 
          
 def coletaDadosMerLivre(): # OK -- IMPLEMENTAR BANCO
@@ -199,25 +193,25 @@ def coletaDadosMerLivre(): # OK -- IMPLEMENTAR BANCO
     produtos = divProdutos.find_elements(By.XPATH, "//h3[contains(@class, 'dynamic-carousel__title')]") 
     precos = divProdutos.find_elements(By.XPATH, "//div[contains(@class, 'dynamic-carousel__price-block')]//span")
     centavos = divProdutos.find_elements(By.XPATH, "//div[contains(@class, 'dynamic-carousel__price-block')]//span//sup")
+    imgProduto = navegador.find_elements(By.XPATH, "//div[contains(@class, 'dynamic-carousel__link-container')]//img")
+    linkProduto = navegador.find_elements(By.XPATH, "//div[contains(@class, 'dynamic-carousel__item-container')]//a[contains(@class, 'splinter-link')]")
 
-    for produto, preco, centavo in zip(produtos[:3], precos, centavos[:3]):
+    for produto, preco, centavo, img, link in zip(produtos[:3], precos, centavos[:3], imgProduto, linkProduto):
 
         produto = produto.text
         preco = preco.text
         centavo = centavo.text
-        urlImg = navegador.find_element(By.XPATH, "//div[contains(@class, 'dynamic-carousel__link-container')]//img")
-        urlProduto = navegador.find_element(By.XPATH, "//div[contains(@class, 'dynamic-carousel__item-container')]//a[contains(@class, 'splinter-link')]")
-
-        linkProduto = urlProduto.get_attribute('href')
-        imgProduto = urlImg.get_attribute('src')
+    
+        urlProduto = link.get_attribute('href')
+        urlImg = img.get_attribute('src')
  
         if centavo:
             print(f"{produto.upper()} || R$ {preco},{centavo}")
         else:
             print(f"{produto.upper()} || R$ {preco},00")
 
-        print(linkProduto)
-        print(imgProduto, "\n")
+        print(f'LINK: {urlProduto}')
+        print(f'IMG: {urlImg}\n')
 
 def coletaDadosAmericanas(): # OK
     navegador = iniciar_chrome(url="https://www.americanas.com.br/", headless='off')
@@ -246,8 +240,8 @@ def coletaDadosAmericanas(): # OK
         )
         produtos = navegador.find_elements(By.XPATH, "//h3[contains(@class, 'ProductCard_productName')]")
         precos = navegador.find_elements(By.XPATH, "//p[contains(@class, 'ProductCard_productPrice')]")
-        links = navegador.find_elements(By.XPATH, "//div[contains(@class, 'ProductCard_productCard')]//a")
-        imgLinks = navegador.find_elements(By.XPATH, "//div[contains(@class, 'ProductCard_productImage')]//img")
+        linkProduto = navegador.find_elements(By.XPATH, "//div[contains(@class, 'ProductCard_productCard')]//a")
+        imgProduto = navegador.find_elements(By.XPATH, "//div[contains(@class, 'ProductCard_productImage')]//img")
 
         WebDriverWait(navegador, 30).until(
             EC.presence_of_element_located((By.XPATH, "//h3[contains(@class, 'ProductCard_productName')]"))
@@ -258,9 +252,9 @@ def coletaDadosAmericanas(): # OK
         else:
 
             try:
-                for i, (produto, preco, link, imgLink) in enumerate(zip(produtos[:3], precos, links, imgLinks), start=1):
+                for i, (produto, preco, link, imgLink) in enumerate(zip(produtos[:3], precos, linkProduto, imgProduto), start=1):
                     urlProduto = link.get_attribute('href')
-                    src = imgLink.get_attribute('src')
+                    urlImg = imgLink.get_attribute('src')
                     produto = produto.text
                     preco = preco.text
 
@@ -269,31 +263,43 @@ def coletaDadosAmericanas(): # OK
 
                     print(f"{produto.strip().upper()} -- {preco.strip()}")
                     print(f'LINK: {urlProduto}')
-                    print(f'IMG: {src}\n')
+                    print(f'IMG: {urlImg}\n')
 
-                    inserirDados(produto, "Americanas", preco, urlProduto, src)
+                    inserirDados(produto, "Americanas", preco, urlProduto, urlImg)
             except Exception as e:
                 print(f"Erro durante o loop: {e}")
 
     except TimeoutException:
         print("Produtos não carregaram a tempo. Verifique se o XPath está correto ou se é necessário rolar mais")
 
-def coletaDadosMagazine(): # VERIFICAR DIVS -- FALTA OBTER URL E IMG
+def coletaDadosMagazine(): # OK -- IMPLEMENTAR BANCO
 
     navegador = iniciar_chrome(url='https://www.magazineluiza.com.br/celulares-e-smartphones/l/te/', headless='off')
 
     WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
 
-    navegador.execute_script("window.scrollBy(0, 1000);")
-    time.sleep(5)
-
     site = BeautifulSoup(navegador.page_source, 'html.parser')
-    maisVendidos = site.find('div', class_='sc-fjhLSj iSXyfy')
-    produtos = maisVendidos.find_all('h2', class_='sc-doohEh dHamKz')
-    precos = maisVendidos.find_all('p', class_='sc-dcJsrY eLxcFM sc-kUdmhA cvHkKW')
+    divProdutos = site.find('div', {'data-testid': 'mod-productlist'})
+    cards = divProdutos.find_all('a', {'data-testid': 'product-card-container'})
 
-    for produto, preco in zip(produtos[:4], precos):
-        print(F"{produto.text} | {preco.text}")
+    for card in cards[:4]:
+    
+        produto = card.find('h2', {'data-testid': 'product-title'})
+        produto = produto.text
+
+        preco = card.find('p', {'data-testid': 'price-value'})
+        preco = preco.text
+        preco = preco.split()
+
+        imgProduto = card.find('img', {'data-testid': 'image'})
+
+        urlProduto = card.get("href")
+        urlImg = imgProduto.get("src")
+
+        print(f"{produto} | {preco[1]} {preco[2]}")
+        print(f'LINK: https://www.magazineluiza.com.br{urlProduto}')
+        print(f'IMG: {urlImg}\n')
+
 
 def coletaCasasBahia(): # CONTINUAR
 
@@ -438,7 +444,7 @@ def filtroCompleto():
 
 # filtroCompleto()
 # coletaDadosAmazon()
-coletaDadosAmericanas()
+coletaDadosMerLivre()
 
 
 # IDEIA ESTRUTURA BANCO DE DADOS
