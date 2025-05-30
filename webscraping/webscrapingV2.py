@@ -271,7 +271,7 @@ def coletaDadosAmericanas(): # OK
                     print(f'LINK: {urlProduto}')
                     print(f'IMG: {src}\n')
 
-                    # inserirDados(produto, "Americanas", preco, urlProduto, src)
+                    inserirDados(produto, "Americanas", preco, urlProduto, src)
             except Exception as e:
                 print(f"Erro durante o loop: {e}")
 
