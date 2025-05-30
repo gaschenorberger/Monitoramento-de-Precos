@@ -12,13 +12,10 @@ import os
 import time
 from bs4 import BeautifulSoup
 import requests
-import pandas as pd
-import openpyxl
 from datetime import date
 import psycopg2
 import random
-import subprocess
-import pyautogui
+
 
 
 
