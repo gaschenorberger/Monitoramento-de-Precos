@@ -75,7 +75,6 @@ def inserirDados(produto_nome, loja_nome, preco, link_produto, href_img):
         cursor.close()
         conexao.close()
 
-
 def obter_ou_criar(cursor, tabela, nome):
     cursor.execute(f"SELECT id FROM {tabela} WHERE nome = %s", (nome,))
     resultado = cursor.fetchone()
@@ -84,7 +83,6 @@ def obter_ou_criar(cursor, tabela, nome):
     else:
         cursor.execute(f"INSERT INTO {tabela} (nome) VALUES (%s) RETURNING id", (nome,))
         return cursor.fetchone()[0]
-
 
 def esperar_elemento(navegador, xpath, tempo=10):
     """
@@ -507,6 +505,7 @@ def filtroCasasBahia(inputNome): #OK -- IMPLEMENTAR BANCO
         print(f"{produto} | {preco}")
         print(f'LINK: {urlProduto}')
         print(f'IMG: {urlImg}\n')
+
 
 
 #FILTRO COMPLETO -- EXECUTA TODAS AS FUNÇÕES DE UMA VEZ, TRAZENDO OS RESULTADOS 
