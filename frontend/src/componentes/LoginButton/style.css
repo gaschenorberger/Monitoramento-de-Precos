@@ -1,0 +1,54 @@
+.loginButton {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 222px;
+    height: 60px;
+    background-color: #cfd9ec;
+    border-radius: 50px;
+    padding: 0 16px;
+    border: none;
+    cursor: pointer;
+    transition: width 0.3s ease;
+    font-family: Arial, sans-serif;
+}
+
+.loginButton:hover {
+    width: 240px;
+}
+
+.loginImage {
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.loginTextWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.loginText {
+    font-weight: bold;
+    font-size: 16px;
+    margin: 0;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.atvCashback {
+    font-size: 13px;
+    font-style: italic;
+    color: #444;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.arrowIcon {
+    margin-left: 8px;
+    flex-shrink: 0;
+}
