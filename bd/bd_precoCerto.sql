@@ -1,87 +1,104 @@
--- ESTRUTURA BANCO DE DADOS
-/*TABELA LOJAS
-    id
-    nome
+DROP TABLE usuarios CASCADE;
+DROP TABLE produtos CASCADE;
+DROP TABLE produtos_categorias CASCADE;
+DROP TABLE produtos_monitorados CASCADE;
+DROP TABLE categorias CASCADE;
 
-TABELA PRODUTOS
-    id
-    nome
+SELECT * FROM usuarios;
+SELECT * FROM produtos;
+SELECT * FROM produtos_categorias;
+SELECT * FROM produtos_monitorados;
+SELECT * FROM categorias;
 
-TABELA PRECOS
-    id
-    produto_id
-    loja_id
-    preco
-    link_produto
-    href_img
-    data_captura
-*/
-
--- p.nome == produto nome || l.nome == loja nome
+TRUNCATE TABLE categorias; -- LIMPA TODOS OS DADOS DA TABELA, PORÉM NAO APAGA OS RELACIONAMENTOS
 
 
 
+-- ==========================
+-- Tabela de Usuários
+-- ==========================
 
-select * from lojas;
-select * from produtos;
-select * from precos;
-
-
-
--- ALTERAR ID LOJA
-
--- 1. Desabilita a constraint temporariamente
-ALTER TABLE precos DROP CONSTRAINT precos_loja_id_fkey;
-
--- 2. Atualiza o ID na tabela lojas
-UPDATE lojas
-SET id = 2
-WHERE id = 28;
-
--- 3. Atualiza os registros na tabela precos
-UPDATE precos
-SET loja_id = 2
-WHERE loja_id = 28;
-
--- 4. Recria a constraint
-ALTER TABLE precos
-ADD CONSTRAINT precos_loja_id_fkey FOREIGN KEY (loja_id) REFERENCES lojas(id);
-
---------------------------------------------------------------------------------------
+CREATE TABLE usuarios (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    senha_hash VARCHAR(200) NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 
--- INSERIR NOVAS LOJAS
-
-select * from lojas;
-INSERT INTO lojas VALUES (3, 'Mercado Livre');
-
-------------------------------------------------------------------------------------------
-
-
-
-
--- VIEWS
-
--- Produtos coletados hoje:
-
--- DDS == DADOS
-
-CREATE OR REPLACE VIEW DDS_COLETADOS_HOJE AS
-    SELECT p.nome AS produto, l.nome AS loja, pr.preco, pr.link_produto, pr.href_img
-        FROM precos pr
-            JOIN produtos p ON p.id = pr.produto_id
-            JOIN lojas l ON l.id = pr.loja_id
-        WHERE pr.data_captura = CURRENT_DATE;
+-- ==========================
+-- Tabela de Produtos
+-- ==========================
+CREATE TABLE produtos (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    preco_atual DECIMAL(10, 2) NOT NULL,
+    url TEXT NOT NULL,
+    imagem_url TEXT,
+    site_origem VARCHAR(100) NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 
--- Histórico de um produto específico:
+-- ==========================
+-- Tabela de Relacionamento Produtos-Categorias
+-- (Produtos podem ter varias categorias)
+-- ==========================
+CREATE TABLE produtos_categorias (
+    produto_id INT NOT NULL,
+    categoria_id INT NOT NULL,
+    PRIMARY KEY (produto_id, categoria_id),
+    FOREIGN KEY (produto_id) REFERENCES produtos(id) ON DELETE CASCADE,
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE CASCADE
+);
 
-SELECT pr.data_captura, l.nome AS loja, pr.preco
-    FROM precos pr
-        JOIN lojas l ON l.id = pr.loja_id
-    WHERE pr.produto_id = 1
-        ORDER BY pr.data_captura;
+
+-- ==========================
+-- Tabela de Histórico de Preços
+-- ==========================
+CREATE TABLE historico_precos (
+    id SERIAL PRIMARY KEY,
+    produto_id INT NOT NULL,
+    preco DECIMAL(10, 2) NOT NULL,
+    coletado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (produto_id) REFERENCES produtos(id) ON DELETE CASCADE
+);
 
 
-SELECT 
+-- ==========================
+-- Tabela de Produtos Monitorados pelo Usuário
+-- (Quando o usuário adiciona um produto específico para acompanhar)
+-- ==========================
+CREATE TABLE produtos_monitorados (
+    id SERIAL PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    produto_id INT NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (produto_id) REFERENCES produtos(id) ON DELETE CASCADE
+);
+
+
+-- ==========================
+-- Tabela de Categorias
+-- ==========================
+
+CREATE TABLE categorias (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) UNIQUE NOT NULL
+);
+
+
+INSERT INTO categorias (nome) VALUES
+('iPhone'),
+('Samsung'),
+('Notebook'),
+('Smartwatch'),
+('Headphone'),
+('Ofertas');
+
+select * from categorias;
+
+
 

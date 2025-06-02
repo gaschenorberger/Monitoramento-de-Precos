@@ -120,6 +120,8 @@ def iniciar_chrome(url, headless='off'):
 
 #-------------------------------ÁREA PRINCIPAL---------------------------
 
+
+# COMPUTADORES E INFORMÁTICA
 def coletaDadosAmazon(): # OK
 
     navegador = iniciar_chrome(url='https://www.amazon.com.br/gp/bestsellers', headless='off')
@@ -171,6 +173,7 @@ def coletaDadosAmazon(): # OK
             
             inserirDados(produto, "Amazon", preco, urlProduto, urlImg)
 
+# INFORMATICA
 def coletaDadosMerLivre(): # OK -- IMPLEMENTAR BANCO
 
     navegador = iniciar_chrome(url='https://www.mercadolivre.com.br/c/informatica#menu=categories', headless='off')
@@ -207,6 +210,7 @@ def coletaDadosMerLivre(): # OK -- IMPLEMENTAR BANCO
         print(f'LINK: {urlProduto}')
         print(f'IMG: {urlImg}\n')
 
+# CELULARES E SMARTPHONES
 def coletaDadosAmericanas(): # OK
     navegador = iniciar_chrome(url="https://www.americanas.com.br/", headless='off')
 
@@ -266,6 +270,7 @@ def coletaDadosAmericanas(): # OK
     except TimeoutException:
         print("Produtos não carregaram a tempo. Verifique se o XPath está correto ou se é necessário rolar mais")
 
+# CELULARES E SMARTPHONES
 def coletaDadosMagazine(): # OK -- IMPLEMENTAR BANCO
 
     navegador = iniciar_chrome(url='https://www.magazineluiza.com.br/celulares-e-smartphones/l/te/', headless='off')
@@ -294,6 +299,7 @@ def coletaDadosMagazine(): # OK -- IMPLEMENTAR BANCO
         print(f'LINK: https://www.magazineluiza.com.br{urlProduto}')
         print(f'IMG: {urlImg}\n')
 
+# CELULARES E SMARTPHONES
 def coletaCasasBahia(): # OK -- IMPLEMENTAR BANCO
 
     navegador = iniciar_chrome(url='https://www.casasbahia.com.br/c/telefones-e-celulares?filtro=c38', headless='off')
@@ -518,8 +524,8 @@ def filtroCompleto():
     # filtroMagazine(inputNome)
     # filtroCasasBahia(inputNome)
 
-filtroCompleto()
-# coletaCasasBahia()
+# filtroCompleto()
+coletaDadosAmericanas()
 
 
 # IDEIA ESTRUTURA BANCO DE DADOS
