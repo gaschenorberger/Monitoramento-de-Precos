@@ -15,6 +15,7 @@ import requests
 from datetime import date
 import psycopg2
 import random
+import re
 
 
 
@@ -41,32 +42,103 @@ Dell (computadores e acessórios) (www.dell.com.br)'''
 
 
 
-def inserirDados(produto_nome, loja_nome, preco, link_produto, href_img):
-    try:
-        conexao = psycopg2.connect(
-            dbname='precoCerto',
-            user='postgres',
-            password='123',
-            host='localhost',
-            port='5432'
+
+def conectar():
+    return psycopg2.connect(
+        dbname='bdPrecoCerto',
+        user='postgres',
+        password='123',  
+        host='localhost',
+        port='5432'
+    )
+
+
+def obter_ou_criar_loja(cursor, nome):
+    cursor.execute("SELECT id FROM lojas WHERE nome = %s", (nome,))
+    resultado = cursor.fetchone()
+    if resultado:
+        return resultado[0]
+    else:
+        cursor.execute(
+            "INSERT INTO lojas (nome) VALUES (%s) RETURNING id",
+            (nome,)
         )
+        return cursor.fetchone()[0]
+
+def pegar_ou_criar_categoria(cursor, nome_categoria):
+    cursor.execute("SELECT id FROM categorias WHERE nome = %s", (nome_categoria,))
+    resultado = cursor.fetchone()
+    if resultado:
+        return resultado[0]
+    else:
+        cursor.execute(
+            "INSERT INTO categorias (nome) VALUES (%s) RETURNING id",
+            (nome_categoria,)
+        )
+        return cursor.fetchone()[0]
+
+def vincular_produto_categoria(cursor, produto_id, categoria_id):
+    cursor.execute("""
+        SELECT 1 FROM produtos_categorias 
+        WHERE produto_id = %s AND categoria_id = %s
+    """, (produto_id, categoria_id))
+    if not cursor.fetchone():
+        cursor.execute("""
+            INSERT INTO produtos_categorias (produto_id, categoria_id)
+            VALUES (%s, %s)
+        """, (produto_id, categoria_id))
+
+def inserirDados(produto_nome, loja_nome, preco, link_produto, href_img, lista_categorias):
+    try:
+        conexao = conectar()
         cursor = conexao.cursor()
 
-        # Verifica ou cria produto
-        produto_id = obter_ou_criar(cursor, 'produtos', produto_nome)
+        loja_id = obter_ou_criar_loja(cursor, loja_nome)
+        
 
-        # Verifica ou cria loja
-        loja_id = obter_ou_criar(cursor, 'lojas', loja_nome)
-
-        # Insere na tabela de preços
+        # Verificar se o produto já existe
         cursor.execute("""
-            INSERT INTO precos (produto_id, loja_id, preco, link_produto, href_img, data_captura)
-            VALUES (%s, %s, %s, %s, %s, %s)
-        """, (produto_id, loja_id, preco, link_produto, href_img, date.today()))
+            SELECT id FROM produtos
+            WHERE nome = %s AND site_origem = %s
+        """, (produto_nome, loja_nome))
+        resultado = cursor.fetchone()
+
+        if resultado:
+            produto_id = resultado[0]
+
+            # Atualizar preço atual, link e imagem
+            cursor.execute("""
+                UPDATE produtos
+                SET preco_atual = %s,
+                    url = %s,
+                    imagem_url = %s
+                WHERE id = %s
+            """, (preco, link_produto, href_img, produto_id))
+        else:
+            # Inserir novo produto
+            cursor.execute("""
+                INSERT INTO produtos (nome, site_origem, preco_atual, url, imagem_url, criado_em)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                RETURNING id
+            """, (produto_nome, loja_nome, preco, link_produto, href_img, date.today()))
+            produto_id = cursor.fetchone()[0]
+
+        # Vincular produto à categoria
+
+        for nome_categoria in lista_categorias:
+            categoria_id = pegar_ou_criar_categoria(cursor, nome_categoria)
+            vincular_produto_categoria(cursor, produto_id, categoria_id)
+
+
+        # Inserir no histórico de preços
+        cursor.execute("""
+            INSERT INTO historico_precos (produto_id, preco, coletado_em)
+            VALUES (%s, %s, NOW())
+        """, (produto_id, preco))
 
         conexao.commit()
 
-        print(f"✅ Dados inseridos: {produto_nome} | {preco} | {loja_nome}\n")
+        print(f"✅ Dados inseridos/atualizados: {produto_nome} | {preco} | {loja_nome} | {nome_categoria}\n")
 
     except Exception as erro:
         print(f"❌ Erro ao inserir dados: {erro}")
@@ -75,14 +147,7 @@ def inserirDados(produto_nome, loja_nome, preco, link_produto, href_img):
         cursor.close()
         conexao.close()
 
-def obter_ou_criar(cursor, tabela, nome):
-    cursor.execute(f"SELECT id FROM {tabela} WHERE nome = %s", (nome,))
-    resultado = cursor.fetchone()
-    if resultado:
-        return resultado[0]
-    else:
-        cursor.execute(f"INSERT INTO {tabela} (nome) VALUES (%s) RETURNING id", (nome,))
-        return cursor.fetchone()[0]
+
 
 def esperar_elemento(navegador, xpath, tempo=10):
     """
@@ -116,6 +181,39 @@ def iniciar_chrome(url, headless='off'):
 
     return navegador
 
+def detectar_categorias(produto_nome):
+    nome = produto_nome.lower()
+
+    categorias = []
+
+    if 'iphone' in nome:
+        categorias.append('iPhone')
+        categorias.append('Smartphone')
+
+    if 'macbook' in nome:
+        categorias.append('Notebook')
+
+    if 'samsung' in nome:
+        categorias.append('Samsung')
+        categorias.append('Smartphone')
+
+    if 'smartphone' in nome:
+        categorias.append('Smartphone')
+
+    if 'notebook' in nome:
+        categorias.append('Notebook')
+
+    if 'smartwatch' in nome:
+        categorias.append('Smartwatch')
+
+    if 'headphone' in nome or 'fone' in nome:
+        categorias.append('Headphone')
+
+    if not categorias:
+        categorias.append('Outros')
+
+
+    return list(set(categorias))
 
 
 #-------------------------------ÁREA PRINCIPAL---------------------------
@@ -162,19 +260,27 @@ def coletaDadosAmazon(): # OK
             if centavos:
                 real = real.text
                 centavo = centavo.text
-                preco = f'{real},{centavo}'
+
+                if '00' in centavo:
+                    preco = real
+                else:
+                    preco = f'{real}.{centavo}'
                 
             else:
-                preco = f'{real.text},00'
+                preco = f'{real.text}'
 
             print(f"{produto.upper()} | {preco}")
             print(f'LINK: {urlProduto}')
             print(f'IMG: {urlImg}\n')
-            
-            inserirDados(produto, "Amazon", preco, urlProduto, urlImg)
+
+
+            categorias = detectar_categorias(produto)
+
+            inserirDados(produto, "Amazon", preco, urlProduto, urlImg, categorias)
+        navegador.quit()
 
 # INFORMATICA
-def coletaDadosMerLivre(): # OK -- IMPLEMENTAR BANCO
+def coletaDadosMerLivre(): # OK 
 
     navegador = iniciar_chrome(url='https://www.mercadolivre.com.br/c/informatica#menu=categories', headless='off')
 
@@ -198,17 +304,27 @@ def coletaDadosMerLivre(): # OK -- IMPLEMENTAR BANCO
         produto = produto.text
         preco = preco.text
         centavo = centavo.text
+
+        preco = preco.split(' ')
+        preco = preco[1]
+
     
         urlProduto = link.get_attribute('href')
         urlImg = img.get_attribute('src')
  
         if centavo:
-            print(f"{produto.upper()} || R$ {preco},{centavo}")
+            print(f"{produto.upper()} || {preco},{centavo}")
         else:
-            print(f"{produto.upper()} || R$ {preco},00")
+            print(f"{produto.upper()} || {preco},00")
 
         print(f'LINK: {urlProduto}')
         print(f'IMG: {urlImg}\n')
+
+        categorias = detectar_categorias(produto)
+        
+        inserirDados(produto, "Mercado Livre", preco, urlProduto, urlImg, categorias)       
+
+    navegador.quit() 
 
 # CELULARES E SMARTPHONES
 def coletaDadosAmericanas(): # OK
@@ -258,20 +374,30 @@ def coletaDadosAmericanas(): # OK
 
                     preco = preco.split()
                     preco = preco[1]
+                    preco = preco.strip()
+                    preco = preco.replace('.', '')
+                    preco = preco.replace(',', '.')
 
-                    print(f"{produto.strip().upper()} -- {preco.strip()}")
+                    print(f"{produto.strip().upper()} -- {preco}")
                     print(f'LINK: {urlProduto}')
                     print(f'IMG: {urlImg}\n')
 
-                    inserirDados(produto, "Americanas", preco, urlProduto, urlImg)
+                    categorias = detectar_categorias(produto)
+
+                    
+                    inserirDados(produto, "Americanas", preco, urlProduto, urlImg, categorias)
+
+
             except Exception as e:
                 print(f"Erro durante o loop: {e}")
 
     except TimeoutException:
         print("Produtos não carregaram a tempo. Verifique se o XPath está correto ou se é necessário rolar mais")
+    
+    navegador.quit()
 
 # CELULARES E SMARTPHONES
-def coletaDadosMagazine(): # OK -- IMPLEMENTAR BANCO
+def coletaDadosMagazine(): # OK 
 
     navegador = iniciar_chrome(url='https://www.magazineluiza.com.br/celulares-e-smartphones/l/te/', headless='off')
 
@@ -289,24 +415,39 @@ def coletaDadosMagazine(): # OK -- IMPLEMENTAR BANCO
         preco = card.find('p', {'data-testid': 'price-value'})
         preco = preco.text
         preco = preco.split()
+        preco = preco[-1]
+
+        preco = preco.replace(".", "")
+        preco = preco.replace(",", ".")
 
         imgProduto = card.find('img', {'data-testid': 'image'})
 
         urlProduto = card.get("href")
         urlImg = imgProduto.get("src")
+        urlProduto = f'https://www.magazineluiza.com.br{urlProduto}'
 
-        print(f"{produto} | {preco[1]} {preco[2]}")
-        print(f'LINK: https://www.magazineluiza.com.br{urlProduto}')
+        print(f"{produto} | {preco}")
+        print(f'LINK: {urlProduto}')
         print(f'IMG: {urlImg}\n')
 
+
+        categorias = detectar_categorias(produto)
+
+        
+        inserirDados(produto, "Magazine Luiza", preco, urlProduto, urlImg, categorias)
+    
+    navegador.quit()
+
 # CELULARES E SMARTPHONES
-def coletaCasasBahia(): # OK -- IMPLEMENTAR BANCO
+def coletaCasasBahia(): # OK 
 
     navegador = iniciar_chrome(url='https://www.casasbahia.com.br/c/telefones-e-celulares?filtro=c38', headless='off')
 
     WebDriverWait(navegador, 240).until(lambda navegador: navegador.execute_script('return document.readyState') == 'complete')
 
-    divProdutos = navegador.find_element(By.XPATH, "//div[contains(@class, 'slick-track')]")
+    esperar_elemento(navegador, "//div[contains(@data-testid, 'dsvia-base-div')]")
+
+    divProdutos = navegador.find_element(By.XPATH, "//div[contains(@data-testid, 'dsvia-base-div')]")
     produtos = divProdutos.find_elements(By.XPATH, "//h3[contains(@class, 'product-card__title')]")
     precos = divProdutos.find_elements(By.XPATH, "//div[@class='product-card__highlight-price']")
     linkProduto = divProdutos.find_elements(By.XPATH, "//h3[contains(@class, 'product-card__title')]//a")
@@ -319,10 +460,20 @@ def coletaCasasBahia(): # OK -- IMPLEMENTAR BANCO
         urlProduto = link.get_attribute('href')
         urlImg = img.get_attribute('src')
 
+        preco = preco.split()
+        preco = preco[-1]
+        preco = preco.replace(".", "")
+        preco = preco.replace(",", ".")
+
         print(f"{produto} | {preco}")
         print(f'LINK: {urlProduto}')
         print(f'IMG: {urlImg}\n')
 
+        categorias = detectar_categorias(produto)
+        
+        inserirDados(produto, "Casas Bahia", preco, urlProduto, urlImg, categorias)
+
+    navegador.quit()
 
 
 
@@ -406,9 +557,9 @@ def filtroMercadoLivre(inputNome): #OK -- IMPLEMENTAR BANCO
             imgLink = imgTag.get('data-src') or imgTag.get('data-lazy-src') or imgTag.get('data-original') or imgLink
 
         if centavos:
-            precoProduto = simbolo + precoProduto.text + ',' + centavos.text
+            precoProduto = precoProduto.text + '.' + centavos.text
         else:
-            precoProduto = simbolo + precoProduto.text + ',00'
+            precoProduto = precoProduto.text + ',00'
 
         print(nomeProduto, precoProduto)
         print(f'LINK: {linkProduto}')
@@ -524,60 +675,23 @@ def filtroCompleto():
     # filtroMagazine(inputNome)
     # filtroCasasBahia(inputNome)
 
+
+def coletaCompleta():
+
+    coletaDadosAmazon(), time.sleep(2)
+    coletaDadosMerLivre(), time.sleep(2)
+    coletaDadosAmericanas(), time.sleep(2)
+    coletaDadosMagazine(), time.sleep(2)
+    coletaCasasBahia()
+
 # filtroCompleto()
-coletaDadosAmericanas()
+coletaCompleta()
+# coletaDadosMagazine()
 
 
-# IDEIA ESTRUTURA BANCO DE DADOS
-""" dados_webscraping
-	    nomeProduto
-	    precoProduto
-	    linkProduto
-        lojaProduto
-        hrefImg
-	
-    produtos_merclivre
-	    nomeProduto
-	    precoProduto
-	    linkProduto
-        lojaProduto
-        hrefImg
-	
-    produtos_amazon
-	    nomeProduto
-	    precoProduto
-	    linkProduto
-        lojaProduto
-        hrefImg
-
-    produtos_americanas
-	    nomeProduto
-	    precoProduto
-	    linkProduto
-        lojaProduto
-        hrefImg"""
 
 #NO BANCO MINHA IDEIA É FAZER UMA TABELA PRA CADA SITE, SALVAR TODAS AS INF COM A DATA DO DIA, QUANDO FOR PUXAR NO SITE, USAR SELECT * FROM AMAZON WHERE DT_ATUAL = 'DATA';
 #ASSIM FAZENDO COM QUE PUXE NO SITE A ATUALIZAÇÃO DO DIA, MAS NAO DEIXANDO DE SALVAR OS PRODUTOS DOS OUTROS DIAS PRA FAZER GRAFICO DE COMPARAÇÃO DE DATA
 
 
 
-
-"""
-TABELA LOJAS
-id
-nome
-
-TABELA PRODUTOS
-id
-nome
-
-TABELA PRECOS
-id
-produto_id
-loja_id
-preco
-link_produto
-href_img
-data_captura
-"""

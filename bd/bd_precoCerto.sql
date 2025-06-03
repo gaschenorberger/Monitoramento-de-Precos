@@ -4,13 +4,35 @@ DROP TABLE produtos_categorias CASCADE;
 DROP TABLE produtos_monitorados CASCADE;
 DROP TABLE categorias CASCADE;
 
-SELECT * FROM usuarios;
-SELECT * FROM produtos;
+SELECT * FROM usuarios
+ORDER BY id ASC;
+
+SELECT * FROM produtos
+ORDER BY id ASC;
+
 SELECT * FROM produtos_categorias;
-SELECT * FROM produtos_monitorados;
-SELECT * FROM categorias;
+
+SELECT * FROM produtos_monitorados
+ORDER BY id ASC;
+
+SELECT * FROM categorias
+ORDER BY id ASC;
+
+
 
 TRUNCATE TABLE categorias; -- LIMPA TODOS OS DADOS DA TABELA, PORÉM NAO APAGA OS RELACIONAMENTOS
+DELETE FROM categorias;
+
+
+
+
+-- ZERAR ID 
+
+DELETE FROM categorias;
+ALTER SEQUENCE categorias_id_seq RESTART WITH 1;
+
+--------------------------------
+
 
 
 
@@ -96,9 +118,97 @@ INSERT INTO categorias (nome) VALUES
 ('Notebook'),
 ('Smartwatch'),
 ('Headphone'),
-('Ofertas');
+('Smartphone')
+('Outros');
 
 select * from categorias;
 
 
 
+-- ===============================================
+-- VIEWS
+-- ===============================================
+
+
+-- VIEW PRA PUXAR CATEGORIAS ESPECIFICAS
+
+CREATE OR REPLACE VIEW VW_PRODUTOS_CATEGORIAS AS
+SELECT
+    p.id AS produto_id,
+    p.nome AS nome_produto,
+    p.preco_atual,
+    p.url,
+    p.imagem_url,
+    p.site_origem,
+    p.criado_em,
+    c.id AS categoria_id,
+    c.nome AS nome_categoria
+FROM
+    produtos p
+JOIN produtos_categorias pc ON p.id = pc.produto_id
+JOIN categorias c ON pc.categoria_id = c.id;
+
+
+SELECT * 
+FROM VW_PRODUTOS_CATEGORIAS
+WHERE nome_categoria = 'iPhone';
+
+SELECT * 
+FROM VW_PRODUTOS_CATEGORIAS
+WHERE nome_categoria = 'Samsung';
+
+SELECT * 
+FROM VW_PRODUTOS_CATEGORIAS
+WHERE nome_categoria = 'Notebook';
+
+SELECT * 
+FROM VW_PRODUTOS_CATEGORIAS
+WHERE nome_categoria = 'Smartwatch';
+
+SELECT * 
+FROM VW_PRODUTOS_CATEGORIAS
+WHERE nome_categoria = 'Headphone';
+
+SELECT * 
+FROM VW_PRODUTOS_CATEGORIAS
+WHERE nome_categoria = 'Smartphone';
+
+SELECT * 
+FROM VW_PRODUTOS_CATEGORIAS
+WHERE nome_categoria = 'Outros';
+
+
+
+
+
+DELETE FROM produtos;
+ALTER SEQUENCE produtos_id_seq RESTART WITH 1;
+
+DELETE FROM lojas;
+ALTER SEQUENCE lojas_id_seq RESTART WITH 1;
+
+DELETE FROM categorias;
+ALTER SEQUENCE categorias_id_seq RESTART WITH 1;
+
+INSERT INTO categorias (nome) VALUES
+('iPhone'),
+('Samsung'),
+('Notebook'),
+('Smartwatch'),
+('Headphone'),
+('Smartphone'),
+('Outros');
+
+
+
+-- ME RETORNA TODOS OS PRODUTOS DA MAGAZINE LUIZA -- TRANSFORMAR EM VIEW
+SELECT DISTINCT 
+    produto_id,
+    nome_produto,
+    preco_atual,
+    url,
+    imagem_url,
+    site_origem,
+    criado_em
+FROM VW_PRODUTOS_CATEGORIAS
+WHERE site_origem = 'Magazine Luiza';
