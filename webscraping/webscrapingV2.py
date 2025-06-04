@@ -186,34 +186,37 @@ def detectar_categorias(produto_nome):
 
     categorias = []
 
-    if 'iphone' in nome:
-        categorias.append('iPhone')
-        categorias.append('Smartphone')
+    if 'caneta styus' in nome:
+        pass
+    else:
+        if 'iphone' in nome:
+            categorias.append('iPhone')
+            categorias.append('Smartphone')
 
-    if 'macbook' in nome:
-        categorias.append('Notebook')
+        if 'macbook' in nome:
+            categorias.append('Notebook')
 
-    if 'samsung' in nome:
-        categorias.append('Samsung')
-        categorias.append('Smartphone')
+        if 'samsung' in nome:
+            categorias.append('Samsung')
+            categorias.append('Smartphone')
 
-    if 'smartphone' in nome:
-        categorias.append('Smartphone')
+        if 'smartphone' in nome:
+            categorias.append('Smartphone')
 
-    if 'notebook' in nome:
-        categorias.append('Notebook')
+        if 'notebook' in nome:
+            categorias.append('Notebook')
 
-    if 'smartwatch' in nome:
-        categorias.append('Smartwatch')
+        if 'smartwatch' in nome:
+            categorias.append('Smartwatch')
 
-    if 'headphone' in nome or 'fone' in nome:
-        categorias.append('Headphone')
+        if 'headphone' in nome or 'fone' in nome:
+            categorias.append('Headphone')
 
-    if not categorias:
-        categorias.append('Outros')
+        if not categorias:
+            categorias.append('Outros')
 
 
-    return list(set(categorias))
+        return list(set(categorias))
 
 
 #-------------------------------ÁREA PRINCIPAL---------------------------
@@ -251,7 +254,7 @@ def coletaDadosAmazon(): # OK
     
     if produtos:
 
-        for produto, real, centavo, link, imgLink  in zip(produtos[:3], reais, centavos, linkProduto, imgProduto):
+        for produto, real, centavo, link, imgLink  in zip(produtos[:5], reais, centavos, linkProduto, imgProduto):
 
             urlProduto = link.get_attribute('href')
             urlImg = imgLink.get_attribute('src')
@@ -268,6 +271,12 @@ def coletaDadosAmazon(): # OK
                 
             else:
                 preco = f'{real.text}'
+
+            if preco.count('.') == 2:
+                partes = preco.split('.')
+                preco = partes[0] + partes[1] + '.' + partes[2]
+            else:
+                preco = preco
 
             print(f"{produto.upper()} | {preco}")
             print(f'LINK: {urlProduto}')
@@ -299,7 +308,7 @@ def coletaDadosMerLivre(): # OK
     imgProduto = navegador.find_elements(By.XPATH, "//div[contains(@class, 'dynamic-carousel__link-container')]//img")
     linkProduto = navegador.find_elements(By.XPATH, "//div[contains(@class, 'dynamic-carousel__item-container')]//a[contains(@class, 'splinter-link')]")
 
-    for produto, preco, centavo, img, link in zip(produtos[:3], precos, centavos[:3], imgProduto, linkProduto):
+    for produto, preco, centavo, img, link in zip(produtos[:5], precos, centavos[:5], imgProduto, linkProduto):
 
         produto = produto.text
         preco = preco.text
@@ -366,7 +375,7 @@ def coletaDadosAmericanas(): # OK
         else:
 
             try:
-                for i, (produto, preco, link, imgLink) in enumerate(zip(produtos[:3], precos, linkProduto, imgProduto), start=1):
+                for i, (produto, preco, link, imgLink) in enumerate(zip(produtos[:5], precos, linkProduto, imgProduto), start=1):
                     urlProduto = link.get_attribute('href')
                     urlImg = imgLink.get_attribute('src')
                     produto = produto.text
@@ -407,7 +416,7 @@ def coletaDadosMagazine(): # OK
     divProdutos = site.find('div', {'data-testid': 'mod-productlist'})
     cards = divProdutos.find_all('a', {'data-testid': 'product-card-container'})
 
-    for card in cards[:4]:
+    for card in cards[:5]:
     
         produto = card.find('h2', {'data-testid': 'product-title'})
         produto = produto.text
@@ -453,7 +462,7 @@ def coletaCasasBahia(): # OK
     linkProduto = divProdutos.find_elements(By.XPATH, "//h3[contains(@class, 'product-card__title')]//a")
     imgProduto = divProdutos.find_elements(By.XPATH, "//img[@class='product-card__image']")
 
-    for produto, preco, link, img in zip(produtos[:4], precos, linkProduto, imgProduto):
+    for produto, preco, link, img in zip(produtos[:5], precos, linkProduto, imgProduto):
         
         produto = produto.text
         preco = preco.text
@@ -686,7 +695,7 @@ def coletaCompleta():
 
 # filtroCompleto()
 coletaCompleta()
-# coletaDadosMagazine()
+# coletaDadosAmazon()
 
 
 

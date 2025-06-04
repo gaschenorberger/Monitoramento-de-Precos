@@ -16,7 +16,7 @@ function dadosProdutos() {
     const [produtos, setProdutos] = useState([]);
 
     useEffect(() => {
-        axios.get('')
+        axios.get("http://localhost:3001/produtos")
         .then(Response => setProdutos(Response.data))
         .catch(error => console.error('Error ao buscar produtos:', error));
     }, []);

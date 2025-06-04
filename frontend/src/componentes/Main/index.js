@@ -14,14 +14,19 @@ function Main() {
   const [produtos, setProdutos] = useState([]);
 
   useEffect(() => {
-    axios.get("#") //colocar o link da api aqui!!
+    axios.get("http://localhost:3001/produtos") //colocar o link da api aqui!!
       .then((res) => setProdutos(res.data))
       .catch((err) => console.error("Erro ao buscar produtos:", err));
   }, []);
 
-  const celulares = produtos.filter(p => p.category === "Celulares");
-  const notebooks = produtos.filter(p => p.category === "Notebooks");
-  const amazon = produtos.filter(p => p.loja === "Amazon");
+  function getRandomItems(arr, num) {
+    const shuffled = arr.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, num);
+  }
+
+  const smartphone = getRandomItems(produtos.filter(p => p.nome_categoria === "Smartphone"), 4);
+  const notebook = getRandomItems(produtos.filter(p => p.nome_categoria === "Notebook"), 4);
+  const amazon = getRandomItems(produtos.filter(p => p.site_origem === "Amazon"), 4);
 
   return (
     <main>
@@ -34,9 +39,9 @@ function Main() {
       </Titulo>
 
       <StoreList />
-      <CelularSection produtos={celulares} />
+      <CelularSection produtos={smartphone} />
       <AmazonSection produtos={amazon} />
-      <NbSection produtos={notebooks} />
+      <NbSection produtos={notebook} />
       <HistorySection />
       <Footer />
     </main>

@@ -26,8 +26,8 @@
 
 .searchBar button {
     width: 75px;
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 
 @media (max-width: 1020px) {
