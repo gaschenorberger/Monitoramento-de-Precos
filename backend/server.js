@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Conexão com PostgreSQL
+// CONECTANDO NO BANCO
 const pool = new Pool({
     user: 'postgres',
     host: 'localhost',

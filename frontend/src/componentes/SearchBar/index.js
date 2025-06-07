@@ -4,7 +4,14 @@ function SearchBar(){
     return(
         <div className="searchBar">
                 <select className="categoriasSelect">
-                    <option><b>Todas as categorias</b></option>
+                    <option className='optionSelect'><b>Todas as categorias</b></option>
+                    <option><b>iPhone</b></option>
+                    <option><b>Samsung</b></option>
+                    <option><b>Notebook</b></option>
+                    <option><b>Smartwatch</b></option>
+                    <option><b>Headphone</b></option>
+                    <option><b>Smartphone</b></option>
+                    <option><b>Outros</b></option>
                 </select>
                 <input type="text" placeholder="Digite sua busca..."/>
                 <button>
