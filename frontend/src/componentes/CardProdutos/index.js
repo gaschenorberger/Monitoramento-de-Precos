@@ -12,7 +12,7 @@ export const CardProdutos = ({ nome_produto, preco_atual, site_origem, imagem_ur
             </section>
             
             <p className="lojaNome">Menor preço via {site_origem}</p>
-            <p className="precoProduto">{preco_atual}</p>
+            <p className="precoProduto">R${preco_atual}</p>
             {/* <p className="numeroLojas">Compare entre {nLojas} lojas</p> */}
           </a>
       </div>
