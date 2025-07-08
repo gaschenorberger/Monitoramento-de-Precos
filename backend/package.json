@@ -1,6 +1,12 @@
 {
+  "name": "monitoramento-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
-    "proxy": "http://localhost:3001",
     "axios": "^1.9.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
