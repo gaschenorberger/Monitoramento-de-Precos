@@ -6,6 +6,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import  ElementNotInteractableException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 import os
@@ -265,9 +266,9 @@ def coletaDadosAmazon(): # OK
                 centavo = centavo.text
 
                 if '00' in centavo:
-                    preco = real
+                    preco = f"{real},00"
                 else:
-                    preco = f'{real}.{centavo}'
+                    preco = f'{real},{centavo}'
                 
             else:
                 preco = f'{real.text}'
@@ -295,7 +296,9 @@ def coletaDadosMerLivre(): # OK
 
     wait = WebDriverWait(navegador, 20)
 
-    esperar_elemento(navegador, "//section[contains(@class, 'dynamic-carousel-normal-desktop')]")
+    time.sleep(2)
+
+    esperar_elemento(navegador, "//section[contains(@class, 'dynamic__carousel ')]")
     
     # SECTION PRODUTOS
 
@@ -323,8 +326,10 @@ def coletaDadosMerLivre(): # OK
  
         if centavo:
             print(f"{produto.upper()} || {preco},{centavo}")
+            preco = f"{preco},{centavo}"
         else:
             print(f"{produto.upper()} || {preco},00")
+            preco = f"{preco},00"
 
         print(f'LINK: {urlProduto}')
         print(f'IMG: {urlImg}\n')
@@ -339,11 +344,28 @@ def coletaDadosMerLivre(): # OK
 def coletaDadosAmericanas(): # OK
     navegador = iniciar_chrome(url="https://www.americanas.com.br/", headless='off')
 
+    time.sleep(2)
+
+
+    navegador.switch_to.default_content()
+
     try:
-        popUp = navegador.find_element(By.XPATH, "//div[contains(@class, 'ins-responsive-banner')]")
-        popUp.click()
-    except NoSuchElementException:
-        print("Popup não encontrado")
+        # Espera até que o elemento esteja presente e clicável
+        popUp = WebDriverWait(navegador, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//a[contains(@class, 'ins-sample-element-children')]"))
+        )
+        try:
+            # Tenta clicar normal
+            popUp.click()
+            print("Popup clicado com sucesso!")
+        except ElementNotInteractableException:
+            # Se não conseguir, tenta via JavaScript
+            navegador.execute_script("arguments[0].click();", popUp)
+            print("Popup clicado via JavaScript!")
+    except TimeoutException as e:
+        print("Popup não encontrado ou não clicável dentro do timeout:", e)
+    except Exception as e:
+        print("Erro inesperado:", e)
 
     wait = WebDriverWait(navegador, 20)
 
@@ -356,6 +378,8 @@ def coletaDadosAmericanas(): # OK
     iphone_link.click()
 
     print('Produtos Ofertas do Dia Americanas\n')
+
+    time.sleep(2)
 
     try:
         WebDriverWait(navegador, 30).until(
@@ -383,9 +407,9 @@ def coletaDadosAmericanas(): # OK
 
                     preco = preco.split()
                     preco = preco[1]
-                    preco = preco.strip()
-                    preco = preco.replace('.', '')
-                    preco = preco.replace(',', '.')
+                    # preco = preco.strip()
+                    # preco = preco.replace('.', '')
+                    # preco = preco.replace(',', '.')
 
                     print(f"{produto.strip().upper()} -- {preco}")
                     print(f'LINK: {urlProduto}')
@@ -426,8 +450,8 @@ def coletaDadosMagazine(): # OK
         preco = preco.split()
         preco = preco[-1]
 
-        preco = preco.replace(".", "")
-        preco = preco.replace(",", ".")
+        # preco = preco.replace(".", "")
+        # preco = preco.replace(",", ".")
 
         imgProduto = card.find('img', {'data-testid': 'image'})
 
@@ -471,8 +495,8 @@ def coletaCasasBahia(): # OK
 
         preco = preco.split()
         preco = preco[-1]
-        preco = preco.replace(".", "")
-        preco = preco.replace(",", ".")
+        # preco = preco.replace(".", "")
+        # preco = preco.replace(",", ".")
 
         print(f"{produto} | {preco}")
         print(f'LINK: {urlProduto}')
@@ -697,7 +721,7 @@ def coletaCompleta():
 coletaCompleta()
 # coletaDadosAmazon()
 
-
+# coletaDadosAmericanas()
 
 #NO BANCO MINHA IDEIA É FAZER UMA TABELA PRA CADA SITE, SALVAR TODAS AS INF COM A DATA DO DIA, QUANDO FOR PUXAR NO SITE, USAR SELECT * FROM AMAZON WHERE DT_ATUAL = 'DATA';
 #ASSIM FAZENDO COM QUE PUXE NO SITE A ATUALIZAÇÃO DO DIA, MAS NAO DEIXANDO DE SALVAR OS PRODUTOS DOS OUTROS DIAS PRA FAZER GRAFICO DE COMPARAÇÃO DE DATA
