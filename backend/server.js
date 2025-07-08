@@ -8,14 +8,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// CONECTANDO NO BANCO
-const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'bdPrecoCerto',
-    password: '123',
-    port: 5432,
+const pool = new Pool({ // CONECTANDO NO BANCO ONLINE
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
+
+
+
+
+// // CONECTANDO NO BANCO LOCAL
+// const pool = new Pool({
+//     user: 'postgres',
+//     host: 'localhost',
+//     database: 'bdPrecoCerto',
+//     password: '123',
+//     port: 5432,
+// });
 
 pool.connect()
   .then(client => {
