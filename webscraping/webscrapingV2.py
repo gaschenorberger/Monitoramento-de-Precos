@@ -199,9 +199,12 @@ def detectar_categorias(produto_nome):
 
         if 'samsung' in nome:
             categorias.append('Samsung')
-            categorias.append('Smartphone')
+            # categorias.append('Smartphone')
 
         if 'smartphone' in nome:
+            categorias.append('Smartphone')
+
+        if 'smartphone' and 'samsung' in nome:
             categorias.append('Smartphone')
 
         if 'notebook' in nome:
