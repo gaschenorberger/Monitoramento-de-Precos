@@ -33,6 +33,7 @@ app.get('/produtos', async (req, res) => {
     }
 });
 
-app.listen(3001, () => {
-    console.log('Servidor rodando na porta 3001');
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
 });
