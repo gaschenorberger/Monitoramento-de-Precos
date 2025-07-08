@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-const { Pool } = require('pg');
+import pkg from 'pg';
+
+const { Pool } = pkg;
 
 const app = express();
 app.use(cors());
