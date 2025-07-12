@@ -8,8 +8,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// const pool = new Pool({
+//   connectionString: 'postgresql://bd_precocerto_user:Lptizk3SMOVsutR6MlqsisbsLyjfYHgY@dpg-d1m8elmmcj7s739vqot0-a/bd_precocerto'
+// });
+
+
+// Conexão com PostgreSQL
 const pool = new Pool({
-  connectionString: 'postgresql://bd_precocerto_user:Lptizk3SMOVsutR6MlqsisbsLyjfYHgY@dpg-d1m8elmmcj7s739vqot0-a/bd_precocerto'
+    user: 'postgres',
+    host: 'localhost',
+    database: 'bdPrecoCerto',
+    password: '123',
+    port: 5432,
 });
 
 pool.connect()
