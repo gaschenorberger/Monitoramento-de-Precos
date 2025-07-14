@@ -59,3 +59,15 @@
   color: black;
   flex-shrink: 0;
 }
+
+
+@media (max-width: 1388px) {
+    .loginButton{
+      width: 60px;
+    }
+
+    .loginTextWrapper,
+    .arrowIcon{
+      display: none;
+    }
+}

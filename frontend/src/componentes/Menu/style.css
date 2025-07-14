@@ -119,17 +119,26 @@ ul li:hover ul.dropdown{
     width: 100%;
 }
 
-@media (max-width: 1020px) {
-    .menu{
-        margin-top: 130px;
-        gap: 15px;
-        width: 115%;
+@media (max-width: 1404px) {
+    .menu ul{
+        gap: 20px;
     }
 }
 
-/* .menu a:hover {
-    padding: 5px;
-    border-radius: 25px;
-    background-color: #F27BBD;;
-    color: white;
-} */
+@media (max-width: 1000px){
+    
+  /* No menu, esconda os textos, mas mantenha os SVGs */
+  .menu a {
+    justify-content: center; /* centraliza só o ícone */
+  }
+
+  .menu a > :not(svg) {
+    display: none; /* esconde todos os filhos que não sejam SVG */
+  }
+
+  /* Ajusta a largura do dropdown para não quebrar o layout */
+  ul li ul.dropdown {
+    width: auto !important;
+    height: auto !important;
+  }
+}

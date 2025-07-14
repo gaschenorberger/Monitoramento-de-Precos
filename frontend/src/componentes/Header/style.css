@@ -9,7 +9,7 @@
     color: white;
     gap: 30px;
    
-    position: fixed; 
+    position: fixed !important; 
     top: 0;
     left: 0;
     width: 100%;
@@ -19,7 +19,5 @@
 }
 
 @media (max-width: 1067px) {
-    .navbar{
-        padding: 70px 0 0 ;
-    }
+  
 }

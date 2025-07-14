@@ -52,14 +52,3 @@
 .alerts:hover::after{
     width: 100%;
 }
-
-@media (max-width: 1020px) {
-    .userActions {
-        width: 100%;
-        height: 80px;
-    
-        margin-left: -0%;
-        margin-top: -15px;
-        margin-bottom: 7%;
-    }
-}
