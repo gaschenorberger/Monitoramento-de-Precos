@@ -2,7 +2,6 @@
   margin: 0;
   padding: 0;
   margin-top: 3%;
-  margin-right: -6%;
   margin-left: 15%;
 }
 
@@ -10,18 +9,48 @@
   display: block;
   width: 210px;
   height: auto;
-  display: block;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  line-height: 0;
 }
 
+.logoMin {
+  display: none;
+}
+
+.logoMin img {
+  width: 100px;
+  height: auto;
+}
 
 @media (max-width: 1388px) {
-    .logo{
-        margin-right: -10%;
-        margin-left: 20%;
-        margin-top: 5%;
-    }
+  .logo {
+    margin-right: -5%;
+    margin-left: 20%;
+    margin-top: 5%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .logo {
+    margin-left: 30%;
+    margin-right: -12%;
+  }
+}
+
+@media (max-width: 832px) {
+  .logo {
+    display: none;
+  }
+  .logoMin {
+    display: block;
+    margin: 0 10px 0 -10px;
+  }
+  .logoMin img {
+    width: 150px;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 400px) {
+   .logoMin {
+    margin: 0 10px 0 -20px;
+  }
 }

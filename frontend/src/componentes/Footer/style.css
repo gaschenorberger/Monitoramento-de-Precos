@@ -86,3 +86,37 @@
     color: white;
     margin-left: 10%;
 }
+
+@media (max-width: 1152px){
+    .highFooter{
+        gap: 200px;
+    }
+}
+
+@media (max-width: 952px){
+    .highFooter{
+        gap: 100px;
+    }
+}
+
+@media (max-width: 752px){
+    .highFooter{
+        gap: 25px;
+    }
+    .lowFooter{
+        margin: auto;
+    }
+}
+
+@media (max-width: 624px){
+   
+    .highFooter{
+        flex-wrap: wrap;
+    }
+    .infos{
+        margin-left: 2px;
+    }
+    .helpGuide{
+        margin-top: auto;
+    }
+}

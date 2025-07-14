@@ -1,6 +1,6 @@
 .searchBar {
     display: flex;
-    margin-left: 100px;
+    margin-left: 50px;
 }
 
 .searchBar select, .searchBar input, .searchBar button {
@@ -30,10 +30,68 @@
     border-bottom-right-radius: 15px;
 }
 
-@media (max-width: 1020px) {
+@media (max-width: 1024px) {
     .searchBar {
         display: flex;
         margin-left: 10%;
-        width: 150%;
+    }
+    .searchBar select, .searchBar input, .searchBar button {
+    width: 100px;
+    padding: 20px;
+    border: none;
+    outline: none;
+}
+}
+
+@media (max-width: 832px){
+    .searchBar{
+        margin-left: -1%;
     }
 }
+
+@media (max-width: 644px){
+    .searchBar{
+        margin-left: -8%;
+    }
+    .searchBar select{
+        display: none;
+    }
+    .searchBar input{
+        border-top-left-radius: 15px;
+        border-bottom-left-radius: 15px;
+    }
+     .searchBar input, .searchBar button {
+        width: 70px;
+    }
+}
+
+@media (max-width: 480px){
+    .searchBar{
+        margin-left: -15%;
+    }
+
+   .searchBar input, .searchBar button {
+        width: 65px;
+    }
+}
+
+@media (max-width: 415px){
+    .searchBar{
+        margin-left: -17%;
+    }
+
+   .searchBar input, .searchBar button {
+        width: 65px;
+    }
+    .searchBar button{
+        width: 50px;
+    }
+}
+
+@media (max-width: 388px){
+    .searchBar{
+        margin-left: -21%;
+    }
+}
+
+

@@ -29,10 +29,8 @@
     transition: transform 0.3s ease;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .banner-image{
-        width: 250%;
-        object-fit: cover;
-        display: block;
+      margin-top: 50px;
     }
 }
