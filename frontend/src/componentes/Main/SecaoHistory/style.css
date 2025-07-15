@@ -15,12 +15,12 @@
     align-items: center;
     max-height: 220px;
     margin: 120px;
+    margin-left: 14%;
+    margin-right: 15%;
     padding: 10px 20px;
     border: 1px solid #898989;
     border-radius: 15px;
     width: 70%;
-    margin-left: 14%;
-    margin-right: 15%;
     overflow: hidden;
     overflow-y: auto;
 }

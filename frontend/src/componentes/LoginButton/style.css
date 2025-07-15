@@ -66,6 +66,10 @@
       width: 60px;
     }
 
+    .loginButton:hover{
+      width: 65px;
+    }
+
     .loginTextWrapper,
     .arrowIcon{
       display: none;

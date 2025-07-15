@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './componentes/Header';
 import Menu from './componentes/Menu';
 import Main from './componentes/Main';
+import ProductPage from './componentes/ProductPage';
 import './App.css';
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
       <Menu />
       <Routes>
         <Route path="/" element={<Main />} />
+        <Route path="/produto" element={<ProductPage />} />
       </Routes>
     </Router>
   );

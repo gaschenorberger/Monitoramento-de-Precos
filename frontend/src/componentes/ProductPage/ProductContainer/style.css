@@ -1,0 +1,23 @@
+ .productContainer{
+    padding: 0;
+    margin-left: 17%;
+ }
+
+.breadcrumb{
+    font-size: 12px;
+    color: #FF66C4;
+}
+
+.breadcrumb a{
+    text-decoration: none;
+    color: #FF66C4;
+}
+
+.ratingContainer{
+    display: flex;
+    margin-top: -13px;
+}
+
+.ratingPP{
+    margin-top: -1px;
+}
