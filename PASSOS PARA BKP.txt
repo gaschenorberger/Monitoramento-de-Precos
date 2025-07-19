@@ -2,7 +2,7 @@ BACKUP BANCO DE DADOS
 	
 
 TERMINAL
-1- cd C:\Program Files\PostgreSQL\17\bin>
+1- cd C:\Program Files\PostgreSQL\17\bin
 
 2- pg_dump -U postgres -d bdPrecoCerto -f "C:\Users\schen\Documents\bkpPrecoCerto.sql"
 

@@ -148,6 +148,28 @@ def inserirDados(produto_nome, loja_nome, preco, link_produto, href_img, lista_c
         cursor.close()
         conexao.close()
 
+def deletarDados(link_produto):
+    try:
+        conexao = conectar()
+        cursor = conexao.cursor()
+
+
+        cursor.execute("""
+            DELETE FROM PRODUTOS
+            WHERE url = %s
+        """, (link_produto,))
+
+        print("PRODUTO SEM PARCELA | REMOVIDO")
+
+        conexao.commit()
+
+
+    except Exception as erro:
+        print(f"❌ Erro ao deletar dados: {erro}")
+
+    finally:
+        cursor.close()
+        conexao.close()
 
 
 def esperar_elemento(navegador, xpath, tempo=10):
@@ -249,13 +271,16 @@ def coletaDadosAmazon(): # OK
 
     esperar_elemento(navegador, "//div[contains(@class, 'a-cardui dcl-product')]")
 
+    linkList = []
+
     secao = navegador.find_element(By.XPATH, "//div[contains(@class, 'a-cardui dcl-product')]") 
     produtos = secao.find_elements(By.XPATH, "//span[contains(@class, 'dcl-truncate dcl-product-label')]//span")
     reais = secao.find_elements(By.XPATH, "//span[contains(@class, 'a-price-whole')]")
     centavos = secao.find_elements(By.XPATH, "//span[contains(@class, 'a-price-fraction')]")
     linkProduto = navegador.find_elements(By.XPATH, "//div[contains(@class, 'a-cardui dcl-product')]//a")
     imgProduto = navegador.find_elements(By.XPATH, "//div[contains(@class, 'dcl-product-image-container')]//img")
-    
+   
+
     if produtos:
 
         for produto, real, centavo, link, imgLink  in zip(produtos[:5], reais, centavos, linkProduto, imgProduto):
@@ -263,6 +288,8 @@ def coletaDadosAmazon(): # OK
             urlProduto = link.get_attribute('href')
             urlImg = imgLink.get_attribute('src')
             produto = produto.text
+
+            linkList.append(urlProduto)
             
             if centavos:
                 real = real.text
@@ -290,6 +317,38 @@ def coletaDadosAmazon(): # OK
             categorias = detectar_categorias(produto)
 
             inserirDados(produto, "Amazon", preco, urlProduto, urlImg, categorias)
+
+        for link in linkList:
+            navegador.get(link)
+            time.sleep(2)
+
+            try:
+                parcelas = navegador.find_element(By.XPATH, "//span[contains(@class, 'best-offer-name')]")
+                parcelas = parcelas.text
+                parcelas = parcelas.split()
+
+                if parcelas[0] == 'ou': #ou R$ 189,00 em até 6x de R$ 31,50 sem juros --- (outro padrão de parcela)
+                    parcelas = parcelas.split()
+                    parcelas = f"{parcelas[5]} {parcelas[6]} {parcelas[7]} {parcelas[8]}"
+                    print(parcelas)
+                
+                elif parcelas[3] == 'de': #Em até 12x de R$ 14,99 com juros --- (tem o 'de' antes do R$)
+                    parcelas = f"{parcelas[2]} de {parcelas[4]} {parcelas[5]}"
+                    print(parcelas)
+
+                else: #Em até 2x R$ 21,63 sem juros --- (não tem o 'de' antes do R$)
+                    parcelas = f"{parcelas[2]} de {parcelas[3]} {parcelas[4]}"
+                    print(parcelas)
+
+            except NoSuchElementException:
+                print("PARCELAS NÃO ENCONTRADAS")
+                deletarDados(link)
+
+
+
+
+
+        
         navegador.quit()
 
 # INFORMATICA
@@ -721,13 +780,12 @@ def coletaCompleta():
     coletaCasasBahia()
 
 # filtroCompleto()
-coletaCompleta()
-# coletaDadosAmazon()
+# coletaCompleta()
+coletaDadosAmazon()
 
 # coletaDadosAmericanas()
 
 #NO BANCO MINHA IDEIA É FAZER UMA TABELA PRA CADA SITE, SALVAR TODAS AS INF COM A DATA DO DIA, QUANDO FOR PUXAR NO SITE, USAR SELECT * FROM AMAZON WHERE DT_ATUAL = 'DATA';
 #ASSIM FAZENDO COM QUE PUXE NO SITE A ATUALIZAÇÃO DO DIA, MAS NAO DEIXANDO DE SALVAR OS PRODUTOS DOS OUTROS DIAS PRA FAZER GRAFICO DE COMPARAÇÃO DE DATA
-
 
 
