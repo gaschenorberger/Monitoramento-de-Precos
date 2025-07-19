@@ -53,6 +53,41 @@
     transform: translateY(-100%);
 }
 
+.cep-button {
+  background: none;
+  border: none;
+  color: white;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.cep-button:hover{
+    font-weight: bold;
+}
+
+.cep-button::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0%;
+    height: 2px;
+    background-color: #F27BBD;
+    transition: ease 0.3s;
+}
+
+.cep-button:hover::after{
+    width: 100%;
+}
+
 .menu a {
     text-decoration: none;
     color: white;

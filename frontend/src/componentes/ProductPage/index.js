@@ -13,6 +13,7 @@ function ProductPage() {
                 avaliacoes="4.8"
                 nAvaliacoes="956"
                 preco="8.896,78"
+                preco_parcela="889,67"
             />
        </div>
     )

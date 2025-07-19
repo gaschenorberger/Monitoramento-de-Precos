@@ -16,6 +16,7 @@ export default function ProductPics({ imagens, imagemPrincipal, setImagemPrincip
                         key={index}
                         src={img}
                         alt={`Miniatura ${index}`}
+                        className="miniatura"
                         onClick={() => setImagemPrincipal(img)}
                     />
                 ))}
@@ -24,6 +25,7 @@ export default function ProductPics({ imagens, imagemPrincipal, setImagemPrincip
                 <img
                     src={imagemPrincipal}
                     alt='Imagem Principal do Produto'
+                    className="imagem-principal"
                 />  
             </div>
         </div>

@@ -1,24 +1,26 @@
 import './style.css'
-import { useEffect, useState } from 'react'
+import ModalCEP from './ModalCEP'
+import {  useState } from 'react'
 
 function Menu(){
     const [menuOpen, setMenuOpen] = useState(false)
+    const [showModal, setShowModal] = useState(false)
 
     return (
         <>
         <nav className="menu">
             <ul>
                 <li>
-                <a href="#" className=''>
+                <button className='cep-button' onClick={() => setShowModal(true)}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-geo-alt-fill" viewBox="0 0 16 16">
                     <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
                     </svg>
                     XXXXX-XXX <br /> Informe seu CEP
-                </a>
+                </button>
                 </li>
 
                 <li>
-                <a href="#" className="categorias">
+                <a href="#" className="menu-link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-list" viewBox="0 0 16 16">
                     <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
                     </svg>
@@ -80,7 +82,12 @@ function Menu(){
             </ul>
             </nav>
 
-           {/* BOTÃO HAMBURGUER */}
+            {/* MODAL CEP */}
+
+            <ModalCEP show={showModal} onClose={() => setShowModal(false)}/>
+
+
+           {/* BOTÃO MENU */}
             <button 
                 className="menu-toggle" 
                 onClick={() => setMenuOpen(!menuOpen)}

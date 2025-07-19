@@ -62,7 +62,7 @@ ALTER SEQUENCE public.categorias_id_seq OWNED BY public.categorias.id;
 CREATE TABLE public.historico_precos (
     id integer NOT NULL,
     produto_id integer NOT NULL,
-    preco numeric(10,2) NOT NULL,
+    preco text NOT NULL,
     coletado_em timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -132,7 +132,7 @@ ALTER SEQUENCE public.lojas_id_seq OWNED BY public.lojas.id;
 CREATE TABLE public.produtos (
     id integer NOT NULL,
     nome character varying(255) NOT NULL,
-    preco_atual real NOT NULL,
+    preco_atual text NOT NULL,
     url text NOT NULL,
     imagem_url text,
     site_origem character varying(100) NOT NULL,
@@ -548,6 +548,79 @@ COPY public.historico_precos (id, produto_id, preco, coletado_em) FROM stdin;
 214	34	8999.10	2025-06-04 01:13:15.44248
 215	35	3149.00	2025-06-04 01:13:15.678008
 216	36	4499.91	2025-06-04 01:13:15.820656
+217	102	3.699,00	2025-07-07 22:26:39.636747
+218	103	99,00	2025-07-07 22:26:39.857848
+219	104	249,00	2025-07-07 22:26:40.071714
+220	105	2.678,00	2025-07-07 22:26:40.181084
+221	106	4.399,00	2025-07-07 22:26:40.405258
+222	107	4.679,00	2025-07-07 22:26:50.730837
+223	108	4.679,90	2025-07-07 22:26:50.84125
+224	24	2.898,00	2025-07-07 22:26:51.056666
+225	109	2.898,00	2025-07-07 22:26:51.170063
+226	110	3.839,00	2025-07-07 22:26:51.38451
+227	27	4.579,00	2025-07-07 22:27:07.301345
+228	111	6.469,73	2025-07-07 22:27:07.403842
+229	112	6.545,87	2025-07-07 22:27:07.609915
+230	113	12.749,00	2025-07-07 22:27:07.711006
+231	114	11.369,00	2025-07-07 22:27:07.813231
+232	31	1.969,00	2025-07-07 22:27:30.774149
+233	115	4.949,10	2025-07-07 22:27:30.849285
+234	116	1.304,10	2025-07-07 22:27:30.925099
+235	12	649,00	2025-07-07 22:27:31.107834
+236	117	1.259,10	2025-07-07 22:27:31.181545
+237	118	3.509,10	2025-07-07 22:27:40.572278
+238	119	649,00	2025-07-07 22:27:40.694835
+239	120	899,10	2025-07-07 22:27:40.816013
+240	121	649,00	2025-07-07 22:27:41.035947
+241	122	3.699,00	2025-07-07 22:33:11.97471
+242	123	99,00	2025-07-07 22:33:12.200892
+243	124	249,00	2025-07-07 22:33:12.32612
+244	125	2.678,00	2025-07-07 22:33:12.448691
+245	126	4.399,00	2025-07-07 22:33:12.57578
+246	127	4.679,00	2025-07-07 22:33:22.100434
+247	128	4.679,90	2025-07-07 22:33:22.329568
+248	129	2.898,00	2025-07-07 22:33:22.455534
+249	130	2.898,00	2025-07-07 22:33:22.573427
+250	131	3.839,00	2025-07-07 22:33:22.686074
+251	132	4.579,00	2025-07-07 22:33:38.314921
+252	133	6.469,73	2025-07-07 22:33:38.417893
+253	134	6.545,87	2025-07-07 22:33:38.520183
+254	135	12.749,00	2025-07-07 22:33:38.736215
+255	136	11.369,00	2025-07-07 22:33:38.847169
+256	137	1.969,00	2025-07-07 22:34:00.780251
+257	138	1.304,10	2025-07-07 22:34:00.959795
+258	139	649,00	2025-07-07 22:34:01.0356
+259	140	1.259,10	2025-07-07 22:34:01.110696
+260	141	1.664,10	2025-07-07 22:34:01.185829
+261	142	1.619,10	2025-07-07 22:34:11.403234
+262	143	989,10	2025-07-07 22:34:11.639904
+263	144	1.665,00	2025-07-07 22:34:11.772827
+264	145	1.619,10	2025-07-07 22:34:11.893611
+265	146	3.699,00	2025-07-07 22:36:59.064802
+266	147	99,00	2025-07-07 22:36:59.180003
+267	148	249,00	2025-07-07 22:36:59.29402
+268	149	2.678,00	2025-07-07 22:36:59.411189
+269	150	4.399,00	2025-07-07 22:36:59.658959
+270	151	4.679,00	2025-07-07 22:37:09.080081
+271	152	4.679,90	2025-07-07 22:37:09.290284
+272	153	2.898,00	2025-07-07 22:37:09.511086
+273	154	2.898,00	2025-07-07 22:37:09.745479
+274	155	3.839,00	2025-07-07 22:37:09.955963
+275	156	4.579,00	2025-07-07 22:37:25.19131
+276	157	6.469,73	2025-07-07 22:37:25.295051
+277	158	6.545,87	2025-07-07 22:37:25.409522
+278	159	12.749,00	2025-07-07 22:37:25.512607
+279	160	11.369,00	2025-07-07 22:37:25.725195
+280	161	1.969,00	2025-07-07 22:37:48.031793
+281	162	1.304,10	2025-07-07 22:37:48.206058
+282	163	649,00	2025-07-07 22:37:48.281454
+283	164	1.259,10	2025-07-07 22:37:48.357849
+284	165	1.664,10	2025-07-07 22:37:48.434502
+285	166	5.100,00	2025-07-07 22:37:57.697471
+286	167	3.779,10	2025-07-07 22:37:57.818305
+287	168	850,00	2025-07-07 22:37:57.937958
+288	169	989,00	2025-07-07 22:37:58.17632
+289	170	899,10	2025-07-07 22:37:58.405567
 \.
 
 
@@ -569,32 +642,31 @@ COPY public.lojas (id, nome) FROM stdin;
 --
 
 COPY public.produtos (id, nome, preco_atual, url, imagem_url, site_origem, criado_em) FROM stdin;
-1	Apple 2024 MacBook Air (de 15 polegadas, Processador M3 da Apple com CPU 8‑core e GPU 10‑core, 16GB Memória unificada, 256 GB) - Luz das estrelas	10.999	https://www.amazon.com.br/Apple-MacBook-polegadas-Processador-unificada/dp/B0DLJ83RGF?pd_rd_w=0CRup&content-id=amzn1.sym.828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_p=828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_r=W31FJQTPJ2K7NCN4MA0T&pd_rd_wg=z3Fh3&pd_rd_r=67510e30-373c-45e0-b783-0dccd5b5f9ce&pd_rd_i=B0DLJ83RGF	https://m.media-amazon.com/images/I/410iQVdB1vL._SR480,440_.jpg	Amazon	2025-06-03 00:00:00
-2	FIFINE USB Microfone jogos para PC,streaming,podcasts,gravação,microfono condensador de mesa para computador,compatível com Mac/PS4/PS5,com controle RGB,toque mudo,conector para fone ouvido- A8 Preto	236.58	https://www.amazon.com.br/FIFINEUSB-condensador-computador-compat%C3%ADvel-A8/dp/B09YLM3FNC?pd_rd_w=0CRup&content-id=amzn1.sym.828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_p=828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_r=W31FJQTPJ2K7NCN4MA0T&pd_rd_wg=z3Fh3&pd_rd_r=67510e30-373c-45e0-b783-0dccd5b5f9ce&pd_rd_i=B09YLM3FNC	https://m.media-amazon.com/images/I/41WHQwPXatL._SR480,440_.jpg	Amazon	2025-06-03 00:00:00
-4	Notebook Lenovo LOQ-e 15iax9e Intel Core i5-12450hx 16gb 512gb Ssd Rtx 3050 Linux 15.6 - 83mes00000 Luna Grey	4.549	https://www.mercadolivre.com.br/notebook-lenovo-loq-e-15iax9e-intel-core-i5-12450hx-16gb-512gb-ssd-rtx-3050-linux-156-83mes00000-luna-grey/p/MLB46041404?pdp_filters=deal:MLB779362-1#wid=MLB3982993861&sid=search&searchVariation=MLB46041404&position=8&search_layout=stack&type=product&tracking_id=98c3f087-53fd-4c3c-9242-73b878f777ae&c_container_id=MLB779362-1&c_id=%2Fsplinter%2Fcarouseldynamicitem&c_element_order=1&c_campaign=ofertas-para-comprar-agora-%F0%9F%94%A5&c_label=%2Fsplinter%2Fcarouseldynamicitem&c_uid=93f65a25-4037-11f0-a762-8dcff8f6a7c5&c_element_id=93f65a25-4037-11f0-a762-8dcff8f6a7c5&c_global_position=5&deal_print_id=93fbb150-4037-11f0-92a7-f3e38286dfa0&c_tracking_id=93fbb150-4037-11f0-92a7-f3e38286dfa0	https://http2.mlstatic.com/D_Q_NP_616917-MLA82397783055_022025-P.webp	Mercado Livre	2025-06-03 00:00:00
-5	Notebook Dell Inspiron I15-i120k-a35p I5 16gb 1tb 15.6 W11	4.549	https://www.mercadolivre.com.br/notebook-dell-inspiron-i15-i120k-a35p-i5-16gb-1tb-156-w11/p/MLB37650721?pdp_filters=deal:MLB779362-1#wid=MLB4830712680&sid=search&searchVariation=MLB37650721&position=7&search_layout=stack&type=product&tracking_id=98c3f087-53fd-4c3c-9242-73b878f777ae&c_container_id=MLB779362-1&c_id=%2Fsplinter%2Fcarouseldynamicitem&c_element_order=2&c_campaign=ofertas-para-comprar-agora-%F0%9F%94%A5&c_label=%2Fsplinter%2Fcarouseldynamicitem&c_uid=93f65a26-4037-11f0-a762-8dcff8f6a7c5&c_element_id=93f65a26-4037-11f0-a762-8dcff8f6a7c5&c_global_position=5&deal_print_id=93fbb150-4037-11f0-92a7-f3e38286dfa0&c_tracking_id=93fbb150-4037-11f0-92a7-f3e38286dfa0	https://http2.mlstatic.com/D_Q_NP_682715-MLU76925036775_062024-P.webp	Mercado Livre	2025-06-03 00:00:00
-10	Carregador Usb-C 20W Turbo Compativel Com Iphone-11-12-13-14-15 - Adaptador Tomada Fonte Turbo-Original-Foxcom todos modelos	94.99	/carregador-usb-c-20w-turbo-compativel-com-iphone-11-12-13-14-15-adaptador-tomada-fonte-turbo-original-foxcom-todos-modelos/p/hedd6aec3j/te/cdcl/?seller_id=conexaocelloficial	https://a-static.mlcdn.com.br/280x210/carregador-usb-c-20w-turbo-compativel-com-iphone-11-12-13-14-15-adaptador-tomada-fonte-turbo-original-foxcom-todos-modelos/conexaocelloficial/ftusbc80/448f890ee15391adfa717cfedc970d50.jpeg	Magazine Luiza	2025-06-03 00:00:00
-11	Estabilizador Osmo Mobile 6 (Platinum) DJI - DJI113	1390	/estabilizador-osmo-mobile-6-platinum-dji-dji113/p/dfg5gf4jha/te/etcl/?seller_id=obaboxtecnologia	https://a-static.mlcdn.com.br/280x210/estabilizador-osmo-mobile-6-platinum-dji-dji113/obaboxtecnologia/15004582/4a2b8a95ca58e0dd4d52160ddde7f763.jpeg	Magazine Luiza	2025-06-03 00:00:00
-13	Smartphone Samsung Galaxy S24 FE 128GB Grafite 5G 8GB RAM 6,7" Câm. Tripla + Selfie 10MP	2699.1	/smartphone-samsung-galaxy-s24-fe-128gb-grafite-5g-8gb-ram-67-cam-tripla-selfie-10mp/p/240010800/te/s24f/	https://a-static.mlcdn.com.br/280x210/smartphone-samsung-galaxy-s24-fe-128gb-grafite-5g-8gb-ram-67-cam-tripla-selfie-10mp/magazineluiza/240010800/cb7f1ca382009d6cca85a254ca69a9ae.jpg	Magazine Luiza	2025-06-03 00:00:00
-8	iPhone 13 Apple 128GB iOS 5G Wi-Fi Tela 6.1'' Câmera Dupla 12MP - Meia-Noite	4439	https://www.americanas.com.br/iphone-13-apple-128gb-ios-5g-wi-fi-tela-6-1-camera-dupla-12mp-meia-noite-4864625497/p	https://americanas.vtexassets.com/arquivos/ids/543035/4864625500_1SZ.jpg?v=638750836071000000	Americanas	2025-06-03 00:00:00
-9	Apple iPhone 16 Pro Max 256GB Titânio Natural	11369	https://www.americanas.com.br/apple-iphone-16-pro-max-256gb-titanio-natural-7508564123/p	https://americanas.vtexassets.com/arquivos/ids/430925/7508564123_1_xlarge.jpg?v=638750822551200000	Americanas	2025-06-03 00:00:00
-7	Apple iPhone 14 128GB iOS 5G Wi-Fi Tela 6.1" Câmera Dupla 12MP - Meia Noite	5087.15	https://www.americanas.com.br/apple-iphone-14-128gb-ios-5g-wi-fi-tela-6-1-camera-dupla-12mp-meia-noite-5884145714/p	https://americanas.vtexassets.com/arquivos/ids/439178/5884146047_1SZ.jpg?v=638750823947000000	Americanas	2025-06-03 00:00:00
-12	Smartphone Samsung Galaxy A06 128GB 4GB RAM Azul Escuro 6,7" Câm. Dupla + Selfie 8MP	699	https://www.magazineluiza.com.br/smartphone-samsung-galaxy-a06-128gb-4gb-ram-azul-escuro-67-cam-dupla-selfie-8mp/p/238657700/te/ga06/	https://a-static.mlcdn.com.br/280x210/smartphone-samsung-galaxy-a06-128gb-4gb-ram-azul-escuro-67-cam-dupla-selfie-8mp/magazineluiza/238657700/fca7f701abc03293954ba82835473323.jpg	Magazine Luiza	2025-06-03 00:00:00
-22	Notebook VAIO FE16 AMD Ryzen 7-5700U Linux 16GB 512GB SSD Tela 16" IPS WUXGA Antireflexo - Cinza Grafite	3592.22	https://www.amazon.com.br/Notebook-VAIO-Ryzen-7-5700U-Antireflexo/dp/B0DZZCQ4RX?pd_rd_w=upoki&content-id=amzn1.sym.828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_p=828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_r=2JH99KRD0V1ATB701SRV&pd_rd_wg=l02Ag&pd_rd_r=332b311f-258a-45b4-b00d-a326612b8c6a&pd_rd_i=B0DZZCQ4RX	https://m.media-amazon.com/images/I/41DgkAMwFsL._SR480,440_.jpg	Amazon	2025-06-04 00:00:00
-23	Pc Computador Completo Intel I5 16gb Ssd 480gb Monitor 19	1.281	https://produto.mercadolivre.com.br/MLB-3846072266-pc-computador-completo-intel-i5-16gb-ssd-480gb-monitor-19-_JM#position=20&search_layout=stack&type=item&tracking_id=717aec74-6903-47a2-9ade-fa79845a6d29&c_container_id=MLB779362-1&c_id=%2Fsplinter%2Fcarouseldynamicitem&c_element_order=1&c_campaign=ofertas-para-comprar-agora-%F0%9F%94%A5&c_label=%2Fsplinter%2Fcarouseldynamicitem&c_uid=2489d5e5-40fa-11f0-a310-7b3fff887a6b&c_element_id=2489d5e5-40fa-11f0-a310-7b3fff887a6b&c_global_position=5&deal_print_id=24914ff0-40fa-11f0-bc2f-f1d4672941a6&c_tracking_id=24914ff0-40fa-11f0-bc2f-f1d4672941a6	https://http2.mlstatic.com/D_Q_NP_923086-MLB82423196736_022025-P.webp	Mercado Livre	2025-06-04 00:00:00
-6	Monitor Gamer Aoc 24 180hz 1ms Hdr Ips 24g30e	1.281	https://www.mercadolivre.com.br/monitor-gamer-aoc-24-180hz-1ms-hdr-ips-24g30e/p/MLB46127138?pdp_filters=deal:MLB779362-1#wid=MLB3978668905&sid=search&searchVariation=MLB46127138&position=1&search_layout=stack&type=product&tracking_id=717aec74-6903-47a2-9ade-fa79845a6d29&c_container_id=MLB779362-1&c_id=%2Fsplinter%2Fcarouseldynamicitem&c_element_order=2&c_campaign=ofertas-para-comprar-agora-%F0%9F%94%A5&c_label=%2Fsplinter%2Fcarouseldynamicitem&c_uid=2489d5e6-40fa-11f0-a310-7b3fff887a6b&c_element_id=2489d5e6-40fa-11f0-a310-7b3fff887a6b&c_global_position=5&deal_print_id=24914ff0-40fa-11f0-bc2f-f1d4672941a6&c_tracking_id=24914ff0-40fa-11f0-bc2f-f1d4672941a6	https://http2.mlstatic.com/D_Q_NP_990738-MLA82208796708_022025-P.webp	Mercado Livre	2025-06-03 00:00:00
-24	Notebook Samsung Galaxy Book4 Intel® Core™ i5-1335U (1.3 Ghz, até 4.6GHz, 12 MB L3 Cache), Windows 11 Home, 8GB, 512GB SSD, Iris Xe, 15.6'' Full HD LED, 1.55kg	779	https://www.mercadolivre.com.br/notebook-samsung-galaxy-book4-intel-core-i5-1335u-13-ghz-ate-46ghz-12-mb-l3-cache-windows-11-home-8gb-512gb-ssd-iris-xe-156-full-hd-led-155kg/p/MLB37044038?pdp_filters=deal:MLB779362-1#wid=MLB3964026507&sid=search&searchVariation=MLB37044038&position=2&search_layout=stack&type=product&tracking_id=717aec74-6903-47a2-9ade-fa79845a6d29&c_container_id=MLB779362-1&c_id=%2Fsplinter%2Fcarouseldynamicitem&c_element_order=3&c_campaign=ofertas-para-comprar-agora-%F0%9F%94%A5&c_label=%2Fsplinter%2Fcarouseldynamicitem&c_uid=2489d5e7-40fa-11f0-a310-7b3fff887a6b&c_element_id=2489d5e7-40fa-11f0-a310-7b3fff887a6b&c_global_position=5&deal_print_id=24914ff0-40fa-11f0-bc2f-f1d4672941a6&c_tracking_id=24914ff0-40fa-11f0-bc2f-f1d4672941a6	https://http2.mlstatic.com/D_Q_NP_618141-MLU76378990682_052024-P.webp	Mercado Livre	2025-06-04 00:00:00
-18	Apple 2024 MacBook Air (de 13 polegadas, Processador M3 da Apple com CPU 8‑core e GPU 8‑core, 16GB Memória unificada, 256 GB) - Prateado	9.499	https://www.amazon.com.br/Apple-MacBook-polegadas-Processador-unificada/dp/B0DLHHTLTB?pd_rd_w=upoki&content-id=amzn1.sym.828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_p=828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_r=2JH99KRD0V1ATB701SRV&pd_rd_wg=l02Ag&pd_rd_r=332b311f-258a-45b4-b00d-a326612b8c6a&pd_rd_i=B0DLHHTLTB	https://m.media-amazon.com/images/I/41nuKghpShL._SR480,440_.jpg	Amazon	2025-06-04 00:00:00
-19	XPPen 2024 mesa digitalizadora Deco 640 6" com chave virtual	241.2	https://www.amazon.com.br/XPPen-2024-digitalizadora-chave-virtual/dp/B0D8J1MHP3?pd_rd_w=upoki&content-id=amzn1.sym.828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_p=828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_r=2JH99KRD0V1ATB701SRV&pd_rd_wg=l02Ag&pd_rd_r=332b311f-258a-45b4-b00d-a326612b8c6a&pd_rd_i=B0D8J1MHP3	https://m.media-amazon.com/images/I/31eLkiECWpL._SR480,440_.jpg	Amazon	2025-06-04 00:00:00
-20	Apple 2025 iPad (Wi-Fi, 256 GB) - Prateado (A16)	5.099	https://www.amazon.com.br/Apple-2025-iPad-Wi-Fi-256/dp/B0DZK1WDW7?pd_rd_w=upoki&content-id=amzn1.sym.828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_p=828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_r=2JH99KRD0V1ATB701SRV&pd_rd_wg=l02Ag&pd_rd_r=332b311f-258a-45b4-b00d-a326612b8c6a&pd_rd_i=B0DZK1WDW7	https://m.media-amazon.com/images/I/31HhoNJrO7L._SR480,440_.jpg	Amazon	2025-06-04 00:00:00
-25	Impressora multifuncional cor Epson EcoTank L3250 127/220V	779	https://www.mercadolivre.com.br/impressora-multifuncional-cor-epson-ecotank-l3250-127220v/p/MLB26986602?pdp_filters=deal:MLB779362-1#wid=MLB4501587604&sid=search&searchVariation=MLB26986602&position=6&search_layout=stack&type=product&tracking_id=717aec74-6903-47a2-9ade-fa79845a6d29&c_container_id=MLB779362-1&c_id=%2Fsplinter%2Fcarouseldynamicitem&c_element_order=4&c_campaign=ofertas-para-comprar-agora-%F0%9F%94%A5&c_label=%2Fsplinter%2Fcarouseldynamicitem&c_uid=2489fcf0-40fa-11f0-a310-7b3fff887a6b&c_element_id=2489fcf0-40fa-11f0-a310-7b3fff887a6b&c_global_position=5&deal_print_id=24914ff0-40fa-11f0-bc2f-f1d4672941a6&c_tracking_id=24914ff0-40fa-11f0-bc2f-f1d4672941a6	https://http2.mlstatic.com/D_Q_NP_662288-MLU77913086438_082024-P.webp	Mercado Livre	2025-06-04 00:00:00
-26	Notebook Positivo Vision C14 Lumina Bar Celeron 8gb 256gb Emmc Tela 14 Polegadas Hd Antirreflexo Linux Tecla Link - Cinza	3.799	https://www.mercadolivre.com.br/notebook-positivo-vision-c14-lumina-bar-celeron-8gb-256gb-emmc-tela-14-polegadas-hd-antirreflexo-linux-tecla-link-cinza/p/MLB38031777?pdp_filters=deal:MLB779362-1#wid=MLB4025297005&sid=search&searchVariation=MLB38031777&position=7&search_layout=stack&type=product&tracking_id=717aec74-6903-47a2-9ade-fa79845a6d29&c_container_id=MLB779362-1&c_id=%2Fsplinter%2Fcarouseldynamicitem&c_element_order=5&c_campaign=ofertas-para-comprar-agora-%F0%9F%94%A5&c_label=%2Fsplinter%2Fcarouseldynamicitem&c_uid=2489fcf1-40fa-11f0-a310-7b3fff887a6b&c_element_id=2489fcf1-40fa-11f0-a310-7b3fff887a6b&c_global_position=5&deal_print_id=24914ff0-40fa-11f0-bc2f-f1d4672941a6&c_tracking_id=24914ff0-40fa-11f0-bc2f-f1d4672941a6	https://http2.mlstatic.com/D_Q_NP_960836-MLU77275893974_072024-P.webp	Mercado Livre	2025-06-04 00:00:00
-27	iPhone 13 Apple 128GB iOS 5G Wi-Fi Tela 6.1'' Câmera Dupla 12MP - Estelar	4579	https://www.americanas.com.br/iphone-13-apple-128gb-ios-5g-wi-fi-tela-6-1-camera-dupla-12mp-estelar-4864628680/p	https://americanas.vtexassets.com/arquivos/ids/30035456/4864628698_1SZ.jpg?v=638792860509300000	Americanas	2025-06-04 00:00:00
-28	Apple iPhone 16 128GB Ultramarino	6279	https://www.americanas.com.br/apple-iphone-16-128gb-ultramarino-7510343862/p	https://americanas.vtexassets.com/arquivos/ids/461212/7510343863_1SZ.jpg?v=638822351217370000	Americanas	2025-06-04 00:00:00
-29	Smartphone Motorola Moto G15 256GB Verde 4G 4GB RAM 6,7" Câm. Dupla Selfie 8MP	899.1	https://www.magazineluiza.com.br/smartphone-motorola-moto-g15-256gb-verde-4g-4gb-ram-67-cam-dupla-selfie-8mp/p/238974400/te/g200/?seller_id=motorola-1p	https://a-static.mlcdn.com.br/280x210/smartphone-motorola-moto-g15-256gb-verde-4g-4gb-ram-67-cam-dupla-selfie-8mp/magazineluiza/238974400/0fbd99e1681805da5c73a8caaa4e5c8a.jpg	Magazine Luiza	2025-06-04 00:00:00
-30	Smartphone Motorola Moto G15 256GB Grafite 4G 4GB RAM 6,7" Câm. Dupla Selfie 8MP	899.1	https://www.magazineluiza.com.br/smartphone-motorola-moto-g15-256gb-grafite-4g-4gb-ram-67-cam-dupla-selfie-8mp/p/238974500/te/mg60/?seller_id=motorola-1p	https://a-static.mlcdn.com.br/280x210/smartphone-motorola-moto-g15-256gb-grafite-4g-4gb-ram-67-cam-dupla-selfie-8mp/magazineluiza/238974500/00b2c309c085e3d6021844a439201fce.jpg	Magazine Luiza	2025-06-04 00:00:00
-31	Smartphone Samsung Galaxy A56 128GB 5G 8GB RAM Rosa 6,7" Câm. Tripla + Selfie 12MP	2159.1	https://www.magazineluiza.com.br/smartphone-samsung-galaxy-a56-128gb-5g-8gb-ram-rosa-67-cam-tripla-selfie-12mp/p/240097200/te/ga56/	https://a-static.mlcdn.com.br/280x210/smartphone-samsung-galaxy-a56-128gb-5g-8gb-ram-rosa-67-cam-tripla-selfie-12mp/magazineluiza/240097200/d9169f94917a9bb1de62d34fc43bb0ad.jpg	Magazine Luiza	2025-06-04 00:00:00
-32	Smartband Samsung Galaxy Fit3 Prata	329	https://www.magazineluiza.com.br/smartband-samsung-galaxy-fit3-prata/p/237270800/te/smba/	https://a-static.mlcdn.com.br/280x210/smartband-samsung-galaxy-fit3-prata/magazineluiza/237270800/2b5fe640334363861f98dec293b68344.jpg	Magazine Luiza	2025-06-04 00:00:00
+146	Notebook Dell Inspiron I15-I1300-M50P 15.6" Full HD 13ª Gen Intel Core i5 16GB 512GB SSD Win 11 Preto Carbono	3.699,00	https://www.amazon.com.br/Notebook-Dell-Inspiron-I15-I1300-M50P-Carbono/dp/B0CWPKYV51?pd_rd_w=PeXLT&content-id=amzn1.sym.828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_p=828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_r=8YDDYZYZGT3TAJVCHHBS&pd_rd_wg=gJsYI&pd_rd_r=1e6ee1b1-ac02-4b80-a852-5178b8262127&pd_rd_i=B0CWPKYV51	https://m.media-amazon.com/images/I/41iXF7dHC7L._SR480,440_.jpg	Amazon	2025-07-07 00:00:00
+147	Mouse Gamer Logitech G203 LIGHTSYNC RGB, Efeito de Ondas de Cores, 6 Botões Programáveis e Até 8.000 DPI - Preto	99,00	https://www.amazon.com.br/Logitech-LIGHTSYNC-Efeito-Bot%C3%B5es-Program%C3%A1veis/dp/B087CT8PWY?pd_rd_w=PeXLT&content-id=amzn1.sym.828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_p=828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_r=8YDDYZYZGT3TAJVCHHBS&pd_rd_wg=gJsYI&pd_rd_r=1e6ee1b1-ac02-4b80-a852-5178b8262127&pd_rd_i=B087CT8PWY	https://m.media-amazon.com/images/I/41zEY42v1tL._SR480,440_.jpg	Amazon	2025-07-07 00:00:00
+148	Headset Gamer Logitech G335 com Almofadas com Espuma de Memória, Design Leve e Conexão 3,5mm para PC, PlayStation, Xbox, Nintendo Switch e Mobile - Preto	249,00	https://www.amazon.com.br/Headset-Logitech-Almofadas-PlayStation-Nintendo/dp/B08KKBSDTY?pd_rd_w=PeXLT&content-id=amzn1.sym.828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_p=828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_r=8YDDYZYZGT3TAJVCHHBS&pd_rd_wg=gJsYI&pd_rd_r=1e6ee1b1-ac02-4b80-a852-5178b8262127&pd_rd_i=B08KKBSDTY	https://m.media-amazon.com/images/I/41M95jhVAHL._SR480,440_.jpg	Amazon	2025-07-07 00:00:00
+149	HUION Mesa digitalizadora Kamvas Pro 16 2.5K QHD com tela QLED Tablet gráfico totalmente laminado com caneta, tablet de arte digital de 15,6 polegadas compatível com Mac, PC, Android e Linux	2.678,00	https://www.amazon.com.br/desenho-gr%C3%A1fico-HUION-lamina%C3%A7%C3%A3o-polegadas/dp/B09FDZG55G?pd_rd_w=PeXLT&content-id=amzn1.sym.828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_p=828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_r=8YDDYZYZGT3TAJVCHHBS&pd_rd_wg=gJsYI&pd_rd_r=1e6ee1b1-ac02-4b80-a852-5178b8262127&pd_rd_i=B09FDZG55G	https://m.media-amazon.com/images/I/41SeEWZvZSL._SR480,440_.jpg	Amazon	2025-07-07 00:00:00
+150	Notebook Dell Inspiron I15-I1300-M70P 15.6" Full HD 13ª Gen Intel Core i7 16GB 512GB SSD Win 11 Preto Carbono	4.399,00	https://www.amazon.com.br/Notebook-Dell-Inspiron-I15-I1300-M70P-Carbono/dp/B0CWPJ9V2R?pd_rd_w=PeXLT&content-id=amzn1.sym.828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_p=828de3bf-2f14-4174-a8d7-8b6108724168&pf_rd_r=8YDDYZYZGT3TAJVCHHBS&pd_rd_wg=gJsYI&pd_rd_r=1e6ee1b1-ac02-4b80-a852-5178b8262127&pd_rd_i=B0CWPJ9V2R	https://m.media-amazon.com/images/I/41iXF7dHC7L._SR480,440_.jpg	Amazon	2025-07-07 00:00:00
+151	Notebook Gamer Acer Nitro V ANV15-51-57WS Intel® Core™ i5-13420H 13ªGeração 512SSD 8GB Nvidia® GeForce® RTX 3050 GDDR6 Linux Gutta 15,6'	4.679,00	https://www.mercadolivre.com.br/notebook-gamer-acer-nitro-v-anv15-51-57ws-intel-core-i5-13420h-13geraco-512ssd-8gb-nvidia-geforce-rtx-3050-gddr6-linux-gutta-156/p/MLB37396835?pdp_filters=deal:MLB779362-1#wid=MLB3722589767&sid=search&searchVariation=MLB37396835&position=2&search_layout=stack&type=product&tracking_id=3da9b6f4-cbac-4cba-bd65-9682d61abb53&c_container_id=MLB779362-1&c_id=%2Fsplinter%2Fcarouseldynamicitem&c_element_order=1&c_campaign=ofertas-para-comprar-agora-%F0%9F%94%A5&c_label=%2Fsplinter%2Fcarouseldynamicitem&c_uid=259430e0-5b9c-11f0-ba39-5f018c188434&c_element_id=259430e0-5b9c-11f0-ba39-5f018c188434&c_global_position=7&deal_print_id=259939f0-5b9c-11f0-ab3c-3df41c30bfa6&c_tracking_id=259939f0-5b9c-11f0-ab3c-3df41c30bfa6	https://http2.mlstatic.com/D_Q_NP_757417-MLU76569758316_062024-P.webp	Mercado Livre	2025-07-07 00:00:00
+152	Notebook Samsung Galaxy Book4 Intel® U300 (1.20 Ghz, até 4.4GHz, 8 MB L3 Cache), Windows 11 Home, 8GB, 256GB SSD, UHD Graphics, 15.6'' Full HD LED, 1.55kg	4.679,90	https://www.mercadolivre.com.br/notebook-samsung-galaxy-book4-intel-u300-120-ghz-ate-44ghz-8-mb-l3-cache-windows-11-home-8gb-256gb-ssd-uhd-graphics-156-full-hd-led-155kg/p/MLB40347107?pdp_filters=deal:MLB779362-1#wid=MLB5194930972&sid=search&searchVariation=MLB40347107&position=3&search_layout=stack&type=product&tracking_id=3da9b6f4-cbac-4cba-bd65-9682d61abb53&c_container_id=MLB779362-1&c_id=%2Fsplinter%2Fcarouseldynamicitem&c_element_order=2&c_campaign=ofertas-para-comprar-agora-%F0%9F%94%A5&c_label=%2Fsplinter%2Fcarouseldynamicitem&c_uid=259430e1-5b9c-11f0-ba39-5f018c188434&c_element_id=259430e1-5b9c-11f0-ba39-5f018c188434&c_global_position=7&deal_print_id=259939f0-5b9c-11f0-ab3c-3df41c30bfa6&c_tracking_id=259939f0-5b9c-11f0-ab3c-3df41c30bfa6	https://http2.mlstatic.com/D_Q_NP_876091-MLU78776215826_092024-P.webp	Mercado Livre	2025-07-07 00:00:00
+153	Notebook Samsung Galaxy Book4 Intel® Core™ i5-1335U (1.3 Ghz, até 4.6GHz, 12 MB L3 Cache), Windows 11 Home, 8GB, 512GB SSD, Iris Xe, 15.6'' Full HD LED, 1.55kg	2.898,00	https://www.mercadolivre.com.br/notebook-samsung-galaxy-book4-intel-core-i5-1335u-13-ghz-ate-46ghz-12-mb-l3-cache-windows-11-home-8gb-512gb-ssd-iris-xe-156-full-hd-led-155kg/p/MLB37044038?pdp_filters=deal:MLB779362-1#wid=MLB4736120696&sid=search&searchVariation=MLB37044038&position=4&search_layout=stack&type=product&tracking_id=3da9b6f4-cbac-4cba-bd65-9682d61abb53&c_container_id=MLB779362-1&c_id=%2Fsplinter%2Fcarouseldynamicitem&c_element_order=3&c_campaign=ofertas-para-comprar-agora-%F0%9F%94%A5&c_label=%2Fsplinter%2Fcarouseldynamicitem&c_uid=259430e2-5b9c-11f0-ba39-5f018c188434&c_element_id=259430e2-5b9c-11f0-ba39-5f018c188434&c_global_position=7&deal_print_id=259939f0-5b9c-11f0-ab3c-3df41c30bfa6&c_tracking_id=259939f0-5b9c-11f0-ab3c-3df41c30bfa6	https://http2.mlstatic.com/D_Q_NP_618141-MLU76378990682_052024-P.webp	Mercado Livre	2025-07-07 00:00:00
+154	Notebook Gamer Acer Nitro V Intel Core I5 - 13420H, 8GB Ram, 512GB SSD, NVIDIA RTX4050, Windows 11 Home, Tela 15,6" Full HD - ANV15-51-54DL	2.898,00	https://www.mercadolivre.com.br/notebook-gamer-acer-nitro-v-intel-core-i5-13420h-8gb-ram-512gb-ssd-nvidia-rtx4050-windows-11-home-tela-156-full-hd-anv15-51-54dl/p/MLB37728210?pdp_filters=deal:MLB779362-1#wid=MLB4844389174&sid=search&searchVariation=MLB37728210&position=5&search_layout=stack&type=product&tracking_id=3da9b6f4-cbac-4cba-bd65-9682d61abb53&c_container_id=MLB779362-1&c_id=%2Fsplinter%2Fcarouseldynamicitem&c_element_order=4&c_campaign=ofertas-para-comprar-agora-%F0%9F%94%A5&c_label=%2Fsplinter%2Fcarouseldynamicitem&c_uid=259430e3-5b9c-11f0-ba39-5f018c188434&c_element_id=259430e3-5b9c-11f0-ba39-5f018c188434&c_global_position=7&deal_print_id=259939f0-5b9c-11f0-ab3c-3df41c30bfa6&c_tracking_id=259939f0-5b9c-11f0-ab3c-3df41c30bfa6	https://http2.mlstatic.com/D_Q_NP_975685-MLU77397723195_072024-P.webp	Mercado Livre	2025-07-07 00:00:00
+155	Impressora multifuncional cor Epson EcoTank L4260	3.839,00	https://www.mercadolivre.com.br/impressora-multifuncional-cor-epson-ecotank-l4260/p/MLB18462372?pdp_filters=deal:MLB779362-1#wid=MLB5364050608&sid=search&searchVariation=MLB18462372&position=6&search_layout=stack&type=product&tracking_id=3da9b6f4-cbac-4cba-bd65-9682d61abb53&c_container_id=MLB779362-1&c_id=%2Fsplinter%2Fcarouseldynamicitem&c_element_order=5&c_campaign=ofertas-para-comprar-agora-%F0%9F%94%A5&c_label=%2Fsplinter%2Fcarouseldynamicitem&c_uid=259430e4-5b9c-11f0-ba39-5f018c188434&c_element_id=259430e4-5b9c-11f0-ba39-5f018c188434&c_global_position=7&deal_print_id=259939f0-5b9c-11f0-ab3c-3df41c30bfa6&c_tracking_id=259939f0-5b9c-11f0-ab3c-3df41c30bfa6	https://http2.mlstatic.com/D_Q_NP_810031-MLA84846513529_052025-P.webp	Mercado Livre	2025-07-07 00:00:00
+156	iPhone 13 Apple 128GB iOS 5G Wi-Fi Tela 6.1'' Câmera Dupla 12MP - Estelar	4.579,00	https://www.americanas.com.br/iphone-13-apple-128gb-ios-5g-wi-fi-tela-6-1-camera-dupla-12mp-estelar-4864628680/p	https://americanas.vtexassets.com/arquivos/ids/30035456/4864628698_1SZ.jpg?v=638792860509300000	Americanas	2025-07-07 00:00:00
+157	IPhone 16 Apple (128GB) Preto, Tela de 6,1, 5G e Câmera de 48MP	6.469,73	https://www.americanas.com.br/iphone-16-apple-128gb-preto-tela-de-6-1-5g-e-camera-de-48mp-7512516013/p	https://americanas.vtexassets.com/arquivos/ids/25720686/7512516017_1_xlarge.jpg?v=638822350670400000	Americanas	2025-07-07 00:00:00
+158	IPhone 16 Apple (128GB) Rosa, Tela de 6,1, 5G e Câmera de 48MP	6.545,87	https://www.americanas.com.br/iphone-16-apple-128gb-rosa-tela-de-6-1-5g-e-camera-de-48mp-7512516061/p	https://americanas.vtexassets.com/arquivos/ids/5180207/7512516065_1_xlarge.jpg?v=638822351985930000	Americanas	2025-07-07 00:00:00
+159	Apple iPhone 16 Pro Max 512GB Titânio natural	12.749,00	https://www.americanas.com.br/apple-iphone-16-pro-max-512gb-titanio-natural-7508562040/p	https://americanas.vtexassets.com/arquivos/ids/420702/7508562041_1SZ.jpg?v=638750819838830000	Americanas	2025-07-07 00:00:00
+160	Apple iPhone 16 Pro Max 256GB Titânio branco	11.369,00	https://www.americanas.com.br/apple-iphone-16-pro-max-256gb-titanio-branco-7508526682/p	https://americanas.vtexassets.com/arquivos/ids/429831/7508526688_1SZ.jpg?v=638750822439800000	Americanas	2025-07-07 00:00:00
+161	Smartphone Samsung Galaxy A56 128GB 5G 8GB RAM Rosa 6,7" Câm. Tripla + Selfie 12MP	1.969,00	https://www.magazineluiza.com.br/smartphone-samsung-galaxy-a56-128gb-5g-8gb-ram-rosa-67-cam-tripla-selfie-12mp/p/240097200/te/ga56/	https://a-static.mlcdn.com.br/280x210/smartphone-samsung-galaxy-a56-128gb-5g-8gb-ram-rosa-67-cam-tripla-selfie-12mp/magazineluiza/240097200/d9169f94917a9bb1de62d34fc43bb0ad.jpg	Magazine Luiza	2025-07-07 00:00:00
+162	Smartwatch Samsung Galaxy Watch7 44mm Verde 32GB Bluetooth	1.304,10	https://www.magazineluiza.com.br/smartwatch-samsung-galaxy-watch7-44mm-verde-32gb-bluetooth/p/238533400/te/gawa/	https://a-static.mlcdn.com.br/280x210/smartwatch-samsung-galaxy-watch7-44mm-verde-32gb-bluetooth/magazineluiza/238533400/d078f0a48b70e8342e2851a67b66c184.jpg	Magazine Luiza	2025-07-07 00:00:00
+163	Smartphone Samsung Galaxy A06 128GB 4GB RAM Azul Escuro 6,7" Câm. Dupla + Selfie 8MP	649,00	https://www.magazineluiza.com.br/smartphone-samsung-galaxy-a06-128gb-4gb-ram-azul-escuro-67-cam-dupla-selfie-8mp/p/238657700/te/ga06/	https://a-static.mlcdn.com.br/280x210/smartphone-samsung-galaxy-a06-128gb-4gb-ram-azul-escuro-67-cam-dupla-selfie-8mp/magazineluiza/238657700/fca7f701abc03293954ba82835473323.jpg	Magazine Luiza	2025-07-07 00:00:00
+164	Smartphone Samsung Galaxy A16 128GB Verde Claro 5G 4GB RAM 6,7" FHD+ Câm Tripla até 50MP + Selfie 13MP Bateria 5000mAh	1.259,10	https://www.magazineluiza.com.br/smartphone-samsung-galaxy-a16-128gb-verde-claro-5g-4gb-ram-67-fhd-cam-tripla-ate-50mp-selfie-13mp-bateria-5000mah/p/238898700/te/ga16/	https://a-static.mlcdn.com.br/280x210/smartphone-samsung-galaxy-a16-128gb-verde-claro-5g-4gb-ram-67-fhd-cam-tripla-ate-50mp-selfie-13mp-bateria-5000mah/magazineluiza/238898700/a2038a19d7577c4cedb245ddb88217ca.jpg	Magazine Luiza	2025-07-07 00:00:00
+165	Smartphone Motorola Moto G75 256GB Cinza 5G 8GB RAM 6,8" Câm. Dupla Selfie 16MP	1.664,10	https://www.magazineluiza.com.br/smartphone-motorola-moto-g75-256gb-cinza-5g-8gb-ram-68-cam-dupla-selfie-16mp/p/238836300/te/srmt/	https://a-static.mlcdn.com.br/280x210/smartphone-motorola-moto-g75-256gb-cinza-5g-8gb-ram-68-cam-dupla-selfie-16mp/magazineluiza/238836300/c940945838094cb576480b1e8f1cc305.jpg	Magazine Luiza	2025-07-07 00:00:00
+166	Apple iPhone 16 128GB - Ultramarino	5.100,00	https://www.casasbahia.com.br/apple-iphone-16-128gb-ultramarino/p/55067624	https://imgs.casasbahia.com.br/55067624/1g.jpg?imwidth=180	Casas Bahia	2025-07-07 00:00:00
+167	Apple iPhone 14 128GB - Meia-noite	3.779,10	https://www.casasbahia.com.br/apple-iphone-14-128gb-meia-noite/p/55058313	https://imgs.casasbahia.com.br/55058313/1g.jpg?imwidth=180	Casas Bahia	2025-07-07 00:00:00
+168	Smartphone Motorola Moto g15 Grafite 256GB 4GB RAM+8GB Ram Boost e Camera 50MP com AI e Night Vision, 5.200mAh Tela FHD+ 6.7" Superbrilho e NFC	850,00	https://www.casasbahia.com.br/smartphone-motorola-moto-g15-grafite-256gb-4gb-ram-8gb-ram-boost-e-camera-50mp-com-ai-e-night-vision-5-200mah-tela-fhd-6-7-superbrilho-e-nfc/p/55068314	https://imgs.casasbahia.com.br/55068314/1g.jpg?imwidth=180	Casas Bahia	2025-07-07 00:00:00
+169	Smartphone Samsung Galaxy A16 Cinza, 128GB, 4GB RAM, Câmera de até 50MP, Tela 6.7", NFC, IP54, Bateria 5000 mAh e Processador Helio G99	989,00	https://www.casasbahia.com.br/smartphone-samsung-galaxy-a16-cinza-128gb-4gb-ram-camera-de-ate-50mp-tela-6-7-nfc-ip54-bateria-5000-mah-e-processador-helio-g99/p/55068267	https://imgs.casasbahia.com.br/55068267/1g.jpg?imwidth=180	Casas Bahia	2025-07-07 00:00:00
+170	Smartphone Samsung Galaxy A15 4G Azul Escuro 128GB, 4GB RAM, Processador Octa-Core, Câmera Tripla Traseira, Selfie de 13MP, Tela Infinita de 6.5" 90Hz	899,10	https://www.casasbahia.com.br/smartphone-samsung-galaxy-a15-4g-azul-escuro-128gb-4gb-ram-processador-octa-core-camera-tripla-traseira-selfie-de-13mp-tela-infinita-de-6-5-90hz/p/55065634	https://imgs.casasbahia.com.br/55065634/1g.jpg?imwidth=180	Casas Bahia	2025-07-07 00:00:00
 \.
 
 
@@ -603,44 +675,49 @@ COPY public.produtos (id, nome, preco_atual, url, imagem_url, site_origem, criad
 --
 
 COPY public.produtos_categorias (produto_id, categoria_id) FROM stdin;
-1	3
-2	5
-4	3
-5	3
-6	7
-7	6
-7	1
-8	6
-8	1
-9	6
-9	1
-10	6
-10	1
-11	7
-12	2
-12	6
-13	2
-13	6
-18	3
-19	7
-20	7
-22	3
-23	7
-24	2
-24	3
-24	6
-25	7
-26	3
-27	6
-27	1
-28	6
-28	1
-29	6
-30	6
-31	2
-31	6
-32	2
-32	6
+146	3
+147	7
+148	7
+149	7
+150	3
+151	3
+152	2
+152	3
+152	6
+153	2
+153	3
+153	6
+154	3
+155	7
+156	1
+156	6
+157	1
+157	6
+158	1
+158	6
+159	1
+159	6
+160	1
+160	6
+161	2
+161	6
+162	2
+162	4
+162	6
+163	2
+163	6
+164	2
+164	6
+165	6
+166	1
+166	6
+167	1
+167	6
+168	6
+169	2
+169	6
+170	2
+170	6
 \.
 
 
@@ -671,7 +748,7 @@ SELECT pg_catalog.setval('public.categorias_id_seq', 7, true);
 -- Name: historico_precos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.historico_precos_id_seq', 216, true);
+SELECT pg_catalog.setval('public.historico_precos_id_seq', 289, true);
 
 
 --
@@ -685,7 +762,7 @@ SELECT pg_catalog.setval('public.lojas_id_seq', 5, true);
 -- Name: produtos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.produtos_id_seq', 36, true);
+SELECT pg_catalog.setval('public.produtos_id_seq', 170, true);
 
 
 --

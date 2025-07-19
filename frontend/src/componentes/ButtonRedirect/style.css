@@ -1,0 +1,13 @@
+.buttonRedirect{
+    width: 100%;
+}
+
+.buttonRedirect a{
+    display: inline-flex;
+    padding: 10px 50px;
+    background-color: #023b92;
+    font-weight: 600;
+    color: white;
+    border-radius: 15px;
+    text-decoration: none;
+}
