@@ -13,6 +13,10 @@
     color: #FF66C4;
 }
 
+.arrowIconPP{
+    color: #0000;
+}
+
 .ratingContainer{
     display: flex;
     margin-top: -13px;
