@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import ProductPics from "./ProductPics";
 import ButtonRedirect from "../../ButtonRedirect";
+import PriceHistoryChart from "./PriceHistoryChart";
+import ProductGuide from "./ProductGuides";
+import ComparisonSection from "./ComparisonSection";
 import { useState } from "react";
 import './style.css'
 
@@ -35,14 +38,16 @@ function ProductContainer({nome_produto, categoria, avaliacoes, nAvaliacoes, pre
                     />
                     <div className="productPrice">
                         <p><strong>R${preco}</strong> <br/>
-                        ou em até 12x de R${preco_parcela}</p>
+                        ou em até 12x de R${preco_parcela}<br/>
+                        menor preço via <strong className="storeName">Amazon</strong></p>
                     </div>
                     <ButtonRedirect
                         loja="AMAZON"
                         link_loja="https://www.amazon.com.br/Apple-iPhone-Pro-Max-256/dp/B0DGMG19VS/ref=asc_df_B0DGMG19VS?mcid=4c7031bba5a034bc908b1a276d0e9c1d&tag=googleshopp00-20&linkCode=df0&hvadid=709964503130&hvpos=&hvnetw=g&hvrand=10608435488934353047&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9102141&hvtargid=pla-2364698376136&language=pt_BR&gad_source=1&th=1"
                     />
                 </div>
-                
+                <ProductGuide/>
+                <ComparisonSection />
             </main>
         </div>
     )

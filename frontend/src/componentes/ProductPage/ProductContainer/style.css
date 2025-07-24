@@ -43,3 +43,8 @@
 .productPrice strong{
     font-size: 40px;
 }
+
+.storeName{
+    font-size: 15px !important;
+    font-style: italic;
+}
