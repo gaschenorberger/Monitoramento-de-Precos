@@ -1,0 +1,12 @@
+.comparisonSection h2{
+    margin-left: 0;
+}
+
+.comparisonContainer{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 70px;
+    margin-left: -300px;
+}

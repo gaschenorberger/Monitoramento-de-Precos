@@ -1,12 +1,18 @@
-.guideButtons{
+.guideButtons {
     display: flex;
     justify-content: center;
-    margin-right: 20%;
-    margin-top: 5%;
-    gap: 10px;
+    position: sticky;
+    top: 80px;
+    margin-left: -20%;
+    margin-top: 50px;
+    background: white;
+    z-index: 1000;
+    padding: 1rem 0;
+    gap: 20px;
+    border-bottom: 1px solid #eee;
 }
 
-.guideButtons button{
+.guideButtons button {
     background: none;
     border: none;
     font-family: inherit;
@@ -15,5 +21,23 @@
     align-items: center;
     cursor: pointer;
     position: relative;
+    padding: 0.5rem;
+    color: #111;
+    transition: font-weight 0.3s ease;
+}
 
+.guideButtons button::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0%;
+    height: 2px;
+    background-color: #F27BBD;
+    transition: width 0.3s ease;
+}
+
+.guideButtons button:hover::after,
+.guideButtons button.active::after {
+    width: 100%;
 }

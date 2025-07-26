@@ -6,16 +6,26 @@ import ProductGuide from "./ProductGuides";
 import ComparisonSection from "./ComparisonSection";
 import { useState } from "react";
 import './style.css'
-
 import pic1 from '../../../images/10401.svg';
 import pic2 from '../../../images/1.svg';
 import pic3 from '../../../images/2.svg';
 import pic4 from '../../../images/4.svg';
+import DescriptionSection from "./DescriptionSection";
+import FichaTecnica from "./FichaTecnica";
 
 
 function ProductContainer({nome_produto, categoria, avaliacoes, nAvaliacoes, preco, preco_parcela,}) {
     const imagens = [ pic2, pic3, pic4];
     const [imagemPrincipal, setImagemPrincipal] = useState(imagens[0]);
+    const dadosProduto = {
+        "Marca": "Apple",
+        "Ano de lançamento": "2024",
+        "Linha": "iPhone",
+        "Série": "Pro Max",
+        "Tipo de Aparelho": "Smartphone",
+        "Cores": "Azul, Verde, Preto",
+        "Tamanho da Tela": "6,8”"
+    };
 
     return (
         <div className="productContainer">
@@ -48,6 +58,11 @@ function ProductContainer({nome_produto, categoria, avaliacoes, nAvaliacoes, pre
                 </div>
                 <ProductGuide/>
                 <ComparisonSection />
+                <DescriptionSection
+                    descricao_produto="Apple iPhone 16 Pro Max 256GB Titânio-deserto 6,9 48MP iOS 5G
+iPhone 16 Pro Max. Com estrutura em titânio, Controle da Câmera, 4K Dolby Vision a 120 qps e o chip A18 Pro. Avisos legais *As telas têm bordas arredondadas. Quando medida como um retângulo, a tela tem 6,12 polegadas (iPhone 16), 6,69 polegadas (iPhone 16 Plus), 6,27 polegadas (iPhone 16 Pro) ou 6,86 polegadas (iPhone 16 Pro Max) na diagonal. A área real de visualização é menor. **A duração da bateria varia de acordo com o uso e a configuração. Consulte apple.com/br/batteries para obter mais informações. ***Acessórios vendidos separadamente. ****Alguns recursos podem não estar disponíveis em todos os países ou regiões. *****O iPhone 16 e o iPhone 16 Pro são capazes de identificar um acidente grave de carro e ligar para os serviços de emergência. Requer uma conexão de rede celular ou chamadas Wi-Fi."
+                />
+                <FichaTecnica dados={dadosProduto} />
             </main>
         </div>
     )

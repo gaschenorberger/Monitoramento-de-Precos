@@ -15,6 +15,7 @@ function ProductPage() {
                 preco="8.896,78"
                 preco_parcela="889,67"
             />
+            <Footer />
        </div>
     )
 }

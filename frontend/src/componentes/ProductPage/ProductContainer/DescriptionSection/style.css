@@ -1,0 +1,10 @@
+.descriptionSection h2{
+    margin-left: 0;
+}
+
+.descriptionBox{
+    border: solid 1px;
+    border-radius: 16px;
+    width: 80%;
+    padding: 0 12px;
+}
