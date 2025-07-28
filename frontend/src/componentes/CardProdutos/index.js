@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom"
 import "./style.css"
 
-export const CardProdutos = ({ nome_produto, preco_atual, site_origem, imagem_url }) => {
+export const CardProdutos = ({ nome_produto, preco_atual, site_origem, imagem_url, id}) => {
     return(
       <div className="cardProdutos">
-          <Link to="/produto" className="aProduto">
+          <Link to={`/produto/${id}`} className="aProduto">
             <img src={imagem_url} className="produtoIMG"/>
             <h2 className="nomeProduto" data-tooltip={nome_produto}>{nome_produto}</h2>
             <section className="ratingProduto">

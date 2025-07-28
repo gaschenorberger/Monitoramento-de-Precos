@@ -1,6 +1,6 @@
  .productContainer{
     padding: 0;
-    margin-left: 17%;
+    margin-left: 14%;
  }
 
 .breadcrumb{
@@ -30,7 +30,7 @@
     margin-left: 1%;
     display: flex;
     align-items: flex-start;
-    gap: 100px;
+    gap: 90px;
 }
 
 .productPrice{
@@ -38,13 +38,14 @@
     margin-left: -10%;
     display: flex;
     flex-direction: column;
+    font-size: 12px;
 }
 
 .productPrice strong{
-    font-size: 40px;
+    font-size: 35px;
 }
 
 .storeName{
-    font-size: 15px !important;
+    font-size: 13px !important;
     font-style: italic;
 }

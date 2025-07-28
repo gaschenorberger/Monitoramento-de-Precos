@@ -12,7 +12,7 @@ function App() {
       <Menu />
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/produto" element={<ProductPage />} />
+        <Route path="/produto/:id" element={<ProductPage />} />
       </Routes>
     </Router>
   );
