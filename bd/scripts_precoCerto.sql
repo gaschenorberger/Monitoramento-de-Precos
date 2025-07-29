@@ -36,6 +36,59 @@ ALTER SEQUENCE categorias_id_seq RESTART WITH 1;
 
 
 
+
+
+
+-- ==========================
+-- ALTERAR NOME DE COLUNAS
+-- ==========================
+
+ALTER TABLE TBL_PRODUTOS_TELA_INI
+RENAME COLUMN nome TO nome_produto;
+
+ALTER TABLE TBL_PRODUTOS_TELA_INI
+RENAME COLUMN preco_atual TO preco;
+
+
+
+
+
+
+
+-- ==========================
+-- ALTERAR NOME DE TABELAS
+-- ==========================
+
+ALTER TABLE PRODUTOS
+RENAME TO TBL_PRODUTOS_TELA_INI -- PRODUTOS EXTRAIDOS DA TELA INICIAL SITE (WEBSCRAPING)
+
+ALTER TABLE PRODUTOS_MONITORADOS
+RENAME TO TBL_PDTOS_MONITORADOS_USR -- PRODUTOS MONITORADOS PELOS USUARIOS
+
+ALTER TABLE PRODUTOS_CATEGORIAS
+RENAME TO TBL_PRODUTOS_CATEGORIAS -- PRODUTOS X CATEGORIAS
+
+ALTER TABLE CATEGORIAS
+RENAME TO TBL_CATEGORIAS_PDTOS -- CATEGORIA DOS PRODUTOS
+
+ALTER TABLE HISTORICO_PRECOS
+RENAME TO TBL_HISTORICO_PRECOS_PDTOS -- HITORICO DE PREÇO DE CADA PRODUTO
+
+ALTER TABLE LOJAS
+RENAME TO TBL_LOJAS -- TABELA COM NOME DAS LOJAS
+
+ALTER TABLE USUARIOS
+RENAME TO TBL_USUARIOS -- INFORMAÇÕES DO USUARIO
+
+
+
+
+
+
+
+
+
+
 -- ==========================
 -- Tabela de Usuários
 -- ==========================
@@ -145,9 +198,11 @@ SELECT
     c.nome AS nome_categoria
 FROM
     produtos p
-JOIN produtos_categorias pc ON p.id = pc.produto_id
+JOIN TBL_PRODUTOS_TELA_INI pc ON p.id = pc.produto_id
 JOIN categorias c ON pc.categoria_id = c.id;
 
+
+-- SELECTS PARA EXIBIR NA BUSCA DE CAREGORIAS DO SITE
 
 SELECT * 
 FROM VW_PRODUTOS_CATEGORIAS
@@ -202,13 +257,15 @@ INSERT INTO categorias (nome) VALUES
 
 
 -- ME RETORNA TODOS OS PRODUTOS DA MAGAZINE LUIZA -- TRANSFORMAR EM VIEW
-SELECT DISTINCT 
-    produto_id,
-    nome_produto,
-    preco_atual,
-    url,
-    imagem_url,
-    site_origem,
-    criado_em
-FROM VW_PRODUTOS_CATEGORIAS
-WHERE site_origem = 'Magazine Luiza';
+
+CREATE VIEW AS VW_PRODUTOS_MAGAZINE
+    SELECT DISTINCT 
+        produto_id,
+        nome_produto,
+        preco_atual,
+        url,
+        imagem_url,
+        site_origem,
+        criado_em
+    FROM VW_PRODUTOS_CATEGORIAS
+    WHERE site_origem = 'Magazine Luiza';

@@ -42,7 +42,7 @@ Pichau (componentes de PC) (www.pichau.com.br)
 Dell (computadores e acessórios) (www.dell.com.br)'''
 
 
-
+#===============================BANCO DE DADOS===============================
 
 def conectar():
     return psycopg2.connect(
@@ -53,27 +53,26 @@ def conectar():
         port='5432'
     )
 
-
 def obter_ou_criar_loja(cursor, nome):
-    cursor.execute("SELECT id FROM lojas WHERE nome = %s", (nome,))
+    cursor.execute("SELECT id FROM TBL_LOJAS WHERE nome = %s", (nome,))
     resultado = cursor.fetchone()
     if resultado:
         return resultado[0]
     else:
         cursor.execute(
-            "INSERT INTO lojas (nome) VALUES (%s) RETURNING id",
+            "INSERT INTO TBL_LOJAS (nome) VALUES (%s) RETURNING id",
             (nome,)
         )
         return cursor.fetchone()[0]
 
 def pegar_ou_criar_categoria(cursor, nome_categoria):
-    cursor.execute("SELECT id FROM categorias WHERE nome = %s", (nome_categoria,))
+    cursor.execute("SELECT id FROM TBL_CATEGORIAS_PDTOS WHERE nome = %s", (nome_categoria,))
     resultado = cursor.fetchone()
     if resultado:
         return resultado[0]
     else:
         cursor.execute(
-            "INSERT INTO categorias (nome) VALUES (%s) RETURNING id",
+            "INSERT INTO TBL_CATEGORIAS_PDTOS (nome) VALUES (%s) RETURNING id",
             (nome_categoria,)
         )
         return cursor.fetchone()[0]
@@ -85,7 +84,7 @@ def vincular_produto_categoria(cursor, produto_id, categoria_id):
     """, (produto_id, categoria_id))
     if not cursor.fetchone():
         cursor.execute("""
-            INSERT INTO produtos_categorias (produto_id, categoria_id)
+            INSERT INTO TBL_PRODUTOS_CATEGORIAS (produto_id, categoria_id)
             VALUES (%s, %s)
         """, (produto_id, categoria_id))
 
@@ -99,8 +98,8 @@ def inserirDados(produto_nome, loja_nome, preco, link_produto, href_img, lista_c
 
         # Verificar se o produto já existe
         cursor.execute("""
-            SELECT id FROM produtos
-            WHERE nome = %s AND site_origem = %s
+            SELECT id FROM TBL_PRODUTOS_TELA_INI
+            WHERE nome_produto = %s AND site_origem = %s
         """, (produto_nome, loja_nome))
         resultado = cursor.fetchone()
 
@@ -110,7 +109,7 @@ def inserirDados(produto_nome, loja_nome, preco, link_produto, href_img, lista_c
             # Atualizar preço atual, link e imagem
             cursor.execute("""
                 UPDATE produtos
-                SET preco_atual = %s,
+                SET preco = %s,
                     url = %s,
                     imagem_url = %s
                 WHERE id = %s
@@ -118,7 +117,7 @@ def inserirDados(produto_nome, loja_nome, preco, link_produto, href_img, lista_c
         else:
             # Inserir novo produto
             cursor.execute("""
-                INSERT INTO produtos (nome, site_origem, preco_atual, url, imagem_url, criado_em)
+                INSERT INTO TBL_PRODUTOS_TELA_INI (nome_produto, site_origem, preco, url, imagem_url, criado_em)
                 VALUES (%s, %s, %s, %s, %s, %s)
                 RETURNING id
             """, (produto_nome, loja_nome, preco, link_produto, href_img, date.today()))
@@ -133,7 +132,7 @@ def inserirDados(produto_nome, loja_nome, preco, link_produto, href_img, lista_c
 
         # Inserir no histórico de preços
         cursor.execute("""
-            INSERT INTO historico_precos (produto_id, preco, coletado_em)
+            INSERT INTO TBL_HISTORICO_PRECOS_PDTOS (produto_id, preco, coletado_em)
             VALUES (%s, %s, NOW())
         """, (produto_id, preco))
 
@@ -155,7 +154,7 @@ def deletarDados(link_produto):
 
 
         cursor.execute("""
-            DELETE FROM PRODUTOS
+            DELETE FROM TBL_PRODUTOS_TELA_INI
             WHERE url = %s
         """, (link_produto,))
 
@@ -170,39 +169,6 @@ def deletarDados(link_produto):
     finally:
         cursor.close()
         conexao.close()
-
-
-def esperar_elemento(navegador, xpath, tempo=10):
-    """
-    Espera até que um elemento esteja presente na página, usando o XPath fornecido.
-
-    :param navegador: Instância do navegador Selenium.
-    :param xpath: XPath do elemento a ser aguardado.
-    :param tempo: Tempo máximo de espera em segundos (padrão: 10).
-    :return: Lista de elementos encontrados ou None se não encontrar.
-    """
-    try:
-        elementos = WebDriverWait(navegador, tempo).until(
-            EC.presence_of_all_elements_located((By.XPATH, xpath))
-        )
-        return elementos
-    except Exception as e:
-        print(f"Erro ao esperar pelo elemento: {e}")
-        return None
-
-def iniciar_chrome(url, headless='off'):
-    options = webdriver.ChromeOptions()
-    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
-    options.add_argument("--disable-extensions")
-    options.add_argument("--start-maximized")
-    
-    if headless == 'on':
-        options.add_argument("--headless")
-
-    navegador = webdriver.Chrome(options=options)
-    navegador.get(url)
-
-    return navegador
 
 def detectar_categorias(produto_nome):
     nome = produto_nome.lower()
@@ -245,7 +211,43 @@ def detectar_categorias(produto_nome):
         return list(set(categorias))
 
 
-#-------------------------------ÁREA PRINCIPAL---------------------------
+#===============================FUNÇÕES SELENIUM================================
+
+def esperar_elemento(navegador, xpath, tempo=10):
+    """
+    Espera até que um elemento esteja presente na página, usando o XPath fornecido.
+
+    :param navegador: Instância do navegador Selenium.
+    :param xpath: XPath do elemento a ser aguardado.
+    :param tempo: Tempo máximo de espera em segundos (padrão: 10).
+    :return: Lista de elementos encontrados ou None se não encontrar.
+    """
+    try:
+        elementos = WebDriverWait(navegador, tempo).until(
+            EC.presence_of_all_elements_located((By.XPATH, xpath))
+        )
+        return elementos
+    except Exception as e:
+        print(f"Erro ao esperar pelo elemento: {e}")
+        return None
+
+def iniciar_chrome(url, headless='off'):
+    options = webdriver.ChromeOptions()
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+    options.add_argument("--disable-extensions")
+    options.add_argument("--start-maximized")
+    
+    if headless == 'on':
+        options.add_argument("--headless")
+
+    navegador = webdriver.Chrome(options=options)
+    navegador.get(url)
+
+    return navegador
+
+
+
+#===============================ÁREA PRINCIPAL================================
 
 
 # COMPUTADORES E INFORMÁTICA
@@ -342,7 +344,20 @@ def coletaDadosAmazon(): # OK
 
             except NoSuchElementException:
                 print("PARCELAS NÃO ENCONTRADAS")
-                deletarDados(link)
+                # deletarDados(link)
+
+            try:
+                spanImagem = navegador.find_elements(By.XPATH, "//span[contains(@class, 'a-button-text')]")
+                
+                for imagem in spanImagem:
+                    src = imagem.find_element(By.XPATH, "//img")
+                    srcImg = src.get_attribute("src")
+
+                    print(srcImg)
+
+
+            except NoSuchElementException:
+                print("IMAGENS NÃO ENCONTRADAS")
 
 
 
