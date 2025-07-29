@@ -1,3 +1,35 @@
+-- ====================================
+-- CONSULTA DE COLUNAS DE UMA TABELA
+-- ====================================
+
+SELECT 
+    ordinal_position AS posicao,
+    column_name AS coluna,
+    data_type AS tipo,
+    is_nullable AS nulo
+FROM 
+    information_schema.columns
+WHERE 
+    table_name = 'tbl_produtos_tela_ini'
+ORDER BY posicao;
+
+-- ====================================
+-- CONSULTA DE TABELAS NO BANCO
+-- ====================================
+
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'public';
+
+
+
+
+
+
+
+
+
+
 DROP TABLE usuarios CASCADE;
 DROP TABLE produtos CASCADE;
 DROP TABLE produtos_categorias CASCADE;
@@ -202,6 +234,29 @@ JOIN TBL_PRODUTOS_TELA_INI pc ON p.id = pc.produto_id
 JOIN categorias c ON pc.categoria_id = c.id;
 
 
+
+-- ME RETORNA TODOS OS PRODUTOS DA MAGAZINE LUIZA -- TRANSFORMAR EM VIEW
+
+CREATE VIEW AS VW_PRODUTOS_MAGAZINE
+    SELECT DISTINCT 
+        produto_id,
+        nome_produto,
+        preco_atual,
+        url,
+        imagem_url,
+        site_origem,
+        criado_em
+    FROM VW_PRODUTOS_CATEGORIAS
+    WHERE site_origem = 'Magazine Luiza';
+
+
+
+
+
+
+
+
+
 -- SELECTS PARA EXIBIR NA BUSCA DE CAREGORIAS DO SITE
 
 SELECT * 
@@ -256,16 +311,6 @@ INSERT INTO categorias (nome) VALUES
 
 
 
--- ME RETORNA TODOS OS PRODUTOS DA MAGAZINE LUIZA -- TRANSFORMAR EM VIEW
 
-CREATE VIEW AS VW_PRODUTOS_MAGAZINE
-    SELECT DISTINCT 
-        produto_id,
-        nome_produto,
-        preco_atual,
-        url,
-        imagem_url,
-        site_origem,
-        criado_em
-    FROM VW_PRODUTOS_CATEGORIAS
-    WHERE site_origem = 'Magazine Luiza';
+
+
