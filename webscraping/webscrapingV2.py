@@ -79,7 +79,7 @@ def pegar_ou_criar_categoria(cursor, nome_categoria):
 
 def vincular_produto_categoria(cursor, produto_id, categoria_id):
     cursor.execute("""
-        SELECT 1 FROM produtos_categorias 
+        SELECT 1 FROM TBL_PRODUTOS_CATEGORIAS 
         WHERE produto_id = %s AND categoria_id = %s
     """, (produto_id, categoria_id))
     if not cursor.fetchone():
@@ -108,7 +108,7 @@ def inserirDados(produto_nome, loja_nome, preco, link_produto, href_img, lista_c
 
             # Atualizar preço atual, link e imagem
             cursor.execute("""
-                UPDATE produtos
+                UPDATE TBL_PRODUTOS_TELA_INI
                 SET preco = %s,
                     url = %s,
                     imagem_url = %s
@@ -347,17 +347,19 @@ def coletaDadosAmazon(): # OK
                 # deletarDados(link)
 
             try:
-                spanImagem = navegador.find_elements(By.XPATH, "//span[contains(@class, 'a-button-text')]")
+                imagens = navegador.find_elements(By.XPATH, "//li[contains(@class, 'a-spacing-small')]//span[contains(@class, 'a-list-item')]//span[contains(@class, 'a-button')]//span[contains(@class, 'a-button-inner')]//input[contains(@class, 'a-button-input')]//span[contains(@class, 'a-button-text')]//img")
+                # imagens = spanImagem.find_elements(By.XPATH, "")
                 
-                for imagem in spanImagem:
-                    src = imagem.find_element(By.XPATH, "//img")
-                    srcImg = src.get_attribute("src")
-
-                    print(srcImg)
+                for imagem in imagens:
+                    src = imagem.get_attribute("src")
+                    
+                    print(src)
 
 
             except NoSuchElementException:
                 print("IMAGENS NÃO ENCONTRADAS")
+
+            time.sleep(1)
 
 
 
