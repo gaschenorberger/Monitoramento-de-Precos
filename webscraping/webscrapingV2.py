@@ -346,13 +346,11 @@ def coletaDadosAmazon(): # OK
                 print("PARCELAS NÃO ENCONTRADAS")
                 # deletarDados(link)
 
-            try:
-                imagens = navegador.find_elements(By.XPATH, "//li[contains(@class, 'a-spacing-small')]//span[contains(@class, 'a-list-item')]//span[contains(@class, 'a-button')]//span[contains(@class, 'a-button-inner')]//input[contains(@class, 'a-button-input')]//span[contains(@class, 'a-button-text')]//img")
-                # imagens = spanImagem.find_elements(By.XPATH, "")
+            try: #a-spacing-small item imageThumbnail a-declarative
+                imagens = navegador.find_elements(By.XPATH, "//li[contains(@class, 'a-spacing-small') and contains(@class, 'item') and contains(@class, 'imageThumbnail') and contains(@class, 'a-declarative')]//img")
                 
                 for imagem in imagens:
                     src = imagem.get_attribute("src")
-                    
                     print(src)
 
 
