@@ -346,13 +346,30 @@ def coletaDadosAmazon(): # OK
                 print("PARCELAS NÃO ENCONTRADAS")
                 # deletarDados(link)
 
-            try: #a-spacing-small item imageThumbnail a-declarative
-                imagens = navegador.find_elements(By.XPATH, "//li[contains(@class, 'a-spacing-small') and contains(@class, 'item') and contains(@class, 'imageThumbnail') and contains(@class, 'a-declarative')]//img")
-                
-                for imagem in imagens:
-                    src = imagem.get_attribute("src")
-                    print(src)
+            try: 
+                #imagens pequenas -> imagens = navegador.find_elements(By.XPATH, "//li[contains(@class, 'a-spacing-small') and contains(@class, 'item') and contains(@class, 'imageThumbnail') and contains(@class, 'a-declarative')]//img")
+                imagens = navegador.find_elements(By.XPATH, "//li[contains(@class, 'a-spacing-small') and contains(@class, 'item') and contains(@class, 'imageThumbnail') and contains(@class, 'a-declarative')]//input")
 
+                wait = WebDriverWait(navegador, 10)
+
+                indiceInicial = 0
+                for imagem in imagens:
+
+                    # imagensSrc = imagem.find_element(By.XPATH, ".//img")
+                    # src = imagensSrc.get_attribute("src")
+
+                    imagem.click()
+                    time.sleep(0.5)
+                        
+                    largeImg = wait.until(EC.presence_of_element_located((
+                        By.XPATH,
+                        f"//li[contains(@class, 'image') and contains(@class, 'item') and contains(@class, 'itemNo{indiceInicial}') and contains(@class, 'maintain-height') and contains(@class, 'selected')]//img"
+                    )))
+
+                    linkSrc = largeImg.get_attribute("src")
+                    print(linkSrc)
+
+                    indiceInicial+=1
 
             except NoSuchElementException:
                 print("IMAGENS NÃO ENCONTRADAS")
