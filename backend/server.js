@@ -75,7 +75,7 @@ pool.connect()
 
 app.get('/produtos', async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM VW_PRODUTOS_CATEGORIAS');
+        const result = await pool.query('SELECT * FROM VW_PRODUTOS_TL_INICIAL');
         res.json(result.rows);
     } catch (error) {
         console.error('Erro ao buscar produtos:', error);

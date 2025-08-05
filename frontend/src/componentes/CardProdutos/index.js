@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import "./style.css"
 
-export const CardProdutos = ({ nome_produto, preco_atual, site_origem, imagem_url, id}) => {
+export const CardProdutos = ({ nome_produto, preco, site_origem, imagem_url, id}) => {
     return(
       <div className="cardProdutos">
           <Link to={`/produto/${id}`} className="aProduto">
@@ -13,7 +13,7 @@ export const CardProdutos = ({ nome_produto, preco_atual, site_origem, imagem_ur
             </section>
             
             <p className="lojaNome">Menor preço via {site_origem}</p>
-            <p className="precoProduto">R$ {preco_atual}</p>
+            <p className="precoProduto">R$ {preco}</p>
             {/* <p className="numeroLojas">Compare entre {nLojas} lojas</p> */}
           </Link>
       </div>
