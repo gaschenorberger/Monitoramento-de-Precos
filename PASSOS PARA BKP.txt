@@ -14,7 +14,7 @@ RESTORE EM OUTRO PC
 
 1- CRIAR BASE NO POSTGRES - bdPrecoCerto
 
-TERMINAL
+TERMINAL - CMD
 2- cd  C:\Users\schen\Documents\GitHub\Monitoramento-de-Precos\bd (lugar onde esta o arquivo .sql)
 
 3- "C:\Program Files\PostgreSQL\17\bin\psql.exe" -U postgres -h localhost -p 5432 bdPrecoCerto < bkpPrecoCerto.sql
