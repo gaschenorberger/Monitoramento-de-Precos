@@ -14,8 +14,8 @@ function Main() {
   const [produtos, setProdutos] = useState([]);
 
   useEffect(() => {
-    // axios.get('https://precocerto.onrender.com/produtos') //WEB
-    axios.get('http://localhost:3001/produtos') // LOCAL
+    axios.get('https://precocerto.onrender.com/produtos') //WEB
+    // axios.get('http://localhost:3001/produtos') // LOCAL
       .then((res) => setProdutos(res.data))
       .catch((err) => console.error("Erro ao buscar produtos:", err));
   }, []);
