@@ -283,7 +283,9 @@ def coletaDadosAmazon(): # OK
     imgProduto = navegador.find_elements(By.XPATH, "//div[contains(@class, 'dcl-product-image-container')]//img")
    
 
-    if produtos:
+    #===============================PÁGINA INICIAL INFORMAÇÕES================================
+
+    if produtos: 
 
         for produto, real, centavo, link, imgLink  in zip(produtos[:5], reais, centavos, linkProduto, imgProduto):
 
@@ -320,17 +322,20 @@ def coletaDadosAmazon(): # OK
 
             inserirDados(produto, "Amazon", preco, urlProduto, urlImg, categorias)
 
+
+
+        #===============================PÁGINA DO PRODUTO INFORMAÇÕES================================
+
         for link in linkList:
             navegador.get(link)
             time.sleep(2)
 
-            try:
+            try: # Obter parcelas de cada produto
                 parcelas = navegador.find_element(By.XPATH, "//span[contains(@class, 'best-offer-name')]")
                 parcelas = parcelas.text
                 parcelas = parcelas.split()
 
                 if parcelas[0] == 'ou': #ou R$ 189,00 em até 6x de R$ 31,50 sem juros --- (outro padrão de parcela)
-                    parcelas = parcelas.split()
                     parcelas = f"{parcelas[5]} {parcelas[6]} {parcelas[7]} {parcelas[8]}"
                     print(parcelas)
                 
@@ -344,9 +349,11 @@ def coletaDadosAmazon(): # OK
 
             except NoSuchElementException:
                 print("PARCELAS NÃO ENCONTRADAS")
-                # deletarDados(link)
 
-            try: 
+
+
+            try: # Obter imagens do produto
+
                 #imagens pequenas -> imagens = navegador.find_elements(By.XPATH, "//li[contains(@class, 'a-spacing-small') and contains(@class, 'item') and contains(@class, 'imageThumbnail') and contains(@class, 'a-declarative')]//img")
                 imagens = navegador.find_elements(By.XPATH, "//li[contains(@class, 'a-spacing-small') and contains(@class, 'item') and contains(@class, 'imageThumbnail') and contains(@class, 'a-declarative')]//input")
 
@@ -355,10 +362,11 @@ def coletaDadosAmazon(): # OK
                 indiceInicial = 0
                 for imagem in imagens:
 
-                    # imagensSrc = imagem.find_element(By.XPATH, ".//img")
-                    # src = imagensSrc.get_attribute("src")
+                    # imagem.click()
+                    
+                    actions = ActionChains(navegador) 
+                    actions.move_to_element(imagem).perform() # Simula a ação do hover, passando o mouse em cima da imagem, para obter imagem (Exclusivo Amazon)
 
-                    imagem.click()
                     time.sleep(0.5)
                         
                     largeImg = wait.until(EC.presence_of_element_located((
@@ -373,6 +381,35 @@ def coletaDadosAmazon(): # OK
 
             except NoSuchElementException:
                 print("IMAGENS NÃO ENCONTRADAS")
+
+
+            try: # Obter informações/descrições resumidas
+                
+                infDetalhadas = navegador.find_element(By.XPATH, "//table[contains(@class, 'a-normal') and contains(@class, 'a-spacing-micro')]")
+
+                if infDetalhadas:
+                    trElements = infDetalhadas.find_elements(By.XPATH, ".//tr[contains(@class, 'a-spacing-small')]")
+
+                    for tr in trElements:
+                        # spanTitulo = tr.find_element(By.XPATH, ".//span[contains(@class, 'a-size-base')]")
+                        # spanTitulo = spanTitulo.text
+
+                        spans = tr.find_elements(By.XPATH, ".//span[contains(@class, 'a-size-base')]")
+
+                        spanTitulo = spans[0]    
+                        spanInformacao = spans[1]
+
+                        spanTitulo = spanTitulo.text
+                        spanInformacao = spanInformacao.text
+
+                        if spanTitulo and spanInformacao:
+                            print(f"{spanTitulo} - {spanInformacao}")
+
+            except NoSuchElementException:
+                print("INFORMAÇÕES DETALHADAS NÃO ENCONTRADAS")
+
+
+            # PEGAR INFORMAÇÕES COMPLETAS ('SOBRE ESTE ITEM') ***CONTINUAR
 
             time.sleep(1)
 
