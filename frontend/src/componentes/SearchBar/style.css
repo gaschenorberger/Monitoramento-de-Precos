@@ -20,15 +20,30 @@
     text-align: start;
 }
 
+
+
 .searchBar input {
     font-size: 15px;
 }
 
+/* BOTÃO */
 .searchBar button {
     width: 75px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s ease;
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
 }
+
+.searchBar button:hover {
+    background-color: #0056b3;
+}
+
 
 @media (max-width: 1024px) {
     .searchBar {
@@ -93,5 +108,3 @@
         margin-left: -21%;
     }
 }
-
-
