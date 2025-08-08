@@ -411,6 +411,11 @@ def coletaDadosAmazon(): # OK
 
             # PEGAR INFORMAÇÕES COMPLETAS ('SOBRE ESTE ITEM') ***CONTINUAR
 
+            try:
+                infCompletas = navegador.find_element(By.XPATH, "//ul[contains(@class, 'a-unordered-list') and contains(@class, '')]")
+            except NoSuchElementException:
+                print("INFORMAÇÕES DETALHADAS NÃO ENCONTRADAS")
+
             time.sleep(1)
 
 
